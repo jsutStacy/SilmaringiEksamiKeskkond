@@ -26,14 +26,14 @@ Do a git pull
 (Go to the folder where you have requirements.txt file.)
 
 Now run these commands:
-pip install --upgrade -r requirements.txt
-python manage.py syncdb
+"pip install --upgrade -r requirements.txt"
+"python manage.py syncdb"
 
 (If you get "You just installed Django's auth system, which means you don't have any superusers defined.
 Would you like to create one now? (yes/no):" answer "no")
 
-python manage.py migrate
-python manage.py runserver 0.0.0.0:7000
+"python manage.py migrate"
+"python manage.py runserver 0.0.0.0:7000"
 
 After this if everything went as planned, you should have a server running and be able to access this url:
 http://localhost:7000/api/randomthing/randomthing/.
