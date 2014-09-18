@@ -6,7 +6,7 @@ Loodud Tarkvaraprojekti aine (MTAT.03.138) raames Tartu Ülikoolis 2014 aastal.
 Project Setup:
 ========================
 
-Get python version 3.4.1(I got the 32-bit version) from https://www.python.org/downloads/. During your installation make sure you instal/check "Add python.exe to Path" and "pip". They should be in the same menu.
+Get python version 3.4.1 (I got the 32-bit version) from https://www.python.org/downloads/. During your installation make sure you instal/check "Add python.exe to Path" and "pip". They should be in the same menu.
 
 Next we're going to install a database. Go to http://www.enterprisedb.com/products-services-training/pgdownload#windows and install Postgres 9.3.5.1. Set postgres/postgres as username/password and leave the port to 5432. There is no need to do anything with StackBuilder at the end of the installation. Now open PgAdmin and create a new user role(right click PostgresSQL 9.3(localhost:5432) - New object - New login role. Set username/password as silmaring/silmaring and check the superuser checkbox.
 Right click "Databases" - New Database.. (If you don't see it, click refresh.)  Name it also "silmaring" and set the owner to silmaring.
@@ -21,7 +21,7 @@ Now we need to install psycopg2. Download the .exe file from http://stickpeople.
 
 (before running check this command - the .exe you downloaded may have slightly different name)
 
-Do a git pull
+Do a git pull.
 
 (Go to the folder where you have requirements.txt file.)
 
