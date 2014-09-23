@@ -1,0 +1,10 @@
+<p>See on test leht</p>
+<a href="<?php echo $this->url('test/add') ?>">Test add leht</a>
+<ul>
+<?php foreach ($testData as $test) : ?>
+	<li>
+		<?php echo $this->escapeHtml($test->id);?> -
+		<?php echo $this->escapeHtml($test->content);?>
+	</li>
+<?php endforeach; ?>
+</ul>
