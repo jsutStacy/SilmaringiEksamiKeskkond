@@ -11,13 +11,18 @@ https://www.apachefriends.org/download.html
 
 Then clone our project from git.
 
+Open cmd and go to path/to/project and run:
+php composer.phar self-update
+php composer.phar install
+(make sure you have php path added into environment variables path)
+
 Now go to path/to/project/vhosts and make new folder named after your first name in lowercase.
 Now we have to make our own vhost file. Name it vhost.conf.
 
 It should look something like this:
 
 <VirtualHost 127.0.0.2:80>
-	ServerName yoururl // mine is eksamikeskond.silmaring.dev
+	ServerName yoururl // mine is eksamikeskkond.silmaring.dev
 	DocumentRoot path/to/public
 	SetEnv APPLICATION_ENV "development"
 
@@ -33,6 +38,9 @@ It should look something like this:
 Now we have to include it to apache conf.
 
 Go to path/to/xampp/apache/conf and open httpd.conf.
+Uncomment line:
+LoadModule rewrite_module modules/mod_rewrite.so
+
 At the end of conf file add line:
 Include "path/to/project/vhosts/yourfoldername/vhost.conf"
 
