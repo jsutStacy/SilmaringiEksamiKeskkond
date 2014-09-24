@@ -23,10 +23,10 @@ It should look something like this:
 
 	<Directory path/to/public>
 		DirectoryIndex index.php
-      AllowOverride All
-      Order allow,deny
-      Allow from all
-		  Require all granted
+		AllowOverride All
+		Order allow,deny
+		Allow from all
+		Require all granted
 	</Directory>
 </VirtualHost>
 
@@ -38,9 +38,9 @@ Include "path/to/project/vhosts/yourfoldername/vhost.conf"
 
 Now go to C:/Windows/System32/drivers/etc and open hosts file.
 Add:
-127.0.0.2		yoururl
+127.0.0.2	yoururl
 Mine is:
-127.0.0.2   silmaring.eksamikeskkond.dev
+127.0.0.2	silmaring.eksamikeskkond.dev
 
 Then save it and restart apache from xampp.
 
