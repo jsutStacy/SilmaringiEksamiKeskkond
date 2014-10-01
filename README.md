@@ -12,8 +12,12 @@ https://www.apachefriends.org/download.html
 Then clone our project from git.
 
 Open cmd and go to path/to/project and run:
+```
 php composer.phar self-update
+```
+```
 php composer.phar install
+```
 (make sure you have php path added into environment variables path)
 
 Now go to path/to/project/vhosts and make new folder named after your first name in lowercase.
@@ -57,6 +61,8 @@ Now when you open your web browser and go to your url you should see the zend fr
 For database connection make new local config file.
 Go to path/to/project/config/autoload and make new php file called yourfirstname.local.php. Mine is andres.local.php
 and add this into it:
+
+```
 <?php
 	return array(
 		'db' => array(
@@ -65,6 +71,7 @@ and add this into it:
 		),
 	);
 ?>
+```
 and save it.
 
 When you go to:
