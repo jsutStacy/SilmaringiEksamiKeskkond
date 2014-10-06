@@ -1,0 +1,25 @@
+<?php
+	$this->headTitle('Kursused - ');
+?>
+<a href="<?php echo $this->url('admin/add-course') ?>">Lisa uus kursus</a>
+<table>
+	<tr>
+		<td>Id</td>
+		<td>Kursuse nimi</td>
+		<td>Kursuse hind</td>
+		<td>Avalikustatud</td>
+		<td></td>
+	</tr>
+	<?php foreach ($courses as $course) : ?>
+	<tr>
+		<td><?php echo $this->escapeHtml($course->id) ?></td>
+		<td><?php echo $this->escapeHtml($course->name) ?></td>
+		<td><?php echo $this->escapeHtml($course->price) ?></td>
+		<td><?php echo $this->escapeHtml($course->published) ?></td>
+		<td>
+			<a href="<?php echo $this->url('admin/edit-course', array('id' => $course->id)) ?>">Muuda</a>
+			<a href="<?php echo $this->url('admin/delete-course', array('id' => $course->id)) ?>">Kustuta</a>
+		</td>
+	</tr>
+	<?php endforeach; ?>
+</table>
