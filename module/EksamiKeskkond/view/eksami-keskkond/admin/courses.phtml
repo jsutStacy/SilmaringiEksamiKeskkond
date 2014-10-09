@@ -1,25 +1,45 @@
 <?php
 	$this->headTitle('Kursused - ');
 ?>
-<a href="<?php echo $this->url('admin/add-course') ?>">Lisa uus kursus</a>
-<table>
-	<tr>
-		<td>Id</td>
-		<td>Kursuse nimi</td>
-		<td>Kursuse hind</td>
-		<td>Avalikustatud</td>
-		<td></td>
-	</tr>
+
+
+
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h2>Halda kursuseid<small> Muuda või kustuta.</small></h2>
+	</div>
+	<div class="col-md-5 pull-right">
+		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/add-course') ?>" target="_blank">
+			<span class="glyphicon glyphicon-plus"></span>
+			Lisa uus kursus
+		</a>
+	</div>
+</div>
+<div class="row">
 	<?php foreach ($courses as $course) : ?>
-	<tr>
-		<td><?php echo $this->escapeHtml($course->id) ?></td>
-		<td><?php echo $this->escapeHtml($course->name) ?></td>
-		<td><?php echo $this->escapeHtml($course->price) ?></td>
-		<td><?php echo $this->escapeHtml($course->published) ?></td>
-		<td>
-			<a href="<?php echo $this->url('admin/edit-course', array('id' => $course->id)) ?>">Muuda</a>
-			<a href="<?php echo $this->url('admin/delete-course', array('id' => $course->id)) ?>">Kustuta</a>
-		</td>
-	</tr>
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title"><?php echo $this->escapeHtml($course->name) ?></h3>
+				</div>
+				<div class="panel-body">
+						<p><b>Hind: </b><?php echo $this->escapeHtml($course->price) ?></p>				
+						<p><b>ID: </b><?php echo $this->escapeHtml($course->id) ?></p>
+						<?php if ($this->escapeHtml($course->published) == "0"): ?>
+							<p>Kursus on suletud.</p>
+						<?php else: ?>
+							<p>Kursus on avatud.</p>
+						<?php endif; ?>
+						<a class="btn btn-default btn-sm" href="<?php echo $this->url('admin/edit-course', array('id' => $course->id)) ?>" target="_blank">
+							<span class="glyphicon glyphicon-edit"></span>
+							Muuda
+						</a>
+						<a class="btn btn-default btn-sm" href="<?php echo $this->url('admin/delete-course', array('id' => $course->id)) ?>" target="_blank">
+							<span class="glyphicon glyphicon-trash"></span>
+							Kustuta
+						</a>
+				</div>
+			</div>
+		</div>
 	<?php endforeach; ?>
-</table>
+</div>
