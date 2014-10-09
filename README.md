@@ -7,7 +7,9 @@ Project Setup:
 ========================
 
 First download and install XAMPP:
+```
 https://www.apachefriends.org/download.html
+```
 
 Then clone our project from git.
 
@@ -24,7 +26,7 @@ Now go to path/to/project/vhosts and make new folder named after your first name
 Now we have to make our own vhost file. Name it vhost.conf.
 
 It should look something like this:
-
+```
 <VirtualHost 127.0.0.2:80>
 	ServerName yoururl // mine is eksamikeskkond.silmaring.dev
 	DocumentRoot path/to/public
@@ -38,21 +40,29 @@ It should look something like this:
 		Require all granted
 	</Directory>
 </VirtualHost>
-
+```
 Now we have to include it to apache conf.
 
 Go to path/to/xampp/apache/conf and open httpd.conf.
 Uncomment line:
+```
 LoadModule rewrite_module modules/mod_rewrite.so
+```
 
 At the end of conf file add line:
+```
 Include "path/to/project/vhosts/yourfoldername/vhost.conf"
+```
 
 Now go to C:/Windows/System32/drivers/etc and open hosts file.
 Add:
+```
 127.0.0.2	yoururl
+```
 Mine is:
-127.0.0.2	silmaring.eksamikeskkond.dev
+```
+127.0.0.2	eksamikeskkond.silmaring.dev
+```
 
 Then save it and restart apache from xampp.
 
@@ -74,7 +84,20 @@ and add this into it:
 ```
 and save it.
 
+Now go and login to:
+```
+http://localhost/phpmyadmin
+```
+Click on import and select:
+```
+path/to/project/database/silmaring.sql
+```
 When you go to:
-http://eksamikeskkond.silmaring.dev/test
-It should give errors about missing database and missing table.
-Don't mind it at the moment.
+```
+http://eksamikeskkond.silmaring.dev
+```
+You should have website working.
+```
+http://eksamikeskkond.silmaring.dev/admin/courses
+```
+Should show list of test courses and You should be able to add, edit and delete them.
