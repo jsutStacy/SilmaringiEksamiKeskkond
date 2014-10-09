@@ -10,7 +10,10 @@ class CourseForm extends Form {
 		// we want to ignore the name passed
 		parent::__construct('EksamiKeskkond');
 
-		$this->setAttribute('method', 'post');
+		$this->setAttributes(array(
+			'method' => 'post',
+			'class' => 'form-horizontal'
+		));
 
 		$this->add(array(
 			'name' => 'id',
@@ -23,6 +26,7 @@ class CourseForm extends Form {
 			'name' => 'name',
 			'attributes' => array(
 				'type' => 'text',
+				'class' => 'form-control',
 			),
 			'options' => array(
 				'label' => 'Kursuse nimi',
@@ -33,6 +37,7 @@ class CourseForm extends Form {
 			'name' => 'price',
 			'attributes' => array(
 				'type' => 'number',
+				'class' => 'form-control',
 			),
 			'options' => array(
 				'label' => 'Kursuse hind',
@@ -42,6 +47,9 @@ class CourseForm extends Form {
 		$this->add(array(
 			'type' => 'Zend\Form\Element\Select',
 			'name' => 'published',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
 			'options' => array(
 				'label' => 'Kursuse nähtavus',
 				'options' => array(
@@ -57,6 +65,7 @@ class CourseForm extends Form {
 				'type' => 'submit',
 				'value' => 'Lisa',
 				'id' => 'submitbutton',
+				'class' => 'btn btn-default',
 			),
 		));
 

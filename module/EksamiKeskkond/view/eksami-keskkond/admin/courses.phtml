@@ -9,7 +9,7 @@
 		<h2>Halda kursuseid<small> Muuda või kustuta.</small></h2>
 	</div>
 	<div class="col-md-5 pull-right">
-		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/add-course') ?>" target="_blank">
+		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/add-course') ?>">
 			<span class="glyphicon glyphicon-plus"></span>
 			Lisa uus kursus
 		</a>
@@ -30,11 +30,11 @@
 						<?php else: ?>
 							<p>Kursus on avatud.</p>
 						<?php endif; ?>
-						<a class="btn btn-default btn-sm" href="<?php echo $this->url('admin/edit-course', array('id' => $course->id)) ?>" target="_blank">
+						<a class="btn btn-default btn-sm" href="<?php echo $this->url('admin/edit-course', array('id' => $course->id)) ?>">
 							<span class="glyphicon glyphicon-edit"></span>
 							Muuda
 						</a>
-						<a class="btn btn-default btn-sm" href="<?php echo $this->url('admin/delete-course', array('id' => $course->id)) ?>" target="_blank">
+						<a class="btn btn-default btn-sm" href="<?php echo $this->url('admin/delete-course', array('id' => $course->id)) ?>">
 							<span class="glyphicon glyphicon-trash"></span>
 							Kustuta
 						</a>

@@ -6,13 +6,20 @@
 	$form = $this->form;
 	$form->setAttribute('action', $this->url('admin/edit-course', array('id' => $this->id)));
 	$form->prepare();
-
 	echo $this->form()->openTag($form);
-
 	echo $this->formHidden($form->get('id'));
-	echo $this->formRow($form->get('name'));
-	echo $this->formRow($form->get('price'));
-	echo $this->formRow($form->get('published'));
-	echo $this->formSubmit($form->get('submit'));
+?>
+<div class="form-group">
+	<?php echo $this->formRow($form->get('name')); ?>
+</div>
+<div class="form-group">
+	<?php echo $this->formRow($form->get('price')); ?>
+</div>
+<div class="form-group">
+	<?php echo $this->formRow($form->get('published')); ?>
+</div>
+<div class="form-group">
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+</div>
 
-	echo $this->form()->closeTag();
+<?php echo $this->form()->closeTag(); ?>
