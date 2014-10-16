@@ -19,6 +19,27 @@ return array(
 						'action' => 'index',
 					),
 				),
+				'may_terminate' => true,
+				'child_routes' => array(
+					'login' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => 'login',
+							'defaults' => array(
+								'action' => 'login',
+							),
+						),
+					),
+					'logout' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => 'logout',
+							'defaults' => array(
+								'action' => 'logout',
+							),
+						),
+					),
+				),
 			),
 			'admin' => array(
 				'type' => 'Literal',
@@ -84,6 +105,75 @@ return array(
 					),
 				),
 			),
+			'teacher' => array(
+				'type' => 'Literal',
+				'options' => array(
+					'route' => '/teacher',
+					'defaults' => array(
+						'controller' => 'TeacherController',
+						'action' => 'index',
+					),
+				),
+			),
+			'student' => array(
+				'type' => 'Literal',
+				'options' => array(
+					'route' => '/student',
+					'defaults' => array(
+						'controller' => 'StudentController',
+						'action' => 'index',
+					),
+				),
+			),
+			'register' => array(
+				'type' => 'Literal',
+				'options' => array(
+					'route' => '/register',
+					'defaults' => array(
+						'controller' => 'RegisterController',
+						'action' => 'index',
+					),
+				),
+				'may_terminate' => true,
+				'child_routes' => array(
+					'success' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/success',
+							'defaults' => array(
+								'action' => 'success',
+							),
+						),
+					),
+					'confirm-email' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/confirm-email[/:token]',
+							'defaults' => array(
+								'action' => 'confirm-email',
+							),
+						),
+					),
+					'forgotten-password' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/forgotten-password',
+							'defaults' => array(
+								'action' => 'forgotten-password',
+							),
+						),
+					),
+					'password-change-success' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/password-change-success',
+							'defaults' => array(
+								'action' => 'password-change-success',
+							),
+						),
+					),
+				),
+			),
 		),
 	),
 	'service_manager' => array(
@@ -93,6 +183,10 @@ return array(
 		),
 		'aliases' => array(
 			'translator' => 'MvcTranslator',
+			'Zend\Authentication\AuthenticationService' => 'my_auth_service',
+		),
+		'invokables' => array(
+			'my_auth_service' => 'Zend\Authentication\AuthenticationService',
 		),
 	),
 	'translator' => array(
@@ -109,6 +203,9 @@ return array(
 		'invokables' => array(
 			'IndexController' => 'EksamiKeskkond\Controller\IndexController',
 			'AdminController' => 'EksamiKeskkond\Controller\AdminController',
+			'TeacherController' => 'EksamiKeskkond\Controller\TeacherController',
+			'StudentController' => 'EksamiKeskkond\Controller\StudentController',
+			'RegisterController' => 'EksamiKeskkond\Controller\RegisterController',
 		),
 	),
 	'view_manager' => array(

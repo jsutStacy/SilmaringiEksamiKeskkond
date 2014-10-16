@@ -13,8 +13,15 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+
+use EksamiKeskkond\Model\User;
 use EksamiKeskkond\Model\Course;
+use EksamiKeskkond\Model\UserTable;
 use EksamiKeskkond\Model\CourseTable;
+
+use Zend\ServiceManager\ServiceManager;
+use Zend\Mail\Transport\Smtp;
+use Zend\Mail\Transport\SmtpOptions;
 
 class Module {
 
@@ -45,11 +52,25 @@ class Module {
 	public function getServiceConfig() {
 		return array(
 			'factories' => array(
+				'EksamiKeskkond\Model\UserTable' => function($sm) {
+					$tableGateway = $sm->get('UserTableGateway');
+					$table = new UserTable($tableGateway);
+				
+					return $table;
+				},
 				'EksamiKeskkond\Model\CourseTable' => function($sm) {
 					$tableGateway = $sm->get('CourseTableGateway');
 					$table = new CourseTable($tableGateway);
 
 					return $table;
+				},
+				'UserTableGateway' => function($sm) {
+					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+				
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new User());
+				
+					return new TableGateway('user', $dbAdapter, null, $resultSetPrototype);
 				},
 				'CourseTableGateway' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
@@ -58,6 +79,14 @@ class Module {
 					$resultSetPrototype->setArrayObjectPrototype(new Course());
 
 					return new TableGateway('course', $dbAdapter, null, $resultSetPrototype);
+				},
+				'mail.transport' => function (ServiceManager $serviceManager) {
+					$config = $serviceManager->get('Config');
+
+					$transport = new Smtp();
+					$transport->setOptions(new SmtpOptions($config['mail']['transport']['options']));
+
+					return $transport;
 				},
 			),
 		);

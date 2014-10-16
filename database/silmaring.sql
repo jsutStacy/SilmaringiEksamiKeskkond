@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 06, 2014 at 04:28 PM
+-- Generation Time: Oct 16, 2014 at 03:13 PM
 -- Server version: 5.5.32
 -- PHP Version: 5.4.16
 
@@ -31,22 +31,12 @@ USE `silmaring`;
 CREATE TABLE IF NOT EXISTS `course` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
+  `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `published` tinyint(1) NOT NULL,
+  `validity_period` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
-
---
--- Dumping data for table `course`
---
-
-INSERT INTO `course` (`id`, `name`, `price`, `published`) VALUES
-(2, 'test', '2.00', 0),
-(4, 'Matemaatika', '10.00', 0),
-(5, 'Informaatika', '1.00', 0),
-(6, 'test', '10.00', 0),
-(7, 'test nÃ¤htav', '10.00', 1),
-(8, 'test privaatne', '15.00', 0);
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
@@ -60,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `lesson` (
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_course_to_lesson` (`course_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -96,7 +86,26 @@ CREATE TABLE IF NOT EXISTS `user` (
   `role_id` int(10) NOT NULL,
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(50) NOT NULL,
-  `status` tinyint(1) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `email_confirmed` tinyint(1) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `password_salt` varchar(50) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT NULL,
+  `registration_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `registration_token` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_course`
+--
+
+CREATE TABLE IF NOT EXISTS `user_course` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) NOT NULL,
+  `course_id` int(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
