@@ -54,6 +54,12 @@ At the end of conf file add line:
 Include "path/to/project/vhosts/yourfoldername/vhost.conf"
 ```
 
+Go to path/to/xampp/php and open php.ini.
+Uncomment line:
+```
+extension=php_openssl.dll
+```
+
 Now go to C:/Windows/System32/drivers/etc and open hosts file.
 Add:
 ```
@@ -84,6 +90,31 @@ and add this into it:
 ```
 and save it.
 
+For e-mail sending make new local config file.
+Go to path/to/project/config/autoload and make new php file called mail.config.local.php and add this into it:
+
+```
+<?php
+	return array(
+		'mail' => array(
+			'transport' => array(
+				'options' => array(
+					'host' => 'smtp.gmail.com',
+					'port' => 587,
+					'connection_class' => 'login',
+					'connection_config' => array(
+						'username' => 'yourgmailaddress',
+						'password' => 'yourgmailpassword',
+						'ssl' => 'tls'
+					),
+				),
+			),
+		),
+	);
+?>
+```
+and save it.
+
 Now go and login to:
 ```
 http://localhost/phpmyadmin
@@ -98,6 +129,5 @@ http://eksamikeskkond.silmaring.dev
 ```
 You should have website working.
 ```
-http://eksamikeskkond.silmaring.dev/admin/courses
+http://eksamikeskkond.silmaring.dev
 ```
-Should show list of test courses and You should be able to add, edit and delete them.
