@@ -128,6 +128,3 @@ When you go to:
 http://eksamikeskkond.silmaring.dev
 ```
 You should have website working.
-```
-http://eksamikeskkond.silmaring.dev
-```
