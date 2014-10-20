@@ -11,7 +11,4 @@
  * file.
  */
 
-return array(
-	'static_salt' => 'aFGQ475SDsdfsaf2342',
-	'admin_email' => 'andres.taht@gmail.com',
-);
+return array();

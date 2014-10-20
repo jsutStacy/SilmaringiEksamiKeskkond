@@ -94,15 +94,6 @@ return array(
 							),
 						),
 					),
-					'teachers' => array(
-						'type' => 'Literal',
-						'options' => array(
-							'route' => '/teachers',
-							'defaults' => array(
-								'action' => 'teachers',
-							),
-						),
-					),
 				),
 			),
 			'teacher' => array(
@@ -122,55 +113,6 @@ return array(
 					'defaults' => array(
 						'controller' => 'StudentController',
 						'action' => 'index',
-					),
-				),
-			),
-			'register' => array(
-				'type' => 'Literal',
-				'options' => array(
-					'route' => '/register',
-					'defaults' => array(
-						'controller' => 'RegisterController',
-						'action' => 'index',
-					),
-				),
-				'may_terminate' => true,
-				'child_routes' => array(
-					'success' => array(
-						'type' => 'Literal',
-						'options' => array(
-							'route' => '/success',
-							'defaults' => array(
-								'action' => 'success',
-							),
-						),
-					),
-					'confirm-email' => array(
-						'type' => 'Segment',
-						'options' => array(
-							'route' => '/confirm-email[/:token]',
-							'defaults' => array(
-								'action' => 'confirm-email',
-							),
-						),
-					),
-					'forgotten-password' => array(
-						'type' => 'Literal',
-						'options' => array(
-							'route' => '/forgotten-password',
-							'defaults' => array(
-								'action' => 'forgotten-password',
-							),
-						),
-					),
-					'password-change-success' => array(
-						'type' => 'Literal',
-						'options' => array(
-							'route' => '/password-change-success',
-							'defaults' => array(
-								'action' => 'password-change-success',
-							),
-						),
 					),
 				),
 			),
@@ -205,7 +147,6 @@ return array(
 			'AdminController' => 'EksamiKeskkond\Controller\AdminController',
 			'TeacherController' => 'EksamiKeskkond\Controller\TeacherController',
 			'StudentController' => 'EksamiKeskkond\Controller\StudentController',
-			'RegisterController' => 'EksamiKeskkond\Controller\RegisterController',
 		),
 	),
 	'view_manager' => array(

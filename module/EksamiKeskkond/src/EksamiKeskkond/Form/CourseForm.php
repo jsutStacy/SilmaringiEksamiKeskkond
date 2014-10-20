@@ -34,9 +34,34 @@ class CourseForm extends Form {
 		));
 
 		$this->add(array(
+			'name' => 'description',
+			'attributes' => array(
+				'type' => 'textarea',
+				'class' => 'form-control',
+			),
+			'options' => array(
+				'label' => 'Kursuse kirjeldus',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'teacher_id',
+			'type' => 'Zend\Form\Element\Select',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
+			'options' => array(
+				'label' => 'Kursuse õpetaja',
+				'options' => array(
+					null => 'Pole veel teada'
+				),
+			),
+		));
+
+		$this->add(array(
 			'name' => 'price',
 			'attributes' => array(
-				'type' => 'number',
+				'type' => 'text',
 				'class' => 'form-control',
 			),
 			'options' => array(

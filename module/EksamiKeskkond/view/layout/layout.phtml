@@ -48,7 +48,6 @@
 								<?php if ($user = $this->identity()) { ?>
 								<li><a href="<?php echo $this->url('home/logout'); ?>">Logi välja</a></li>
 								<?php } else { ?>
-								<li><a href="<?php echo $this->url('register') ?>">Registreeri</a></li>
 								<li><a href="<?php echo $this->url('home/login') ?>">Logi sisse</a></li>
 								<?php } ?>
 							</ul>

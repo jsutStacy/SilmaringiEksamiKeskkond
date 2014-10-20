@@ -37,14 +37,12 @@ class IndexController extends AbstractActionController {
 				$data = $form->getData();
 				$sm = $this->getServiceLocator();
 				$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-				$config = $this->getServiceLocator()->get('Config');
-				$staticSalt = $config['static_salt'];
 
 				$authAdapter = new AuthAdapter($dbAdapter,
 					'user',
 					'email',
 					'password',
-					"MD5(CONCAT('$staticSalt', ?, password_salt)) AND status = 1"
+					"MD5(?) AND status = 1"
 				);
 				$authAdapter
 					->setIdentity($data['email'])
@@ -55,7 +53,6 @@ class IndexController extends AbstractActionController {
 				$result = $auth->authenticate($authAdapter);
 
 				switch ($result->getCode()) {
-
 					case Result::FAILURE_IDENTITY_NOT_FOUND:
 						// do stuff for nonexistent identity
 						break;
@@ -67,13 +64,26 @@ class IndexController extends AbstractActionController {
 					case Result::SUCCESS:
 						$storage = $auth->getStorage();
 						$storage->write($authAdapter->getResultRowObject(null, 'password'));
-						$time = 1209600;
 
-						if ($data['remember_me']) {
-							$sessionManager = new \Zend\Session\SessionManager();
-							$sessionManager->rememberMe($time);
+						$user = $auth->getIdentity();
+
+						switch ($user->role_id) {
+							case 1 :
+								return $this->redirect()->toRoute('admin');
+								break;
+
+							case 2 :
+								return $this->redirect()->toRoute('teacher');
+								break;
+
+							case 3 :
+								return $this->redirect()->toRoute('student');
+								break;
+
+							default :
+								return $this->redirect()->toRoute('home');
+								break;
 						}
-						return $this->redirect()->toRoute('home');
 						break;
 
 					default:

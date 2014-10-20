@@ -36,12 +36,9 @@ class UserTable {
 			'firstname' => $user->firstname,
 			'lastname' => $user->lastname,
 			'email' => $user->email,
-			'email_confirmed' => $user->email_confirmed,
 			'password' => $user->password,
-			'password_salt' => $user->password_salt,
 			'status' => $user->status,
 			'registration_date' => $user->registration_date,
-			'registration_token' => $user->registration_token,
 		);
 
 		$id = (int) $user->id;
@@ -59,23 +56,6 @@ class UserTable {
 		}
 	}
 
-	public function getUserByToken($token) {
-		$rowset = $this->tableGateway->select(array('registration_token' => $token));
-		$row = $rowset->current();
-
-		if (!$row) {
-			throw new \Exception("Could not find row $token");
-		}
-		return $row;
-	}
-
-	public function activateUser($id) {
-		$data['status'] = 1;
-		$data['email_confirmed'] = 1;
-
-		$this->tableGateway->update($data, array('id' => (int) $id));
-	}
-
 	public function getUserByEmail($email) {
 		$rowset = $this->tableGateway->select(array('email' => $email));
 		$row = $rowset->current();
@@ -84,12 +64,6 @@ class UserTable {
 			throw new \Exception("Could not find row $email");
 		}
 		return $row;
-	}
-
-	public function changePassword($id, $password) {
-		$data['password'] = $password;
-
-		$this->tableGateway->update($data, array('id' => (int) $id));
 	}
 
 	public function deleteUser($id) {

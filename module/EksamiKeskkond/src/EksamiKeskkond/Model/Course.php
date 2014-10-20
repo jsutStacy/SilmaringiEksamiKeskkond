@@ -11,7 +11,11 @@ class Course implements InputFilterAwareInterface {
 
 	public $id;
 
+	public $teacher_id;
+
 	public $name;
+
+	public $description;
 
 	public $price;
 
@@ -21,7 +25,9 @@ class Course implements InputFilterAwareInterface {
 
 	public function exchangeArray($data) {
 		$this->id = (isset($data['id'])) ? $data['id'] : null;
+		$this->teacher_id = (isset($data['teacher_id'])) ? $data['teacher_id'] : null;
 		$this->name = (isset($data['name'])) ? $data['name'] : null;
+		$this->description = (isset($data['description'])) ? $data['description'] : null;
 		$this->price = (isset($data['price'])) ? $data['price'] : null;
 		$this->published = (isset($data['published'])) ? $data['published'] : null;
 	}
@@ -69,6 +75,11 @@ class Course implements InputFilterAwareInterface {
 			$inputFilter->add($factory->createInput(array(
 				'name' => 'price',
 				'required' => true,
+			)));
+
+			$inputFilter->add($factory->createInput(array(
+				'name' => 'teacher_id',
+				'required' => false,
 			)));
 
 			$inputFilter->add($factory->createInput(array(

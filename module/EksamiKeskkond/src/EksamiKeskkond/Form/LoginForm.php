@@ -38,14 +38,6 @@ class LoginForm extends Form {
 		));
 
 		$this->add(array(
-			'name' => 'remember_me',
-			'type' => 'checkbox',
-			'options' => array(
-				'label' => 'Mäleta mind',
-			),
-		));
-
-		$this->add(array(
 			'name' => 'submit',
 			'attributes' => array(
 				'type' => 'submit',

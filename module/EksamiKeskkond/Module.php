@@ -18,23 +18,13 @@ use EksamiKeskkond\Model\User;
 use EksamiKeskkond\Model\Course;
 use EksamiKeskkond\Model\UserTable;
 use EksamiKeskkond\Model\CourseTable;
+use EksamiKeskkond\Acl\Acl;
 
 use Zend\ServiceManager\ServiceManager;
-use Zend\Mail\Transport\Smtp;
-use Zend\Mail\Transport\SmtpOptions;
 
 class Module {
 
-	public function onBootstrap(MvcEvent $e) {
-		$this->initAcl($e);
-
-		$eventManager = $e->getApplication()->getEventManager();
-		$eventManager->attach('route', array($this, 'checkAcl'));
-
-		$moduleRouteListener = new ModuleRouteListener();
-		$moduleRouteListener->attach($eventManager);
-	}
-
+	
 	public function getConfig() {
 		return include __DIR__ . '/config/module.config.php';
 	}
@@ -47,6 +37,13 @@ class Module {
 				),
 			),
 		);
+	}
+
+	public function onBootstrap(\Zend\EventManager\EventInterface $e) {
+		$application = $e->getApplication();
+		$em = $application->getEventManager();
+
+		$em->attach('route', array($this, 'onRoute'), -100);
 	}
 
 	public function getServiceConfig() {
@@ -80,74 +77,60 @@ class Module {
 
 					return new TableGateway('course', $dbAdapter, null, $resultSetPrototype);
 				},
-				'mail.transport' => function (ServiceManager $serviceManager) {
-					$config = $serviceManager->get('Config');
-
-					$transport = new Smtp();
-					$transport->setOptions(new SmtpOptions($config['mail']['transport']['options']));
-
-					return $transport;
-				},
 			),
 		);
 	}
 
-	public function initAcl(MvcEvent $e) {
-		$acl = new \Zend\Permissions\Acl\Acl();
-		$roles = include __DIR__ . '/config/module.acl.roles.php';
-		//$roles = $this->getDbRoles($e); - uncomment when we have roles in database
+	public function onRoute(\Zend\EventManager\EventInterface $e) {
+		$application = $e->getApplication();
+		$routeMatch = $e->getRouteMatch();
+		$sm = $application->getServiceManager();
 
-		$allResources = array();
+		$auth = $sm->get('Zend\Authentication\AuthenticationService');
+		$config = $sm->get('Config');
+		$acl = new Acl($config);
 
-		foreach ($roles as $role => $resources) {
-			$role = new \Zend\Permissions\Acl\Role\GenericRole($role);
-			$acl->addRole($role);
+		$role = Acl::DEFAULT_ROLE;
 
-			//adding resources
-			foreach ($resources as $resource) {
-				// Edit 4
-				if(!$acl->hasResource($resource))
-					$acl->addResource(new \Zend\Permissions\Acl\Resource\GenericResource($resource));
-			}
+		if ($auth->hasIdentity()) {
+			$user = $auth->getIdentity();
 
-			//adding restrictions
-			foreach ($resources as $resource) {
-				$acl->allow($role, $resource);
+			switch ($user->role_id) {
+				case 1 :
+					$role = Acl::ADMIN_ROLE;
+					break;
+
+				case 2 :
+					$role = Acl::TEACHER_ROLE;
+					break;
+
+				case 3 :
+					$role = Acl::STUDENT_ROLE;
+					break;
+
+				default :
+					$role = Acl::DEFAULT_ROLE;
+					break;
 			}
 		}
+		$controller = $routeMatch->getParam('controller');
+		$action = $routeMatch->getParam('action');
 
-		//setting to view
-		$e->getViewModel()->acl = $acl;
-	}
+		if (!$acl->hasResource($controller)) {
+			throw new \Exception('Resource ' . $controller . ' not defined');
+		}
+		if (!$acl->isAllowed($role, $controller, $action)) {
+			$url = $e->getRouter()->assemble(array(), array('name' => 'home'));
 
-	public function checkAcl(MvcEvent $e) {
-		$route = $e->getRouteMatch()->getMatchedRouteName();
-
-		//you set your role
-		$userRole = 'admin';
-
-		if ($e->getViewModel()->acl->hasResource($route) && !$e->getViewModel()->acl->isAllowed($userRole, $route)) {
-			/*
 			$response = $e->getResponse();
+			$response->getHeaders()->addHeaderLine('Location', $url);
 
-			//location to page or what ever
-			$response->getHeaders()->addHeaderLine('Location', $e->getRequest()->getBaseUrl() . '/404');
-			$response->setStatusCode(404);
-			*/
+			// The HTTP response status code 302 Found is a common way of performing a redirection.
+			// http://en.wikipedia.org/wiki/HTTP_302
+			$response->setStatusCode(302);
+			$response->sendHeaders();
+
+			exit;
 		}
-	}
-
-	public function getDbRoles(MvcEvent $e) {
-		// I take it that your adapter is already configured
-		$dbAdapter = $e->getApplication()->getServiceManager()->get('Zend\Db\Adapter\Adapter');
-		$results = $dbAdapter->query('SELECT * FROM acl');
-
-		// making the roles array
-		$roles = array();
-
-		foreach ($results as $result) {
-			$roles[$result['user_role']][] = $result['resource'];
-		}
-		return $roles;
 	}
 }

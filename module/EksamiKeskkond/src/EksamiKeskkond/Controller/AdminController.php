@@ -11,8 +11,6 @@ class AdminController extends AbstractActionController {
 
 	protected $courseTable;
 
-	protected $userTable;
-
 	public function indexAction() {
 		return new ViewModel();
 	}
@@ -80,10 +78,6 @@ class AdminController extends AbstractActionController {
 		
 	}
 
-	public function closeCourseAction($id) {
-		
-	}
-
 	public function changeCoursePriceAction($id) {
 		
 	}
@@ -96,35 +90,11 @@ class AdminController extends AbstractActionController {
 	
 	}
 
-	public function teachersAction() {
-		return new ViewModel(array(
-			'teachers' => $this->getUserTable()->fetchAllTeachers(),
-		));
-	}
-
-	public function registerTeacherAction() {
-		
-	}
-
-	public function deleteTeacherAction($id) {
-		$this->getCourseTable()->deleteTeacher($this->params()->fromRoute('id'));
-
-		return $this->redirect()->toRoute('admin/teachers');
-	}
-
-	public function getCoursetable() {
+	public function getCourseTable() {
 		if (!$this->courseTable) {
 			$sm = $this->getServiceLocator();
 			$this->courseTable = $sm->get('EksamiKeskkond\Model\CourseTable');
 		}
 		return $this->courseTable;
-	}
-
-	public function getUsertable() {
-		if (!$this->userTable) {
-			$sm = $this->getServiceLocator();
-			$this->userTable = $sm->get('EksamiKeskkond\Model\UserTable');
-		}
-		return $this->userTable;
 	}
 }

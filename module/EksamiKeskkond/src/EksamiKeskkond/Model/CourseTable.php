@@ -32,7 +32,9 @@ class CourseTable {
 
 	public function saveCourse(Course $course) {
 		$data = array(
+			'teacher_id' => $course->teacher_id,
 			'name' => $course->name,
+			'description' => $course->description,
 			'price' => $course->price,
 			'published' => $course->published,
 		);
