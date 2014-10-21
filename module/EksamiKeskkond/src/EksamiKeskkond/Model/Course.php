@@ -75,6 +75,14 @@ class Course implements InputFilterAwareInterface {
 			$inputFilter->add($factory->createInput(array(
 				'name' => 'price',
 				'required' => true,
+				'validators' => array(
+					array(
+						'name' => 'Between',
+						'options' => array(
+							'min' => 0,
+						),
+					),
+				),
 			)));
 
 			$inputFilter->add($factory->createInput(array(
