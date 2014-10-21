@@ -19,8 +19,6 @@ class UserTable {
 	}
 
 	public function getUser($id) {
-		$id = (int) $id;
-
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 
@@ -40,15 +38,12 @@ class UserTable {
 			'status' => $user->status,
 			'registration_date' => $user->registration_date,
 		);
-
-		$id = (int) $user->id;
-
-		if ($id == 0) {
+		if ($user->id == 0) {
 			$this->tableGateway->insert($data);
 		}
 		else {
-			if ($this->getUser($id)) {
-				$this->tableGateway->update($data, array('id' => $id));
+			if ($this->getUser($user->id)) {
+				$this->tableGateway->update($data, array('id' => $user->id));
 			}
 			else {
 				throw new \Exception('Form id does not exist');
@@ -66,7 +61,27 @@ class UserTable {
 		return $row;
 	}
 
+	public function getAllTeachersForSelect() {
+		$result = array(null => 'Pole veel teada');
+		$rowset = $this->tableGateway->select(array('role_id' => 2));
+
+		foreach ($rowset as $row) {
+			$result[$row->id] = $row->firstname . ' ' . $row->lastname;
+		}
+		return $result;
+	}
+
 	public function deleteUser($id) {
 		$this->tableGateway->delete(array('id' => $id));
+	}
+
+	public function getUsersByIds(array $ids) {
+		$data = array();
+
+		foreach ($ids as $id) {
+			$rowset = $this->tableGateway->select(array('id' => $id));
+			$data[] = $rowset->current();
+		}
+		return $data;
 	}
 }

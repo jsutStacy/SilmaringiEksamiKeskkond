@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 20, 2014 at 06:08 PM
+-- Generation Time: Oct 21, 2014 at 06:15 PM
 -- Server version: 5.5.32
 -- PHP Version: 5.4.16
 
@@ -35,16 +35,17 @@ CREATE TABLE IF NOT EXISTS `course` (
   `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `published` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+  PRIMARY KEY (`id`),
+  KEY `fk_user_to_course` (`teacher_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `course`
 --
 
 INSERT INTO `course` (`id`, `teacher_id`, `name`, `description`, `price`, `published`) VALUES
-(6, 0, 'Matemaatika Eksamikursus', 'Kursus on mÃµeldud matemaatika eksamit sooritavatele Ãµpilastele', '10.00', 1),
-(7, 0, 'Eesti Keele Eksamikursus', '', '5.00', 0);
+(6, NULL, 'Matemaatika Eksamikursus', 'Kursus on mÃµeldud matemaatika eksamit sooritavatele Ãµpilastele', '10.00', 1),
+(7, 2, 'Eesti Keele Eksamikursus', 'See on eesti keel eksami kursus', '5.00', 1);
 
 -- --------------------------------------------------------
 
@@ -57,7 +58,8 @@ CREATE TABLE IF NOT EXISTS `lesson` (
   `subject_id` int(10) DEFAULT NULL,
   `name` int(255) DEFAULT NULL,
   `content` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_subject_to_lesson` (`subject_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -70,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `role`
@@ -92,7 +94,8 @@ CREATE TABLE IF NOT EXISTS `subject` (
   `course_id` int(10) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `description` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_course_to_subject` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -110,8 +113,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(50) DEFAULT NULL,
   `status` tinyint(1) DEFAULT NULL,
   `registration_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+  PRIMARY KEY (`id`),
+  KEY `fk_role_to_user` (`role_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `user`
@@ -134,8 +138,45 @@ CREATE TABLE IF NOT EXISTS `user_course` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `user_id` int(10) NOT NULL,
   `course_id` int(10) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`id`),
+  KEY `fk_user_to_user_course` (`user_id`),
+  KEY `fk_course_to_user_course` (`course_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `course`
+--
+ALTER TABLE `course`
+  ADD CONSTRAINT `fk_user_to_course` FOREIGN KEY (`teacher_id`) REFERENCES `user` (`id`);
+
+--
+-- Constraints for table `lesson`
+--
+ALTER TABLE `lesson`
+  ADD CONSTRAINT `fk_subject_to_lesson` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`id`);
+
+--
+-- Constraints for table `subject`
+--
+ALTER TABLE `subject`
+  ADD CONSTRAINT `fk_course_to_subject` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`);
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `fk_role_to_user` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
+
+--
+-- Constraints for table `user_course`
+--
+ALTER TABLE `user_course`
+  ADD CONSTRAINT `fk_course_to_user_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
+  ADD CONSTRAINT `fk_user_to_user_course` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -1,0 +1,26 @@
+<?php
+	$this->headTitle('Kursus - ');
+?>
+
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h2><?php echo $this->escapeHtml($course->name) ?></h2>
+	</div>
+	<div class="col-md-5 pull-right">
+		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/change-course-visibility', array('id' => $course->id)) ?>">
+			<?php if ($course->published == true) { ?>
+				Tee nähtamatuks
+			<?php } else { ?>
+				Tee nähtavaks
+			<?php }?>
+		</a>
+		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/course-participants', array('id' => $course->id)) ?>">
+			Kursusel osalejad
+		</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<p><?php echo $this->escapeHtml($course->description) ?></p>
+	</div>
+</div>

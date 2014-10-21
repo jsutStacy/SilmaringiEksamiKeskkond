@@ -16,8 +16,11 @@ use Zend\Db\TableGateway\TableGateway;
 
 use EksamiKeskkond\Model\User;
 use EksamiKeskkond\Model\Course;
+use EksamiKeskkond\Model\UserCourse;
 use EksamiKeskkond\Model\UserTable;
 use EksamiKeskkond\Model\CourseTable;
+use EksamiKeskkond\Model\UserCourseTable;
+
 use EksamiKeskkond\Acl\Acl;
 
 use Zend\ServiceManager\ServiceManager;
@@ -61,6 +64,12 @@ class Module {
 
 					return $table;
 				},
+				'EksamiKeskkond\Model\UserCourseTable' => function($sm) {
+					$tableGateway = $sm->get('UserCourseTableGateway');
+					$table = new UserCourseTable($tableGateway);
+				
+					return $table;
+				},
 				'UserTableGateway' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 				
@@ -76,6 +85,14 @@ class Module {
 					$resultSetPrototype->setArrayObjectPrototype(new Course());
 
 					return new TableGateway('course', $dbAdapter, null, $resultSetPrototype);
+				},
+				'UserCourseTableGateway' => function($sm) {
+					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+				
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new UserCourse());
+				
+					return new TableGateway('user_course', $dbAdapter, null, $resultSetPrototype);
 				},
 			),
 		);

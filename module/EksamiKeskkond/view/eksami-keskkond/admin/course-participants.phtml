@@ -1,0 +1,31 @@
+<?php
+	$this->headTitle('Kursusel osalejad - ');
+?>
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h2>Kursusel osalejad (<?php echo count($participants) ?>)</h2>
+	</div>
+	<div class="col-md-5 pull-right">
+		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/empty-course', array('id' => $id)) ?>">Tühjenda kursus</a>
+	</div>
+</div>
+<div class="row">
+	<table>
+		<tr>
+			<td>Id</td>
+			<td>Eesnimi</td>
+			<td>Perekonnanimi</td>
+			<td>E-mail</td>
+			<td>Staatus</td>
+		</tr>
+		<?php foreach ($participants as $student) : ?>
+		<tr>
+			<td><?php echo $this->escapeHtml($student->id) ?></td>
+			<td><?php echo $this->escapeHtml($student->firstname) ?></td>
+			<td><?php echo $this->escapeHtml($student->lastname) ?></td>
+			<td><?php echo $this->escapeHtml($student->email) ?></td>
+			<td><?php echo $student->status == true ? "Aktiivne" : "Külmutatud" ?></td>
+		</tr>
+		<?php endforeach; ?>
+	</table>
+</div>

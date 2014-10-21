@@ -52,9 +52,6 @@ class CourseForm extends Form {
 			),
 			'options' => array(
 				'label' => 'Kursuse õpetaja',
-				'options' => array(
-					null => 'Pole veel teada'
-				),
 			),
 		));
 

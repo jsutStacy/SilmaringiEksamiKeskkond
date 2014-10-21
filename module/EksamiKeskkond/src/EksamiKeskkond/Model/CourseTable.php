@@ -19,8 +19,6 @@ class CourseTable {
 	}
 
 	public function getCourse($id) {
-		$id = (int) $id;
-
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 
@@ -32,21 +30,18 @@ class CourseTable {
 
 	public function saveCourse(Course $course) {
 		$data = array(
-			'teacher_id' => $course->teacher_id,
+			'teacher_id' => !empty($course->teacher_id) ? $course->teacher_id : NULL,
 			'name' => $course->name,
 			'description' => $course->description,
 			'price' => $course->price,
 			'published' => $course->published,
 		);
-
-		$id = (int) $course->id;
-
-		if ($id == 0) {
+		if ($course->id == 0) {
 			$this->tableGateway->insert($data);
 		}
 		else {
-			if ($this->getCourse($id)) {
-				$this->tableGateway->update($data, array('id' => $id));
+			if ($this->getCourse($course->id)) {
+				$this->tableGateway->update($data, array('id' => $course->id));
 			}
 			else {
 				throw new \Exception('Form id does not exist');
@@ -54,8 +49,17 @@ class CourseTable {
 		}
 	}
 
+	public function changeCourseVisibility($id) {
+		$course = $this->getCourse($id);
+		$visibility = $course->published == true ? 0 : 1;
+
+		$this->tableGateway->update(
+			array('published' => $visibility),
+			array('id' => $id)
+		);
+	}
+
 	public function deleteCourse($id) {
 		$this->tableGateway->delete(array('id' => $id));
 	}
-
 }

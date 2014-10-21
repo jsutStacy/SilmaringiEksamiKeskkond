@@ -52,6 +52,18 @@ return array(
 				),
 				'may_terminate' => true,
 				'child_routes' => array(
+					'course' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/course[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'course',
+							),
+						),
+					),
 					'courses' => array(
 						'type' => 'Literal',
 						'options' => array(
@@ -91,6 +103,42 @@ return array(
 							),
 							'defaults' => array(
 								'action' => 'delete-course',
+							),
+						),
+					),
+					'change-course-visibility' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/change-course-visibility[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'change-course-visibility',
+							),
+						),
+					),
+					'empty-course' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/empty-course[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'empty-course',
+							),
+						),
+					),
+					'course-participants' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/course-participants[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'course-participants',
 							),
 						),
 					),
