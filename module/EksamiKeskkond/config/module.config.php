@@ -153,6 +153,21 @@ return array(
 						'action' => 'index',
 					),
 				),
+				'may_terminate' => true,
+				'child_routes' => array(
+					'course' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/course[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'course',
+							),
+						),
+					),
+				),
 			),
 			'student' => array(
 				'type' => 'Literal',
@@ -161,6 +176,42 @@ return array(
 					'defaults' => array(
 						'controller' => 'StudentController',
 						'action' => 'index',
+					),
+				),
+				'may_terminate' => true,
+				'child_routes' => array(
+					'course' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/course[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'course',
+							),
+						),
+					),
+					'all-courses' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/all-courses',
+							'defaults' => array(
+								'action' => 'all-courses',
+							),
+						),
+					),
+					'buy-course' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/buy-course[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'buy-course',
+							),
+						),
 					),
 				),
 			),

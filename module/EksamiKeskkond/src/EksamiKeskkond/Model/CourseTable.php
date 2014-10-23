@@ -28,6 +28,12 @@ class CourseTable {
 		return $row;
 	}
 
+	public function getCourseByTeacherId($teacherId) {
+		$rowset = $this->tableGateway->select(array('teacher_id' => $teacherId));
+
+		return $rowset->current();
+	}
+
 	public function saveCourse(Course $course) {
 		$data = array(
 			'teacher_id' => !empty($course->teacher_id) ? $course->teacher_id : NULL,

@@ -23,7 +23,7 @@
 				<div class="panel-body">
 						<p><b>Hind: </b><?php echo $this->escapeHtml($course->price) ?></p>
 						<p><b>ID: </b><?php echo $this->escapeHtml($course->id) ?></p>
-						<?php if ($this->escapeHtml($course->published) == "0"): ?>
+						<?php if ($course->published != true): ?>
 							<p>Kursus on suletud.</p>
 						<?php else: ?>
 							<p>Kursus on avatud.</p>
