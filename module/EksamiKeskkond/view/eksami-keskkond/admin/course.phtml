@@ -6,21 +6,29 @@
 	<div class="col-md-5 pull-left">
 		<h2><?php echo $this->escapeHtml($course->name) ?></h2>
 	</div>
-	<div class="col-md-5 pull-right">
-		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/change-course-visibility', array('id' => $course->id)) ?>">
-			<?php if ($course->published == true) { ?>
-				Tee nähtamatuks
-			<?php } else { ?>
-				Tee nähtavaks
-			<?php }?>
-		</a>
-		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/course-participants', array('id' => $course->id)) ?>">
-			Kursusel osalejad
-		</a>
-	</div>
 </div>
 <div class="row">
-	<div class="col-md-5 pull-left">
+	<div class="col-md-4 pull-left">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Halda kursust</h3>
+			</div>
+		</div>
+		<div class="panel-body">
+			<a class="btn btn-primary btn-me" href="<?php echo $this->url('admin/change-course-visibility', array('id' => $course->id)) ?>">
+				<?php if ($course->published == true) { ?>
+					Tee nähtamatuks
+				<?php } else { ?>
+					Tee nähtavaks
+				<?php }?>
+			</a>
+			<a class="btn btn-primary btn-me" href="<?php echo $this->url('admin/course-participants', array('id' => $course->id)) ?>">
+				Kursusel osalejad
+			</a>
+		</div>
+	</div>
+	<div class="col-md-8 pull-right">
 		<p><?php echo $this->escapeHtml($course->description) ?></p>
 	</div>
+	
 </div>
