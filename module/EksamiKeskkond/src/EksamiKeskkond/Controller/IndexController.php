@@ -14,6 +14,7 @@ use Zend\Authentication\Adapter\DbTable as AuthAdapter;
 
 use EksamiKeskkond\Form\LoginForm;
 use EksamiKeskkond\Filter\LoginFilter;
+
 use EksamiKeskkond\Model\User;
 
 class IndexController extends AbstractActionController {

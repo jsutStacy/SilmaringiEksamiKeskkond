@@ -6,6 +6,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 use EksamiKeskkond\Form\CourseForm;
+use EksamiKeskkond\Filter\CourseFilter;
+
 use EksamiKeskkond\Model\Course;
 
 class AdminController extends AbstractActionController {
@@ -42,7 +44,7 @@ class AdminController extends AbstractActionController {
 		if ($request->isPost()) {
 			$course = new Course();
 
-			$form->setInputFilter($course->getInputFilter());
+			$form->setInputFilter(new CourseFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
@@ -68,7 +70,7 @@ class AdminController extends AbstractActionController {
 		$request = $this->getRequest();
 
 		if ($request->isPost()) {
-			$form->setInputFilter($course->getInputFilter());
+			$form->setInputFilter(new CourseFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
