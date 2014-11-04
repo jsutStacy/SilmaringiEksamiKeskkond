@@ -12,6 +12,8 @@ return array(
 			'allow' => array(
 				'IndexController' => array(
 					'all' => 'guest',
+					'logoutAction' => 'student',
+					'loginAction' => 'guest'
 				),
 				'StudentController' => array(
 					'all' => 'student',
@@ -26,6 +28,10 @@ return array(
 			'deny' => array(
 				'StudentController' => array(
 					'all' => 'teacher',
+				),
+				'IndexController' => array(
+					'logoutAction' => 'guest',
+					'loginAction' => 'student',
 				),
 			),
 		),

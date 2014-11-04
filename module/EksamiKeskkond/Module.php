@@ -13,6 +13,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\View\HelperPluginManager;
 
 use EksamiKeskkond\Model\User;
 use EksamiKeskkond\Model\Course;
@@ -92,6 +93,49 @@ class Module {
 					$resultSetPrototype->setArrayObjectPrototype(new UserCourse());
 				
 					return new TableGateway('user_course', $dbAdapter, null, $resultSetPrototype);
+				},
+			),
+		);
+	}
+	
+	public function getViewHelperConfig() {
+		return array(
+			'factories' => array(
+				'navigation' => function(HelperPluginManager $pm){
+					$sm = $pm->getServiceLocator();
+					$config = $sm->get('Config');
+						
+					$acl = new Acl($config);
+					$auth = $sm->get('Zend\Authentication\AuthenticationService');
+					$role = Acl::DEFAULT_ROLE;
+						
+					if ($auth->hasIdentity()) {
+						$user = $auth->getIdentity();
+							
+						switch ($user->role_id) {
+							case 1 :
+								$role = Acl::ADMIN_ROLE;
+								break;
+									
+							case 2 :
+								$role = Acl::TEACHER_ROLE;
+								break;
+									
+							case 3 :
+								$role = Acl::STUDENT_ROLE;
+								break;
+									
+							default :
+								$role = Acl::DEFAULT_ROLE;
+								break;
+						}
+					}
+						
+					$navigation = $pm->get('Zend\View\Helper\Navigation');
+					$navigation->setAcl($acl)
+					->setRole($role);
+						
+					return $navigation;
 				},
 			),
 		);
