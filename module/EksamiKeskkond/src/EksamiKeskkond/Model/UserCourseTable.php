@@ -21,7 +21,6 @@ class UserCourseTable {
 	public function getCourseParticipants($courseId) {
 		$userIds = array();
 		$resultSet = $this->tableGateway->select(array('course_id' => $courseId));
-
 		foreach ($resultSet as $row) {
 			$userIds[] = $row->user_id;
 		}

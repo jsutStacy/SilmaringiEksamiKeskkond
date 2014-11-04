@@ -116,6 +116,14 @@ class AdminController extends AbstractActionController {
 			'participants' => $users,
 		));
 	}
+	
+	public function teachersAction(){
+		
+		$teachers = $this->getUserTable()->getAllTeachersForSelect();
+		return new ViewModel(array(
+			'teachers' => $teachers,
+		));
+	}
 
 	public function getUserTable() {
 		if (!$this->userTable) {

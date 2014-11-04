@@ -8,6 +8,12 @@
 				'route' => 'home',
 			),
 			array(
+				'label' => 'Õpetajad',
+				'route' => 'admin/teachers',
+				'resource' => 'AdminController',
+				'privilege' => 'all'
+			),
+			array(
 				'label' => 'Logi vÃ¤lja',
 				'route' => 'home/logout',
 				'action' => 'logoutAction',
@@ -22,7 +28,7 @@
 				'controller' => 'IndexController',
 				'resource' => 'IndexController',
 				'privilege' => 'loginAction',
-			)
+			),
 		)
 	),
 	'service_manager' => array(
