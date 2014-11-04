@@ -119,7 +119,7 @@ class AdminController extends AbstractActionController {
 	
 	public function teachersAction(){
 		
-		$teachers = $this->getUserTable()->getAllTeachersForSelect();
+		$teachers = $this->getUserTable()->getAllTeachersForList();
 		return new ViewModel(array(
 			'teachers' => $teachers,
 		));

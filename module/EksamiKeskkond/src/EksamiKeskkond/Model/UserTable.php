@@ -62,6 +62,17 @@ class UserTable {
 	}
 
 	public function getAllTeachersForSelect() {
+		$result = array(null => 'Pole veel teada');
+		$rowset = $this->tableGateway->select(array('role_id' => 2));
+		
+		foreach ($rowset as $row) {
+			$result[$row->id] = $row->firstname . ' ' . $row->lastname;
+		}
+		
+		return $result;
+	}
+	
+	public function getAllTeachersForList(){
 		$rowset = $this->tableGateway->select(array('role_id' => 2));
 		foreach ($rowset as $row) {
 			$result[$row->id] = $rowset->current();
