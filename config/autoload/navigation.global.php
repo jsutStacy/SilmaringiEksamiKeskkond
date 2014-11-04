@@ -14,6 +14,18 @@
 				'privilege' => 'all'
 			),
 			array(
+				'label' => 'Kursused',
+				'route' => 'admin/courses',
+				'resource' => 'AdminController',
+				'privilege' => 'all'	
+			),
+			array(
+				'label' => 'Kõik kursused',
+				'route' => 'student/all-courses',
+				'resource' => 'StudentController',
+				'privilege' => 'all',
+			),
+			array(
 				'label' => 'Logi vÃ¤lja',
 				'route' => 'home/logout',
 				'action' => 'logoutAction',

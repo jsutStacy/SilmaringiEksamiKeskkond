@@ -27,7 +27,7 @@ return array(
 			),
 			'deny' => array(
 				'StudentController' => array(
-					'all' => 'teacher',
+					'all' => 'teacher',					
 				),
 				'IndexController' => array(
 					'logoutAction' => 'guest',
