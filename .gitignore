@@ -3,3 +3,7 @@ config/autoload/database.global.php
 .buildpath
 .project
 .settings/
+.idea/
+TVP.iml
+config/autoload/careelika.local.php
+vhosts/careelika/vhost.conf

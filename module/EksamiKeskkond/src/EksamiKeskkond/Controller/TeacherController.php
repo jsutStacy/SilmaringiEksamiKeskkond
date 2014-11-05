@@ -38,21 +38,22 @@ class TeacherController extends AbstractActionController {
 
 	public function courseAction() {
 		$auth = new AuthenticationService();
+
 		$user = $auth->getIdentity();
 		$course =  $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
-		if (!$course){
+
+		if (!$course) {
 			return $this->redirect()->toRoute('errors');
 		}
 		$teacherId = $course->teacher_id;
-		if ($teacherId == $user->id){
+		if ($teacherId == $user->id) {
 			return new ViewModel(array(
-					'course' => $course,
+				'course' => $course,
 			));
 		}
-		else{
+		else {
 			return $this->redirect()->toRoute('errors/no-permission');
 		}
-		
 	}
 
 	public function addSubjectAction() {
@@ -85,27 +86,25 @@ class TeacherController extends AbstractActionController {
 	public function editSubjectAction() {
 		$id = $this->params()->fromRoute('id');
 		$subject = $this->getSubjectTable()->getSubject($id);
-		//kas subject id voi kursuse id
-		$course = $this->getCourseTable()->getCourseBySubjectId($this->params()->fromRoute('id'));
-		
+		$course = $this->getCourseTable()->getCourse($subject->course_id);
+
 		$form  = new SubjectForm();
 		$form->bind($subject);
-		$form->get('course_id')->setValueOptions($course);
+		$form->get('course_id')->setValue($course->id);
 		$form->get('submit')->setAttribute('value', 'Muuda');
-	
+
 		$request = $this->getRequest();
-	
+
 		if ($request->isPost()) {
 			$form->setInputFilter(new SubjectFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
-	
+
 			if ($form->isValid()) {
 				$this->getSubjectTable()->saveSubject($form->getData());
-	
-				return $this->redirect()->toRoute('teacher/course');
+
+				return $this->redirect()->toRoute('teacher/course', array('id' => $course->id));
 			}
 		}
-	
 		return array(
 			'id' => $id,
 			'form' => $form,
@@ -113,9 +112,13 @@ class TeacherController extends AbstractActionController {
 	}
 	
 	public function deleteSubjectAction() {
+		$id = $this->params()->fromRoute('id');
+		$subject = $this->getSubjectTable()->getSubject($id);
+		$course = $this->getCourseTable()->getCourse($subject->course_id);
 		$this->getSubjectTable()->deleteSubject($this->params()->fromRoute('id'));
+		
 	
-		return $this->redirect()->toRoute('teacher/course');
+		return $this->redirect()->toRoute('teacher/course', array('id'=> $course->id));
 	}
 
 	public function courseSubjectsAction() {

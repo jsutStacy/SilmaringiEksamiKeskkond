@@ -26,8 +26,6 @@ use EksamiKeskkond\Model\UserTable;
 use EksamiKeskkond\Model\CourseTable;
 use EksamiKeskkond\Model\SubjectTable;
 use EksamiKeskkond\Model\UserCourseTable;
-use EksamiKeskkond\Model\CourseSubject;
-use EksamiKeskkond\Model\CourseSubjectTable;
 
 use EksamiKeskkond\Acl\Acl;
 
@@ -83,12 +81,6 @@ class Module {
 				
 					return $table;
 				},
-				'EksamiKeskkond\Model\CourseSubjectTable' => function($sm) {
-					$tableGateway = $sm->get('CourseSubjectTableGateway');
-					$table = new CourseSubjectTable($tableGateway);
-				
-					return $table;
-				},
 				'UserTableGateway' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 				
@@ -120,14 +112,6 @@ class Module {
 					$resultSetPrototype->setArrayObjectPrototype(new UserCourse());
 				
 					return new TableGateway('user_course', $dbAdapter, null, $resultSetPrototype);
-				},
-				'CourseSubjectTableGateway' => function($sm) {
-					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-				
-					$resultSetPrototype = new ResultSet();
-					$resultSetPrototype->setArrayObjectPrototype(new CourseSubject());
-				
-					return new TableGateway('course_subject', $dbAdapter, null, $resultSetPrototype);
 				},
 			),
 		);

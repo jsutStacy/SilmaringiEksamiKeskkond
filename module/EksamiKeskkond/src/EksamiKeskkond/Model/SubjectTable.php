@@ -23,12 +23,10 @@ class SubjectTable {
 		$row = $rowset->current();
 
 		if (!$row) {
-			throw new \Exception("Could not find row controller-model-subjectTable $id");
+			throw new \Exception("Could not find row $id");
 		}
 		return $row;
 	}
-
-
 
 	public function saveSubject(Subject $subject) {
 		$data = array(
@@ -44,11 +42,10 @@ class SubjectTable {
 				$this->tableGateway->update($data, array('id' => $subject->id));
 			}
 			else {
-				throw new \Exception('Form id does not exist controller-model-subjectTable');
+				throw new \Exception('Form id does not exist');
 			}
 		}
 	}
-
 
 	public function getSubjectsByIds(array $ids) {
 		$data = array();
@@ -59,15 +56,18 @@ class SubjectTable {
 		}
 		return $data;
 	}
-	
+
 	public function deleteSubject($id) {
 		$this->tableGateway->delete(array('id' => $id));
 	}
 	
-
-	public function getCourseBySubjectId($subjectId) {
-		$rowset = $this->tableGateway->select(array('id' => $subjectId));
-	
-		return $rowset->current();
+	public function getSubjectsByCourseId($course) {
+		$result = array();
+		$rowset = $this->tableGateway->select(array('course_id' => $course->id));
+		
+		foreach ($rowset as $row) {
+			$result[$row->id] = $rowset->current();
+		}
+		return $result;
 	}
 }

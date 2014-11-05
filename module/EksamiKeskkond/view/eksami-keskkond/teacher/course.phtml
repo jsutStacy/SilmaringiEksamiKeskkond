@@ -3,9 +3,6 @@
 ?>
 
 <div class="row">
-	<div class="col-md-5 pull-left">
-		<h2>Teemad</h2>
-	</div>
 	<div class="col-md-5 pull-right">
 		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('teacher/add-subject', array('id' => $course->id)) ?>">
 			<span class="glyphicon glyphicon-plus"></span>
@@ -13,7 +10,6 @@
 		</a>
 	</div>
 </div>
-
 <div class="row">
 	<div class="col-md-5 pull-left">
 		<h2><?php echo $this->escapeHtml($course->name) ?></h2>
@@ -23,4 +19,26 @@
 	<div class="col-md-5 pull-left">
 		<p><?php echo $this->escapeHtml($course->description) ?></p>
 	</div>
+</div>
+<div class="col-md-5 pull-left">
+	<h2>Teemad</h2>
+</div>
+<div class="row">
+	<table class="table table-striped">
+		<tr>
+			<td><h3>Nimi</h3></td>
+			<td><h3>Kirjeldus</h3></td>
+			<td></td>
+		</tr>
+		<?php foreach ($subjects as $subject) : ?>
+		<tr>
+			<td><?php echo $this->escapeHtml($subject->name) ?></td>
+			<td><?php echo $this->escapeHtml($subject->description) ?></td>
+			<td>
+				<a href="<?php echo $this->url('teacher/edit-subject', array('id' => $subject->id)) ?>">Muuda teemat</a>
+				<a href="<?php echo $this->url('teacher/delete-subject', array('id' => $subject->id)) ?>">Kustuta teema</a>
+			</td>
+		</tr>
+		<?php endforeach; ?>
+	</table>
 </div>
