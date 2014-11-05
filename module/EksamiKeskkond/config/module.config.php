@@ -142,6 +142,15 @@ return array(
 							),
 						),
 					),
+					'teachers' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/teachers',
+							'defaults' => array(
+								'action' => 'teachers',
+							)
+						)
+					),
 				),
 			),
 			'teacher' => array(
