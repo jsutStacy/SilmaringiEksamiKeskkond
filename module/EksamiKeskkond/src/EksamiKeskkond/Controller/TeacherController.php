@@ -41,6 +41,8 @@ class TeacherController extends AbstractActionController {
 
 		$user = $auth->getIdentity();
 		$course =  $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
+		$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course);
+		
 
 		if (!$course) {
 			return $this->redirect()->toRoute('errors');
@@ -49,6 +51,7 @@ class TeacherController extends AbstractActionController {
 		if ($teacherId == $user->id) {
 			return new ViewModel(array(
 				'course' => $course,
+				'subjects' => $subjects,
 			));
 		}
 		else {
