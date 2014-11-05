@@ -37,9 +37,22 @@ class TeacherController extends AbstractActionController {
 	}
 
 	public function courseAction() {
-		return new ViewModel(array(
-			'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
-		));
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+		$course =  $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
+		if (!$course){
+			return $this->redirect()->toRoute('errors');
+		}
+		$teacherId = $course->teacher_id;
+		if ($teacherId == $user->id){
+			return new ViewModel(array(
+					'course' => $course,
+			));
+		}
+		else{
+			return $this->redirect()->toRoute('errors/no-permission');
+		}
+		
 	}
 
 	public function addSubjectAction() {
