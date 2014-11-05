@@ -34,6 +34,12 @@
 				'privilege' => 'all',
 			),
 			array(
+				'label' => 'Õpilased',
+				'route' => 'teacher/students',
+				'resource' => 'TeacherController',
+				'privilege' => 'all',
+			),
+			array(
 				'label' => 'Logi välja',
 				'route' => 'home/logout',
 				'action' => 'logoutAction',

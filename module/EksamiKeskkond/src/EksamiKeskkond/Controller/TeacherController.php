@@ -17,12 +17,12 @@ use EksamiKeskkond\Filter\SubjectFilter;
 class TeacherController extends AbstractActionController {
 
 	protected $courseTable;
-	
+
 	protected $subjectTable;
-	
-	protected $subjectCourseTable;
-	
+
 	protected $userCourseTable;
+
+	protected $userTable;
 
 	public function indexAction() {
 		$auth = new AuthenticationService();
@@ -48,6 +48,7 @@ class TeacherController extends AbstractActionController {
 			return $this->redirect()->toRoute('errors');
 		}
 		$teacherId = $course->teacher_id;
+
 		if ($teacherId == $user->id) {
 			return new ViewModel(array(
 				'course' => $course,
@@ -57,6 +58,18 @@ class TeacherController extends AbstractActionController {
 		else {
 			return $this->redirect()->toRoute('errors/no-permission');
 		}
+	}
+
+	public function studentsAction() {
+		$students = array();
+		$studentIds = $this->getUserCourseTable()->getCourseParticipants($this->params()->fromRoute('id'));
+
+		foreach ($studentIds as $id) {
+			$students[] = $this->getUserTable()->getUser($id);
+		}
+		return new ViewModel(array(
+			'students' => $students,
+		));
 	}
 
 	public function addSubjectAction() {
@@ -151,11 +164,19 @@ class TeacherController extends AbstractActionController {
 		return $this->subjectTable;
 	}
 
-	public function getCourseSubjectTable() {
-		if (!$this->courseSubjectTable) {
+	public function getUserCourseTable() {
+		if (!$this->userCourseTable) {
 			$sm = $this->getServiceLocator();
-			$this->courseSubjectTable = $sm->get('EksamiKeskkond\Model\CourseSubjectTable');
+			$this->userCourseTable = $sm->get('EksamiKeskkond\Model\UserCourseTable');
 		}
-		return $this->courseSubjectTable;
+		return $this->userCourseTable;
+	}
+
+	public function getUserTable() {
+		if (!$this->userTable) {
+			$sm = $this->getServiceLocator();
+			$this->userTable = $sm->get('EksamiKeskkond\Model\UserTable');
+		}
+		return $this->userTable;
 	}
 }

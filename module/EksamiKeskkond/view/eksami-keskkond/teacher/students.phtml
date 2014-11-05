@@ -1,0 +1,25 @@
+<?php
+	$this->headTitle('Õpilased - ');
+?>
+
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h2>Minu õpilased</h2>
+	</div>
+</div>
+<div class="row">
+	<table class="table table-striped">
+		<tr>
+			<td>Eesnimi</td>
+			<td>Perekonnanimi</td>
+			<td>E-mail</td>
+		</tr>
+	<?php foreach ($students as $student): ?>
+		<tr>
+			<td><?php echo $this->escapeHtml($student->firstname) ?></td>
+			<td><?php echo $this->escapeHtml($student->lastname) ?></td>
+			<td><?php echo $this->escapeHtml($student->email) ?></td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+</div>

@@ -29,6 +29,9 @@ return array(
 				),
 			),
 			'deny' => array(
+				'TeacherController' => array(
+					'all' => 'admin',
+				),
 				'StudentController' => array(
 					'all' => 'teacher',
 				),

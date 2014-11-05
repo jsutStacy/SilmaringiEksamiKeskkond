@@ -224,6 +224,18 @@ return array(
 							),
 						),
 					),
+					'students' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/students[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'students',
+							),
+						),
+					),
 				),
 			),
 			'student' => array(
