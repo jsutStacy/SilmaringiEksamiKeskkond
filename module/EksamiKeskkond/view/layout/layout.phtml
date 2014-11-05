@@ -43,17 +43,7 @@
 
 					<div class="row">
 						<div class="collapse navbar-collapse span10">
-							<!--
-							<ul class="nav navbar-nav navbar-right">
-								<li class="active"><a href="<?php echo $this->url('home') ?>">Avaleht</a></li>
-								<?php if ($user = $this->identity()) { ?>
-								<li><a href="<?php echo $this->url('home/logout'); ?>">Logi välja</a></li>
-								<?php } else { ?>
-								<li><a href="<?php echo $this->url('home/login') ?>">Logi sisse</a></li>
-								<?php } ?>
-							</ul> 
-							-->
-							 <?php echo $this->navigation('navigation')->menu()->setUlClass('nav navbar-nav navbar-right'); ?>
+							<?php echo $this->navigation('navigation')->menu()->setUlClass('nav navbar-nav navbar-right'); ?>
 						</div><!--/.nav-collapse -->
 					</div>
 				</div>

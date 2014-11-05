@@ -8,7 +8,7 @@
 				'route' => 'home',
 			),
 			array(
-				'label' => 'Õpetajad',
+				'label' => 'Ã•petajad',
 				'route' => 'admin/teachers',
 				'resource' => 'AdminController',
 				'privilege' => 'all'
@@ -20,7 +20,7 @@
 				'privilege' => 'all'	
 			),
 			array(
-				'label' => 'Kõik kursused',
+				'label' => 'KÃµik kursused',
 				'route' => 'student/all-courses',
 				'resource' => 'StudentController',
 				'privilege' => 'all',

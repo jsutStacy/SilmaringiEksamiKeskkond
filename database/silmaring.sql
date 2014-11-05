@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4.1
+-- version 3.5.2
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 21, 2014 at 06:15 PM
--- Server version: 5.5.32
--- PHP Version: 5.4.16
+-- Host: localhost
+-- Generation Time: Nov 05, 2014 at 11:33 AM
+-- Server version: 5.5.25a
+-- PHP Version: 5.4.4
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `silmaring`
 --
-CREATE DATABASE IF NOT EXISTS `silmaring` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `silmaring`;
 
 -- --------------------------------------------------------
 
@@ -35,17 +33,16 @@ CREATE TABLE IF NOT EXISTS `course` (
   `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `published` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_user_to_course` (`teacher_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `course`
 --
 
 INSERT INTO `course` (`id`, `teacher_id`, `name`, `description`, `price`, `published`) VALUES
-(6, NULL, 'Matemaatika Eksamikursus', 'Kursus on mÃµeldud matemaatika eksamit sooritavatele Ãµpilastele', '10.00', 1),
-(7, 2, 'Eesti Keele Eksamikursus', 'See on eesti keel eksami kursus', '5.00', 1);
+(6, 2, 'Matemaatika Eksamikursus', 'Kursus on mÃµeldud matemaatika eksamit sooritavatele Ãµpilastele', 10.00, 1),
+(7, 2, 'Eesti Keele Eksamikursus', 'See on eesti keele eksami kursus', 10.00, 0);
 
 -- --------------------------------------------------------
 
@@ -58,8 +55,7 @@ CREATE TABLE IF NOT EXISTS `lesson` (
   `subject_id` int(10) DEFAULT NULL,
   `name` int(255) DEFAULT NULL,
   `content` text,
-  PRIMARY KEY (`id`),
-  KEY `fk_subject_to_lesson` (`subject_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -94,8 +90,7 @@ CREATE TABLE IF NOT EXISTS `subject` (
   `course_id` int(10) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `description` text,
-  PRIMARY KEY (`id`),
-  KEY `fk_course_to_subject` (`course_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -113,8 +108,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(50) DEFAULT NULL,
   `status` tinyint(1) DEFAULT NULL,
   `registration_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `fk_role_to_user` (`role_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
@@ -123,10 +117,10 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`id`, `role_id`, `firstname`, `lastname`, `email`, `password`, `status`, `registration_date`) VALUES
 (1, 1, 'Admin', 'Silmaring', 'admin@silmaring.ee', '2e33a9b0b06aa0a01ede70995674ee23', 1, '2014-10-20 14:00:49'),
-(2, 2, 'Õpetaja1', 'Silmaring', 'opetaja1@silmaring.ee', 'ec3054b21b076be9afc66aa734cc5c0b', 1, '2014-10-20 15:33:56'),
-(3, 2, 'Õpetaja2', 'Silmaring', 'opetaja2@silmaring.ee', 'b1f50e3d85af0d2989f7b0632cae47a8', 1, '2014-10-20 15:33:59'),
-(4, 3, 'Õpilane1', 'Silmaring', 'opilane1@silmaring.ee', '94ea3e70b8ef4bd170fd5ca5bf3f9803', 1, '2014-10-20 15:34:03'),
-(5, 3, 'Õpilane2', 'Silmaring', 'opilane2@silmaring.ee', '927cc87205b95f46323130bc31573178', 1, '2014-10-20 15:34:08');
+(2, 2, 'Ãµpetaja1', 'Silmaring', 'opetaja1@silmaring.ee', 'ec3054b21b076be9afc66aa734cc5c0b', 1, '2014-11-05 10:32:04'),
+(3, 2, 'Ãµpetaja2', 'Silmaring', 'opetaja2@silmaring.ee', 'b1f50e3d85af0d2989f7b0632cae47a8', 1, '2014-11-05 10:32:07'),
+(4, 3, 'Ãµpilane1', 'Silmaring', 'opilane1@silmaring.ee', '94ea3e70b8ef4bd170fd5ca5bf3f9803', 1, '2014-11-05 10:32:11'),
+(5, 3, 'Ãµpilane2', 'Silmaring', 'opilane2@silmaring.ee', '927cc87205b95f46323130bc31573178', 1, '2014-11-05 10:32:15');
 
 -- --------------------------------------------------------
 
@@ -138,45 +132,15 @@ CREATE TABLE IF NOT EXISTS `user_course` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `user_id` int(10) NOT NULL,
   `course_id` int(10) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_user_to_user_course` (`user_id`),
-  KEY `fk_course_to_user_course` (`course_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Constraints for dumped tables
+-- Dumping data for table `user_course`
 --
 
---
--- Constraints for table `course`
---
-ALTER TABLE `course`
-  ADD CONSTRAINT `fk_user_to_course` FOREIGN KEY (`teacher_id`) REFERENCES `user` (`id`);
-
---
--- Constraints for table `lesson`
---
-ALTER TABLE `lesson`
-  ADD CONSTRAINT `fk_subject_to_lesson` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`id`);
-
---
--- Constraints for table `subject`
---
-ALTER TABLE `subject`
-  ADD CONSTRAINT `fk_course_to_subject` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`);
-
---
--- Constraints for table `user`
---
-ALTER TABLE `user`
-  ADD CONSTRAINT `fk_role_to_user` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
-
---
--- Constraints for table `user_course`
---
-ALTER TABLE `user_course`
-  ADD CONSTRAINT `fk_course_to_user_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`),
-  ADD CONSTRAINT `fk_user_to_user_course` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+INSERT INTO `user_course` (`id`, `user_id`, `course_id`) VALUES
+(1, 4, 6);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

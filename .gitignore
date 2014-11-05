@@ -1,2 +1,5 @@
 vendor/
 config/autoload/database.global.php
+.buildpath
+.project
+.settings/
