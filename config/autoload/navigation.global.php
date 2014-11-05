@@ -28,6 +28,12 @@
 				'privilege' => 'all',
 			),
 			array(
+				'label' => 'Minu kursused',
+				'route' => 'student/my-courses',
+				'resource' => 'StudentController',
+				'privilege' => 'all',
+			),
+			array(
 				'label' => 'Logi välja',
 				'route' => 'home/logout',
 				'action' => 'logoutAction',

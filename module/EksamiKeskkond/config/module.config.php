@@ -258,6 +258,15 @@ return array(
 							),
 						),
 					),
+					'my-courses' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/my-courses',
+							'defaults' => array(
+								'action' => 'my-courses',
+							),
+						),
+					),
 					'buy-course' => array(
 						'type' => 'Segment',
 						'options' => array(
