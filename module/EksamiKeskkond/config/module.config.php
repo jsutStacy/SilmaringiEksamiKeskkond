@@ -142,15 +142,6 @@ return array(
 							),
 						),
 					),
-					'teachers' => array(
-						'type' => 'Literal',
-						'options' => array(
-							'route' => '/teachers',
-							'defaults' => array(
-								'action' => 'teachers',
-							)
-						)
-					),
 				),
 			),
 			'teacher' => array(
@@ -173,6 +164,54 @@ return array(
 							),
 							'defaults' => array(
 								'action' => 'course',
+							),
+						),
+					),
+					'subject' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/subject[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'subject',
+							),
+						),
+					),
+					'add-subject' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/add-subject[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+', 
+							),
+							'defaults' => array(
+								'action' => 'add-subject',
+							),
+						),
+					),
+					'edit-subject' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/edit-subject[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'edit-subject',
+							),
+						),
+					),
+					'delete-subject' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/delete-subject[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'delete-subject',
 							),
 						),
 					),

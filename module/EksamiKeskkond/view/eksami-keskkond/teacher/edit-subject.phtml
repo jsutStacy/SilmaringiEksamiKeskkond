@@ -1,0 +1,24 @@
+<?php
+	$this->headTitle('Muuda teemat - ');
+?>
+<h1>Muuda teemat</h1>
+<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('teacher/edit-subject', array('id' => $this->id,'course_id' => $course->id)));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
+	echo $this->formHidden($form->get('course_id'));
+?>
+<div class="form-group">
+	<?php echo $this->formRow($form->get('name')); ?>
+</div>
+<div class="form-group">
+	<?php echo $this->formRow($form->get('description')); ?>
+</div>
+<div class="form-group">
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

@@ -1,0 +1,27 @@
+<?php
+	$this->headTitle('Teema - ');
+?>
+
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h2><?php echo $this->escapeHtml($subject->name) ?></h2>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4 pull-left">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Halda teemat</h3>
+			</div>
+		</div>
+		<div class="panel-body">
+			<a>
+				Teema
+			</a>
+		</div>
+	</div>
+	<div class="col-md-8 pull-right">
+		<p><?php echo $this->escapeHtml($subject->description) ?></p>
+	</div>
+	
+</div>
