@@ -17,7 +17,7 @@
 				'label' => 'Kursused',
 				'route' => 'admin/courses',
 				'resource' => 'AdminController',
-				'privilege' => 'all'	
+				'privilege' => 'all'
 			),
 			array(
 				'label' => 'Kõik kursused',
@@ -30,7 +30,7 @@
 				'route' => 'home/logout',
 				'action' => 'logoutAction',
 				'controller' => 'IndexController',
-				'resource' => 'IndexController',	
+				'resource' => 'IndexController',
 				'privilege' => 'logoutAction',
 			),
 			array(

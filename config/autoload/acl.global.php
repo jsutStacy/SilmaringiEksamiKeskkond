@@ -24,10 +24,13 @@ return array(
 				'AdminController' => array(
 					'all' => 'admin',
 				),
+				'OurErrorController' => array(
+					'all' => 'guest',
+				),
 			),
 			'deny' => array(
 				'StudentController' => array(
-					'all' => 'teacher',					
+					'all' => 'teacher',
 				),
 				'IndexController' => array(
 					'logoutAction' => 'guest',

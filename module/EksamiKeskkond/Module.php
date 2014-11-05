@@ -9,11 +9,14 @@
 
 namespace EksamiKeskkond;
 
-use Zend\Mvc\ModuleRouteListener;
+use Zend\View\Model\ViewModel;
+use Zend\View\HelperPluginManager;
+
 use Zend\Mvc\MvcEvent;
+use Zend\Mvc\ModuleRouteListener;
+
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
-use Zend\View\HelperPluginManager;
 
 use EksamiKeskkond\Model\User;
 use EksamiKeskkond\Model\Course;
@@ -212,14 +215,11 @@ class Module {
 			throw new \Exception('Resource ' . $controller . ' not defined');
 		}
 		if (!$acl->isAllowed($role, $controller, $action)) {
-			$url = $e->getRouter()->assemble(array(), array('name' => 'home'));
+			$url = $e->getRouter()->assemble(array(), array('name' => 'errors/no-permission'));
 
 			$response = $e->getResponse();
 			$response->getHeaders()->addHeaderLine('Location', $url);
-
-			// The HTTP response status code 302 Found is a common way of performing a redirection.
-			// http://en.wikipedia.org/wiki/HTTP_302
-			$response->setStatusCode(302);
+			$response->setStatusCode(403);
 			$response->sendHeaders();
 
 			exit;

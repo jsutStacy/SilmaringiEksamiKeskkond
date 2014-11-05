@@ -272,6 +272,28 @@ return array(
 					),
 				),
 			),
+			'errors' => array(
+				'type' => 'Literal',
+				'options' => array(
+					'route' => '/errors',
+					'defaults' => array(
+						'controller' => 'OurErrorController',
+						'action' => 'index',
+					),
+				),
+				'may_terminate' => true,
+				'child_routes' => array(
+					'no-permission' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/no-permission',
+							'defaults' => array(
+								'action' => 'no-permission',
+							),
+						),
+					),
+				),
+			),
 		),
 	),
 	'service_manager' => array(
@@ -303,6 +325,7 @@ return array(
 			'AdminController' => 'EksamiKeskkond\Controller\AdminController',
 			'TeacherController' => 'EksamiKeskkond\Controller\TeacherController',
 			'StudentController' => 'EksamiKeskkond\Controller\StudentController',
+			'OurErrorController' => 'EksamiKeskkond\Controller\OurErrorController',
 		),
 	),
 	'view_manager' => array(
