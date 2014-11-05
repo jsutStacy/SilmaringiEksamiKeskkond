@@ -33,6 +33,7 @@ return array(
 					'all' => 'teacher',
 				),
 				'IndexController' => array(
+					'indexAction' => 'student',
 					'logoutAction' => 'guest',
 					'loginAction' => 'student',
 				),

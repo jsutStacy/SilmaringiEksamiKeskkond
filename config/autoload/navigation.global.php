@@ -6,6 +6,8 @@
 			array(
 				'label' => 'Kodu',
 				'route' => 'home',
+				'resource' => 'IndexController',
+				'privilege' => 'indexAction'
 			),
 			array(
 				'label' => 'Õpetajad',

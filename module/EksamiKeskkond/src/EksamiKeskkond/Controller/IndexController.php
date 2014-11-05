@@ -20,7 +20,28 @@ use EksamiKeskkond\Model\User;
 class IndexController extends AbstractActionController {
 
 	public function indexAction() {
-		return new ViewModel();
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		if (!empty($user)) {
+			switch ($user->role_id) {
+				case 1 :
+					return $this->redirect()->toRoute('admin');
+					break;
+	
+				case 2 :
+					return $this->redirect()->toRoute('teacher');
+					break;
+	
+				case 3 :
+					return $this->redirect()->toRoute('student');
+					break;
+	
+				default :
+					return $this->redirect()->toRoute('home');
+					break;
+			}
+		}
 	}
 
 	public function loginAction() {
