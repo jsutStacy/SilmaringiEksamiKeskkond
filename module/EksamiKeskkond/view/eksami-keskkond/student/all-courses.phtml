@@ -17,7 +17,11 @@
 					</div>
 					<div class="panel-body">
 						<p><b>Hind: </b><?php echo $this->escapeHtml($course->price) ?></p>
-						<p><a href="<?php echo $this->url('student/buy-course', array('id' => $course->id)) ?>">Osta kursus</a></p>
+						<?php if (!in_array($course->id, $studentCoursesIds)) { ?>
+							<p><a href="<?php echo $this->url('student/buy-course', array('id' => $course->id)) ?>">Osta kursus</a></p>
+						<?php } else { ?>
+							<p>Sul on see kursus juba ostetud</p>
+						<?php } ?>
 					</div>
 				</div>
 			</div>

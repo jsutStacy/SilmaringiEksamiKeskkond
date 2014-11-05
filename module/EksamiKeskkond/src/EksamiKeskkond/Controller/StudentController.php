@@ -32,8 +32,14 @@ class StudentController extends AbstractActionController {
 	}
 
 	public function allCoursesAction() {
+		$auth = new AuthenticationService();
+
+		$user = $auth->getIdentity();
+		$studentCoursesIds = $this->getUserCourseTable()->getAllCoursesByUserId($user->id);
+
 		return new ViewModel(array(
 			'courses' => $this->getCourseTable()->fetchAll(),
+			'studentCoursesIds' => $studentCoursesIds,
 		));
 	}
 
