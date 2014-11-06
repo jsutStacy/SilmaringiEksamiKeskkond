@@ -7,3 +7,4 @@ config/autoload/database.global.php
 TVP.iml
 config/autoload/careelika.local.php
 vhosts/careelika/vhost.conf
+config/autoload/mail.local.php

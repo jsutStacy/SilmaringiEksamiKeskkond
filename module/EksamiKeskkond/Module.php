@@ -30,6 +30,8 @@ use EksamiKeskkond\Model\UserCourseTable;
 use EksamiKeskkond\Acl\Acl;
 
 use Zend\ServiceManager\ServiceManager;
+use Zend\Mail\Transport\Smtp;
+use Zend\Mail\Transport\SmtpOptions;
 
 class Module {
 	
@@ -112,6 +114,14 @@ class Module {
 					$resultSetPrototype->setArrayObjectPrototype(new UserCourse());
 				
 					return new TableGateway('user_course', $dbAdapter, null, $resultSetPrototype);
+				},
+				'mail.transport' => function (ServiceManager $serviceManager) {
+					$config = $serviceManager->get('Config');
+
+					$transport = new Smtp();
+					$transport->setOptions(new SmtpOptions($config['mail']['transport']['options']));
+
+					return $transport;
 				},
 			),
 		);

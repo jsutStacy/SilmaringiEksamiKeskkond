@@ -13,15 +13,11 @@
 			<div class="col-md-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"><?php echo $this->escapeHtml($course->name) ?></h3>
-					</div>
-					<div class="panel-body">
-						<p><b>Hind: </b><?php echo $this->escapeHtml($course->price) ?></p>
-						<?php if (!in_array($course->id, $studentCoursesIds)) { ?>
-							<p><a href="<?php echo $this->url('student/buy-course', array('id' => $course->id)) ?>">Osta kursus</a></p>
-						<?php } else { ?>
-							<p>Sul on see kursus juba ostetud</p>
-						<?php } ?>
+						<h3 class="panel-title">
+							<a href="<?php echo $this->url('student/course', array('id' => $course->id)) ?>">
+								<?php echo $this->escapeHtml($course->name) ?>
+							</a>
+						</h3>
 					</div>
 				</div>
 			</div>

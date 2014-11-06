@@ -291,6 +291,18 @@ return array(
 							),
 						),
 					),
+					'buy-course-with-bill' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/buy-course-with-bill[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'buy-course-with-bill',
+							),
+						),
+					),
 				),
 			),
 			'errors' => array(

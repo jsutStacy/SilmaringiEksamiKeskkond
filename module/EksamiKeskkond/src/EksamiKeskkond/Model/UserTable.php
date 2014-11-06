@@ -35,8 +35,6 @@ class UserTable {
 			'lastname' => $user->lastname,
 			'email' => $user->email,
 			'password' => $user->password,
-			'status' => $user->status,
-			'registration_date' => $user->registration_date,
 		);
 		if ($user->id == 0) {
 			$this->tableGateway->insert($data);

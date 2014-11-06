@@ -16,8 +16,6 @@ class User {
 
 	public $password;
 
-	public $status;
-
 	public $registration_date;
 
 	public function exchangeArray($data) {
@@ -27,7 +25,5 @@ class User {
 		$this->lastname = (isset($data['lastname'])) ? $data['lastname'] : null;
 		$this->email = (isset($data['email'])) ? $data['email'] : null;
 		$this->password = (isset($data['password'])) ? $data['password'] : null;
-		$this->status = (isset($data['status'])) ? $data['status'] : null;
-		$this->registration_date = (isset($data['registration_date'])) ? $data['registration_date'] : null;
 	}
 }

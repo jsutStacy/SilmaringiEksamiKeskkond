@@ -34,8 +34,12 @@
 				<?php endforeach; ?>
 		</table>
 	</div>
-<?php } else if (!$hasBoughtCourse){ ?>
+<?php } else if (!$hasBoughtCourse) { ?>
 	<a class="btn btn-primary btn-me" href="<?php echo $this->url('student/buy-course', array('id' => $course->id)) ?>">
-	<span class="glyphicon glyphicon-plus"></span>Osta kursus</a>
+		<span class="glyphicon glyphicon-plus"></span>Osta kursus pangalingiga
+	</a>
+	<a class="btn btn-primary btn-me" href="<?php echo $this->url('student/buy-course-with-bill', array('id' => $course->id)) ?>">
+		<span class="glyphicon glyphicon-plus"></span>Osta kursus arvega
+	</a>
 <?php } ?>
 

@@ -44,10 +44,11 @@ class UserCourseTable {
 		return $courseIds;
 	}
 
-	public function buyCourse($userId, $courseId) {
+	public function buyCourse($userId, $courseId, $status) {
 		$data = array(
 			'user_id' => $userId,
 			'course_id' => $courseId,
+			'status' => $status,
 		);
 		if ($this->checkIfUserHasBoughtCourse($userId, $courseId)) {
 			return;
@@ -60,7 +61,7 @@ class UserCourseTable {
 	}
 
 	public function checkIfUserHasBoughtCourse($userId, $courseId) {
-		$resultSet = $this->tableGateway->select(array('user_id' => $userId, 'course_id' => $courseId));
+		$resultSet = $this->tableGateway->select(array('user_id' => $userId, 'course_id' => $courseId, 'status' => true));
 
 		if ($resultSet->current()) {
 			return true;
