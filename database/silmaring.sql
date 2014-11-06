@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `silmaring`
 --
+CREATE DATABASE IF NOT EXISTS `silmaring` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `silmaring`;
 
 -- --------------------------------------------------------
 
@@ -33,7 +35,8 @@ CREATE TABLE IF NOT EXISTS `course` (
   `description` text NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `published` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_user_to_course` (`teacher_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
@@ -55,7 +58,8 @@ CREATE TABLE IF NOT EXISTS `lesson` (
   `subject_id` int(10) DEFAULT NULL,
   `name` int(255) DEFAULT NULL,
   `content` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_subject_to_lesson` (`subject_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -90,7 +94,8 @@ CREATE TABLE IF NOT EXISTS `subject` (
   `course_id` int(10) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `description` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_course_to_subject` (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -106,7 +111,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lastname` varchar(50) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_role_to_user` (`role_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
@@ -131,7 +137,9 @@ CREATE TABLE IF NOT EXISTS `user_course` (
   `user_id` int(10) NOT NULL,
   `course_id` int(10) NOT NULL,
   `status` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `fk_user_to_user_course` (`user_id`),
+  KEY `fk_course_to_user_course` (`course_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
@@ -141,6 +149,24 @@ CREATE TABLE IF NOT EXISTS `user_course` (
 INSERT INTO `user_course` (`id`, `user_id`, `course_id`, `status`) VALUES
 (4, 4, 6, NULL),
 (5, 4, 7, 1);
+
+ALTER TABLE `course`
+  ADD CONSTRAINT `fk_user_to_course` FOREIGN KEY (`teacher_id`) REFERENCES `user` (`id`);
+
+ALTER TABLE `lesson`
+  ADD CONSTRAINT `fk_subject_to_lesson` FOREIGN KEY (`subject_id`) REFERENCES `subject` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `subject`
+  ADD CONSTRAINT `fk_course_to_subject` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `user`
+  ADD CONSTRAINT `fk_role_to_user` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
+
+ALTER TABLE `user_course`
+  ADD CONSTRAINT `fk_user_to_user_course` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `user_course`
+  ADD CONSTRAINT `fk_course_to_user_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

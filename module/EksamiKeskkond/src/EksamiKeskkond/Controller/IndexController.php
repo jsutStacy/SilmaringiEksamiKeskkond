@@ -64,7 +64,7 @@ class IndexController extends AbstractActionController {
 					'user',
 					'email',
 					'password',
-					"MD5(?) AND status = 1"
+					"MD5(?)"
 				);
 				$authAdapter
 					->setIdentity($data['email'])
