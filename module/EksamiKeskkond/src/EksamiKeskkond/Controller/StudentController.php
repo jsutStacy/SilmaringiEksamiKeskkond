@@ -7,11 +7,23 @@ use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
 
+use EksamiKeskkond\Model\Course;
+use EksamiKeskkond\Form\CourseForm;
+use EksamiKeskkond\Filter\CourseFilter;
+
+use EksamiKeskkond\Model\Subject;
+use EksamiKeskkond\Form\SubjectForm;
+use EksamiKeskkond\Filter\SubjectFilter;
+
 class StudentController extends AbstractActionController {
 
 	protected $courseTable;
 
 	protected $userCourseTable;
+	
+	protected $userTable;
+	
+	protected $subjectTable;
 
 	public function indexAction() {
 		$auth = new AuthenticationService();
@@ -24,10 +36,25 @@ class StudentController extends AbstractActionController {
 		}
 		return $this->redirect()->toRoute('student/all-courses');
 	}
-
+	
 	public function courseAction() {
+		$auth = new AuthenticationService();	
+		$user = $auth->getIdentity();
+
+		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
+		$subjects = array();
+		$hasBoughtCourse = $this->getUserCourseTable()->checkIfUserHasBoughtCourse($user->id, $course->id);
+		
+		if (!$course) {
+			return $this->redirect()->toRoute('errors');
+		}
+		if ($hasBoughtCourse) {
+			$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course);
+		}
 		return new ViewModel(array(
-			'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
+			'course' => $course,
+			'subjects' => $subjects,
+			'hasBoughtCourse' => $hasBoughtCourse,
 		));
 	}
 
@@ -83,5 +110,13 @@ class StudentController extends AbstractActionController {
 			$this->userCourseTable = $sm->get('EksamiKeskkond\Model\UserCourseTable');
 		}
 		return $this->userCourseTable;
+	}
+	
+	public function getSubjectTable() {
+		if (!$this->subjectTable) {
+			$sm = $this->getServiceLocator();
+			$this->subjectTable = $sm->get('EksamiKeskkond\Model\SubjectTable');
+		}
+		return $this->subjectTable;
 	}
 }

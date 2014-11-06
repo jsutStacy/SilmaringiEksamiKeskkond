@@ -3,6 +3,10 @@
 ?>
 
 <div class="row">
+	<div class="col-md-5 pull-right">
+	</div>
+</div>
+<div class="row">
 	<div class="col-md-5 pull-left">
 		<h2><?php echo $this->escapeHtml($course->name) ?></h2>
 	</div>
@@ -12,3 +16,26 @@
 		<p><?php echo $this->escapeHtml($course->description) ?></p>
 	</div>
 </div>
+<?php if (!empty($subjects)) { ?>
+	<div class="col-md-5 pull-left">
+		<h2>Teemad</h2>
+	</div>
+	<div class="row">
+		<table class="table table-striped">
+			<tr>
+				<td><h3>Nimi</h3></td>
+				<td><h3>Kirjeldus</h3></td>
+			</tr>
+				<?php foreach ($subjects as $subject) : ?>
+					<tr>
+						<td><?php echo $this->escapeHtml($subject->name) ?></td>
+						<td><?php echo $this->escapeHtml($subject->description) ?></td>
+					</tr>
+				<?php endforeach; ?>
+		</table>
+	</div>
+<?php } else if (!$hasBoughtCourse){ ?>
+	<a class="btn btn-primary btn-me" href="<?php echo $this->url('student/buy-course', array('id' => $course->id)) ?>">
+	<span class="glyphicon glyphicon-plus"></span>Osta kursus</a>
+<?php } ?>
+

@@ -62,7 +62,7 @@ class UserCourseTable {
 	public function checkIfUserHasBoughtCourse($userId, $courseId) {
 		$resultSet = $this->tableGateway->select(array('user_id' => $userId, 'course_id' => $courseId));
 
-		if (!empty($resultSet)) {
+		if ($resultSet->current()) {
 			return true;
 		}
 		return false;

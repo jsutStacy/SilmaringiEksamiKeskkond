@@ -136,7 +136,7 @@ class TeacherController extends AbstractActionController {
 	
 		return $this->redirect()->toRoute('teacher/course', array('id'=> $course->id));
 	}
-
+	/*kommenteerin praegu valja, sest tundub, et seda pole vaja, aga kindel pole
 	public function courseSubjectsAction() {
 		$id = $this->params()->fromRoute('id');
 		$subjectIds = $this->getCourseSubjectTable()->getCourseSubjects($id);
@@ -147,7 +147,8 @@ class TeacherController extends AbstractActionController {
 			'subjects' => $subjects,
 		));
 	}
-
+	*/
+	
 	public function getCourseTable() {
 		if (!$this->courseTable) {
 			$sm = $this->getServiceLocator();
