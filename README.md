@@ -81,6 +81,7 @@ and add this into it:
 ```
 <?php
 	return array(
+		'admin_email' => 'youremailaddress',
 		'db' => array(
 			'username' => 'yourmysqlusername',
 			'password' => 'yourmysqlpassword',
