@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 05, 2014 at 11:33 AM
+-- Generation Time: Nov 06, 2014 at 04:36 PM
 -- Server version: 5.5.25a
 -- PHP Version: 5.4.4
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `course` (
 
 INSERT INTO `course` (`id`, `teacher_id`, `name`, `description`, `price`, `published`) VALUES
 (6, 2, 'Matemaatika Eksamikursus', 'Kursus on mÃµeldud matemaatika eksamit sooritavatele Ãµpilastele', 10.00, 1),
-(7, 2, 'Eesti Keele Eksamikursus', 'See on eesti keele eksami kursus', 10.00, 0);
+(7, 2, 'Eesti Keele Eksamikursus', 'See on eesti keele eksami kursus', 10.00, 1);
 
 -- --------------------------------------------------------
 
@@ -106,8 +106,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lastname` varchar(50) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL,
-  `registration_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
@@ -115,12 +113,12 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `role_id`, `firstname`, `lastname`, `email`, `password`, `status`, `registration_date`) VALUES
-(1, 1, 'Admin', 'Silmaring', 'admin@silmaring.ee', '2e33a9b0b06aa0a01ede70995674ee23', 1, '2014-10-20 14:00:49'),
-(2, 2, 'Ãµpetaja1', 'Silmaring', 'opetaja1@silmaring.ee', 'ec3054b21b076be9afc66aa734cc5c0b', 1, '2014-11-05 10:32:04'),
-(3, 2, 'Ãµpetaja2', 'Silmaring', 'opetaja2@silmaring.ee', 'b1f50e3d85af0d2989f7b0632cae47a8', 1, '2014-11-05 10:32:07'),
-(4, 3, 'Ãµpilane1', 'Silmaring', 'opilane1@silmaring.ee', '94ea3e70b8ef4bd170fd5ca5bf3f9803', 1, '2014-11-05 10:32:11'),
-(5, 3, 'Ãµpilane2', 'Silmaring', 'opilane2@silmaring.ee', '927cc87205b95f46323130bc31573178', 1, '2014-11-05 10:32:15');
+INSERT INTO `user` (`id`, `role_id`, `firstname`, `lastname`, `email`, `password`) VALUES
+(1, 1, 'Admin', 'Silmaring', 'admin@silmaring.ee', '2e33a9b0b06aa0a01ede70995674ee23'),
+(2, 2, 'Ãµpetaja1', 'Silmaring', 'opetaja1@silmaring.ee', 'ec3054b21b076be9afc66aa734cc5c0b'),
+(3, 2, 'Ãµpetaja2', 'Silmaring', 'opetaja2@silmaring.ee', 'b1f50e3d85af0d2989f7b0632cae47a8'),
+(4, 3, 'Ãµpilane1', 'Silmaring', 'opilane1@silmaring.ee', '94ea3e70b8ef4bd170fd5ca5bf3f9803'),
+(5, 3, 'Ãµpilane2', 'Silmaring', 'opilane2@silmaring.ee', '927cc87205b95f46323130bc31573178');
 
 -- --------------------------------------------------------
 
@@ -132,15 +130,17 @@ CREATE TABLE IF NOT EXISTS `user_course` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `user_id` int(10) NOT NULL,
   `course_id` int(10) NOT NULL,
+  `status` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `user_course`
 --
 
-INSERT INTO `user_course` (`id`, `user_id`, `course_id`) VALUES
-(1, 4, 6);
+INSERT INTO `user_course` (`id`, `user_id`, `course_id`, `status`) VALUES
+(4, 4, 6, NULL),
+(5, 4, 7, 1);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
