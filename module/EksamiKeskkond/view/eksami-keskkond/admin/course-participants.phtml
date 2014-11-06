@@ -17,14 +17,29 @@
 			<td>Perekonnanimi</td>
 			<td>E-mail</td>
 			<td>Staatus</td>
+			<td></td>
 		</tr>
-		<?php foreach ($participants as $student) : ?>
+		<?php foreach ($participants as $student): ?>
 		<tr>
-			<td><?php echo $this->escapeHtml($student->id) ?></td>
-			<td><?php echo $this->escapeHtml($student->firstname) ?></td>
-			<td><?php echo $this->escapeHtml($student->lastname) ?></td>
-			<td><?php echo $this->escapeHtml($student->email) ?></td>
-			<td><?php echo $student->status == true ? "Aktiivne" : "Külmutatud" ?></td>
+			<td><?php echo $this->escapeHtml($student['user']->id) ?></td>
+			<td><?php echo $this->escapeHtml($student['user']->firstname) ?></td>
+			<td><?php echo $this->escapeHtml($student['user']->lastname) ?></td>
+			<td><?php echo $this->escapeHtml($student['user']->email) ?></td>
+			<?php if ($student['status'] == true) { ?>
+				<td>Kasutajal on ligipääs kursusele</td>
+				<td>
+					<a href="<?php echo $this->url('admin/change-user-course-status', array('user_id' => $student['user']->id, 'course_id' => $id, 'status' => null)) ?>">
+						Eemalda ligipääs kursusele
+					</a>
+				</td>
+			<?php } else { ?>
+				<td>Kasutajal pole ligipääsu kursusele</td>
+				<td>
+					<a href="<?php echo $this->url('admin/change-user-course-status', array('user_id' => $student['user']->id, 'course_id' => $id, 'status' => true)) ?>">
+						Anna ligipääs kursusele
+					</a>
+				</td>
+			<?php } ?>
 		</tr>
 		<?php endforeach; ?>
 	</table>

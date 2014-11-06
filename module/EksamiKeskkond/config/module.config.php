@@ -151,6 +151,19 @@ return array(
 							)
 						)
 					),
+					'change-user-course-status' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/change-user-course-status[/:user_id][/:course_id][/:status]',
+							'constraints' => array(
+								'user_id' => '[0-9]+',
+								'course_id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'change-user-course-status',
+							),
+						),
+					),
 				),
 			),
 			'teacher' => array(

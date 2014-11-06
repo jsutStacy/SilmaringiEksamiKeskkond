@@ -108,15 +108,30 @@ class AdminController extends AbstractActionController {
 
 	public function courseParticipantsAction() {
 		$id = $this->params()->fromRoute('id');
-		$userIds = $this->getUserCourseTable()->getCourseParticipants($id);
-		$users = $this->getUserTable()->getUsersByIds($userIds);
+		$courseParticipants = $this->getUserCourseTable()->getCourseParticipants($id);
 
+		$users = array();
+
+		foreach ($courseParticipants as $key => $courseParticipant) {
+			$users[$key]['user'] = $this->getUserTable()->getUser($courseParticipant['id']);
+			$users[$key]['status'] = $courseParticipant['status'];
+		}
 		return new ViewModel(array(
 			'id' => $id,
 			'participants' => $users,
 		));
 	}
-	
+
+	public function changeUserCourseStatusAction() {
+		$courseId = $this->params()->fromRoute('course_id');
+		$userId = $this->params()->fromRoute('user_id');
+		$status = $this->params()->fromRoute('status');
+
+		$this->getUserCourseTable()->changeStatus($userId, $courseId, $status);
+
+		return $this->redirect()->toRoute('admin/course-participants', array('id' => $courseId));
+	}
+
 	public function teachersAction() {
 		$teachers = $this->getUserTable()->getAllTeachersForList();
 

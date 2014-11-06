@@ -40,7 +40,7 @@ class StudentController extends AbstractActionController {
 	}
 
 	public function courseAction() {
-		$auth = new AuthenticationService();	
+		$auth = new AuthenticationService();
 		$user = $auth->getIdentity();
 
 		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));

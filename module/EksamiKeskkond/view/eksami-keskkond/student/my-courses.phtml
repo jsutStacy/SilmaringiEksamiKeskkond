@@ -8,12 +8,14 @@
 	</div>
 </div>
 <div class="row">
-	<?php foreach ($myCourses as $course) : ?>
+	<?php foreach ($myCourses as $course): ?>
 		<?php if ($course->published == true): ?>
 			<div class="col-md-4">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"><?php echo $this->escapeHtml($course->name) ?></h3>
+						<h3 class="panel-title">
+							<a href="<?php echo $this->url('student/course', array('id' => $course->id)) ?>"><?php echo $this->escapeHtml($course->name) ?></a>
+						</h3>
 					</div>
 				</div>
 			</div>
