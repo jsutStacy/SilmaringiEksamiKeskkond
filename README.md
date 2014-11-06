@@ -91,7 +91,7 @@ and add this into it:
 and save it.
 
 For e-mail sending make new local config file.
-Go to path/to/project/config/autoload and make new php file called mail.config.local.php and add this into it:
+Go to path/to/project/config/autoload and make new php file called mail.local.php and add this into it:
 
 ```
 <?php
