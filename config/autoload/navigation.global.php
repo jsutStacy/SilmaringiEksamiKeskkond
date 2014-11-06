@@ -40,6 +40,12 @@
 				'privilege' => 'all',
 			),
 			array(
+				'label' => 'Minu kursus',
+				'route' => 'teacher/my-course',
+				'resource' => 'TeacherController',
+				'privilege' => 'all',
+			),
+			array(
 				'label' => 'Logi välja',
 				'route' => 'home/logout',
 				'action' => 'logoutAction',

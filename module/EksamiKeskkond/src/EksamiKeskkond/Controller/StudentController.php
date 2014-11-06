@@ -41,17 +41,18 @@ class StudentController extends AbstractActionController {
 
 	public function courseAction() {
 		$auth = new AuthenticationService();
+
 		$user = $auth->getIdentity();
 
-		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
 		$subjects = array();
+		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
 		$hasBoughtCourse = $this->getUserCourseTable()->checkIfUserHasBoughtCourse($user->id, $course->id);
-		
+
 		if (!$course) {
 			return $this->redirect()->toRoute('errors');
 		}
 		if ($hasBoughtCourse) {
-			$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course);
+			$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
 		}
 		return new ViewModel(array(
 			'course' => $course,

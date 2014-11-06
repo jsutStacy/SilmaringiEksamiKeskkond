@@ -177,15 +177,12 @@ return array(
 				),
 				'may_terminate' => true,
 				'child_routes' => array(
-					'course' => array(
-						'type' => 'Segment',
+					'my-course' => array(
+						'type' => 'Literal',
 						'options' => array(
-							'route' => '/course[/:id]',
-							'constraints' => array(
-								'id' => '[0-9]+',
-							),
+							'route' => '/my-course',
 							'defaults' => array(
-								'action' => 'course',
+								'action' => 'my-course',
 							),
 						),
 					),
@@ -238,12 +235,9 @@ return array(
 						),
 					),
 					'students' => array(
-						'type' => 'Segment',
+						'type' => 'Literal',
 						'options' => array(
-							'route' => '/students[/:id]',
-							'constraints' => array(
-								'id' => '[0-9]+',
-							),
+							'route' => '/students',
 							'defaults' => array(
 								'action' => 'students',
 							),

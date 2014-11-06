@@ -49,7 +49,7 @@ class SubjectTable {
 
 	public function getSubjectsByIds(array $ids) {
 		$data = array();
-	
+
 		foreach ($ids as $id) {
 			$rowset = $this->tableGateway->select(array('id' => $id));
 			$data[] = $rowset->current();
@@ -60,11 +60,11 @@ class SubjectTable {
 	public function deleteSubject($id) {
 		$this->tableGateway->delete(array('id' => $id));
 	}
-	
-	public function getSubjectsByCourseId($course) {
+
+	public function getSubjectsByCourseId($courseId) {
 		$result = array();
-		$rowset = $this->tableGateway->select(array('course_id' => $course->id));
-		
+		$rowset = $this->tableGateway->select(array('course_id' => $courseId));
+
 		foreach ($rowset as $row) {
 			$result[$row->id] = $rowset->current();
 		}

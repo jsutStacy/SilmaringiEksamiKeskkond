@@ -14,14 +14,16 @@
 			<td>Perekonnanimi</td>
 			<td>E-mail</td>
 		</tr>
-	<?php foreach ($students as $student): ?>
-		<?php if ($student['status'] == true) { ?>
-			<tr>
-				<td><?php echo $this->escapeHtml($student['data']->firstname) ?></td>
-				<td><?php echo $this->escapeHtml($student['data']->lastname) ?></td>
-				<td><?php echo $this->escapeHtml($student['data']->email) ?></td>
-			</tr>
+		<?php if (!empty($students)) { ?>
+			<?php foreach ($students as $student): ?>
+				<?php if ($student['status'] == true) { ?>
+					<tr>
+						<td><?php echo $this->escapeHtml($student['data']->firstname) ?></td>
+						<td><?php echo $this->escapeHtml($student['data']->lastname) ?></td>
+						<td><?php echo $this->escapeHtml($student['data']->email) ?></td>
+					</tr>
+				<?php } ?>
+			<?php endforeach; ?>
 		<?php } ?>
-	<?php endforeach; ?>
 	</table>
 </div>

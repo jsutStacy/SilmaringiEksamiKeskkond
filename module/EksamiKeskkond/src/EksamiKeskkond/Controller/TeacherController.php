@@ -31,33 +31,28 @@ class TeacherController extends AbstractActionController {
 		$course = $this->getCourseTable()->getCourseByTeacherId($user->id);
 
 		if (!empty($course)) {
-			return $this->redirect()->toRoute('teacher/course', array('id' => $course->id));
+			return $this->redirect()->toRoute('teacher/my-course');
 		}
 		return new ViewModel();
 	}
 
-	public function courseAction() {
+	public function myCourseAction() {
 		$auth = new AuthenticationService();
 
 		$user = $auth->getIdentity();
-		$course =  $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
-		$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course);
-		
+		$course = $this->getCourseTable()->getCourseByTeacherId($user->id);
+		$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
 
 		if (!$course) {
 			return $this->redirect()->toRoute('errors');
 		}
-		$teacherId = $course->teacher_id;
-
-		if ($teacherId == $user->id) {
+		if ($course->teacher_id == $user->id) {
 			return new ViewModel(array(
 				'course' => $course,
 				'subjects' => $subjects,
 			));
 		}
-		else {
-			return $this->redirect()->toRoute('errors/no-permission');
-		}
+		return $this->redirect()->toRoute('errors/no-permission');
 	}
 
 	public function studentsAction() {
@@ -67,15 +62,22 @@ class TeacherController extends AbstractActionController {
 
 		$studentsData = array();
 		$course = $this->getCourseTable()->getCourseByTeacherId($user->id);
+
+		if (!$course) {
+			return $this->redirect()->toRoute('errors');
+		}
 		$students = $this->getUserCourseTable()->getCourseParticipants($course->id);
 
 		foreach ($students as $key => $student) {
 			$studentsData[$key]['data'] = $this->getUserTable()->getUser($student['id']);
 			$studentsData[$key]['status'] = $student['status'];
 		}
-		return new ViewModel(array(
-			'students' => $studentsData,
-		));
+		if ($course->teacher_id == $user->id) {
+			return new ViewModel(array(
+				'students' => $studentsData,
+			));
+		}
+		return $this->redirect()->toRoute('errors/no-permission');
 	}
 
 	public function addSubjectAction() {
@@ -96,7 +98,7 @@ class TeacherController extends AbstractActionController {
 				$subject->exchangeArray($form->getData());
 				$this->getSubjectTable()->saveSubject($subject);
 	
-				return $this->redirect()->toRoute('teacher/course', array('id' => $courseId));
+				return $this->redirect()->toRoute('teacher/my-course');
 			}
 		}
 		return array(
@@ -124,7 +126,7 @@ class TeacherController extends AbstractActionController {
 			if ($form->isValid()) {
 				$this->getSubjectTable()->saveSubject($form->getData());
 
-				return $this->redirect()->toRoute('teacher/course', array('id' => $course->id));
+				return $this->redirect()->toRoute('teacher/my-course');
 			}
 		}
 		return array(
@@ -132,16 +134,13 @@ class TeacherController extends AbstractActionController {
 			'form' => $form,
 		);
 	}
-	
+
 	public function deleteSubjectAction() {
-		$id = $this->params()->fromRoute('id');
-		$subject = $this->getSubjectTable()->getSubject($id);
-		$course = $this->getCourseTable()->getCourse($subject->course_id);
 		$this->getSubjectTable()->deleteSubject($this->params()->fromRoute('id'));
-		
-	
-		return $this->redirect()->toRoute('teacher/course', array('id'=> $course->id));
+
+		return $this->redirect()->toRoute('teacher/my-course');
 	}
+
 	/*kommenteerin praegu valja, sest tundub, et seda pole vaja, aga kindel pole
 	public function courseSubjectsAction() {
 		$id = $this->params()->fromRoute('id');
@@ -154,7 +153,7 @@ class TeacherController extends AbstractActionController {
 		));
 	}
 	*/
-	
+
 	public function getCourseTable() {
 		if (!$this->courseTable) {
 			$sm = $this->getServiceLocator();
