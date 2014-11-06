@@ -61,14 +61,20 @@ class TeacherController extends AbstractActionController {
 	}
 
 	public function studentsAction() {
-		$students = array();
-		$studentIds = $this->getUserCourseTable()->getCourseParticipants($this->params()->fromRoute('id'));
+		$auth = new AuthenticationService();
 
-		foreach ($studentIds as $id) {
-			$students[] = $this->getUserTable()->getUser($id);
+		$user = $auth->getIdentity();
+
+		$studentsData = array();
+		$course = $this->getCourseTable()->getCourseByTeacherId($user->id);
+		$students = $this->getUserCourseTable()->getCourseParticipants($course->id);
+
+		foreach ($students as $key => $student) {
+			$studentsData[$key]['data'] = $this->getUserTable()->getUser($student['id']);
+			$studentsData[$key]['status'] = $student['status'];
 		}
 		return new ViewModel(array(
-			'students' => $students,
+			'students' => $studentsData,
 		));
 	}
 

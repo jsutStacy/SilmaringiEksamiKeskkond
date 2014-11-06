@@ -15,11 +15,13 @@
 			<td>E-mail</td>
 		</tr>
 	<?php foreach ($students as $student): ?>
-		<tr>
-			<td><?php echo $this->escapeHtml($student->firstname) ?></td>
-			<td><?php echo $this->escapeHtml($student->lastname) ?></td>
-			<td><?php echo $this->escapeHtml($student->email) ?></td>
-		</tr>
+		<?php if ($student['status'] == true) { ?>
+			<tr>
+				<td><?php echo $this->escapeHtml($student['data']->firstname) ?></td>
+				<td><?php echo $this->escapeHtml($student['data']->lastname) ?></td>
+				<td><?php echo $this->escapeHtml($student['data']->email) ?></td>
+			</tr>
+		<?php } ?>
 	<?php endforeach; ?>
 	</table>
 </div>

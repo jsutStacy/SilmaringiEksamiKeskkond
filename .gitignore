@@ -8,3 +8,4 @@ TVP.iml
 config/autoload/careelika.local.php
 vhosts/careelika/vhost.conf
 config/autoload/mail.local.php
+config/autoload/mail.global.php
