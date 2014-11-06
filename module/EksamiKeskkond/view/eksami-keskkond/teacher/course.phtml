@@ -35,8 +35,10 @@
 			<td><?php echo $this->escapeHtml($subject->name) ?></td>
 			<td><?php echo $this->escapeHtml($subject->description) ?></td>
 			<td>
-				<a href="<?php echo $this->url('teacher/edit-subject', array('id' => $subject->id)) ?>">Muuda teemat</a>
-				<a href="<?php echo $this->url('teacher/delete-subject', array('id' => $subject->id)) ?>">Kustuta teema</a>
+				<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('teacher/edit-subject', array('id' => $subject->id)) ?>">
+				<span class="glyphicon glyphicon-plus"></span>Muuda teemat</a>
+				<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('teacher/delete-subject', array('id' => $subject->id)) ?>">
+				<span class="glyphicon glyphicon-plus"></span>Kustuta teema</a>
 			</td>
 		</tr>
 		<?php endforeach; ?>
