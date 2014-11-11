@@ -15,7 +15,7 @@ Class BanklinkForm extends Form {
 		
 		$this->add(array(
 			'name' => 'VK_SERVICE',
-			'value' => '1001',
+			'value' => '1011',
 			'attributes' => array(
 				'type' => 'hidden',
 			),
@@ -81,6 +81,14 @@ Class BanklinkForm extends Form {
 		));
 
 		$this->add(array(
+				'name' => 'VK_LANG',
+				'value' => 'EST',
+				'attributes' => array(
+						'type' => 'hidden',
+				),
+		));
+
+		$this->add(array(
 			'name' => 'VK_MSG',
 			'attributes' => array(
 					'type' => 'hidden',
@@ -95,9 +103,39 @@ Class BanklinkForm extends Form {
 		));
 
 		$this->add(array(
+				'name' => 'VK_CANCEL',
+				'attributes' => array(
+						'type' => 'hidden',
+				),
+		));
+
+		$this->add(array(
+				'name' => 'VK_DATETIME',
+				'attributes' => array(
+						'type' => 'hidden',
+				),
+		));
+
+		$this->add(array(
+				'name' => 'VK_ENCODING',
+				'attributes' => array(
+						'type' => 'hidden',
+				),
+		));
+
+		$this->add(array(
+				'name' => 'VK_MAC',
+				'attributes' => array(
+						'type' => 'hidden',
+				),
+		));
+
+		$this->add(array(
 			'name' => 'submit',
 			'attributes' => array(
 				'type' => 'submit',
+				'id' => 'bankLinkSubmit',
+				'style' => 'display:none'
 			),
 		));
 
