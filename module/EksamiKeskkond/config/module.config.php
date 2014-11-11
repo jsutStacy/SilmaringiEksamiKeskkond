@@ -289,9 +289,10 @@ return array(
 					'buy-course' => array(
 						'type' => 'Segment',
 						'options' => array(
-							'route' => '/buy-course[/:id]',
+							'route' => '/buy-course[/:id][/:bank]',
 							'constraints' => array(
 								'id' => '[0-9]+',
+								'bank' => '[a-zA-Z0-9_-]+',
 							),
 							'defaults' => array(
 								'action' => 'buy-course',
