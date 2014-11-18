@@ -4,7 +4,7 @@ namespace EksamiKeskkond\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 
-class SubsubjectTable {
+class LectureTable {
 
 	protected $tableGateway;
 
@@ -18,7 +18,7 @@ class SubsubjectTable {
 		return $resultSet;
 	}
 
-	public function getSubsubject($id) {
+	public function getLecture($id) {
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 
@@ -28,17 +28,19 @@ class SubsubjectTable {
 		return $row;
 	}
 
-	public function saveSubsubject(Subsubject $subsubject) {
+	public function saveLecture(Lecture $lecture) {
 		$data = array(
-			'subject_id' => $subsubject->subject_id,
-			'name' => $subsubject->name,
+			'course_id' => $lecture->course_id,
+			'subject_id' => $lecture->subject_id,
+			'name' => $lecture->name,
+			'content' => $lecture->content,
 		);
-		if ($subsubject->id == 0) {
+		if ($lecture->id == 0) {
 			$this->tableGateway->insert($data);
 		}
 		else {
-			if ($this->getSubsubject($subsubject->id)) {
-				$this->tableGateway->update($data, array('id' => $subsubject->id));
+			if ($this->getSubject($lecture->id)) {
+				$this->tableGateway->update($data, array('id' => $subject->id));
 			}
 			else {
 				throw new \Exception('Form id does not exist');
@@ -46,9 +48,9 @@ class SubsubjectTable {
 		}
 	}
 
-	public function getSubsubjectsByIds(array $ids) {
+	public function getLecturesByIds(array $ids) {
 		$data = array();
-	
+
 		foreach ($ids as $id) {
 			$rowset = $this->tableGateway->select(array('id' => $id));
 			$data[] = $rowset->current();
@@ -56,17 +58,18 @@ class SubsubjectTable {
 		return $data;
 	}
 
-	public function deleteSubsubject($id) {
+	public function deleteLecture($id) {
 		$this->tableGateway->delete(array('id' => $id));
 	}
-	
-	public function getSubsubjectsBySubjectId($subjectId) {
+
+	public function getLecturesBySubjectId($subjectId) {
 		$result = array();
 		$rowset = $this->tableGateway->select(array('subject_id' => $subjectId));
-
+	
 		foreach ($rowset as $row) {
 			$result[$row->id] = $rowset->current();
 		}
 		return $result;
 	}
+
 }

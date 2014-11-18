@@ -14,11 +14,17 @@ use EksamiKeskkond\Model\Subject;
 use EksamiKeskkond\Form\SubjectForm;
 use EksamiKeskkond\Filter\SubjectFilter;
 
+use EksamiKeskkond\Model\Subsubject;
+use EksamiKeskkond\Form\SubsubjectForm;
+use EksamiKeskkond\Filter\SubsubjectFilter;
+
 class TeacherController extends AbstractActionController {
 
 	protected $courseTable;
 
 	protected $subjectTable;
+	
+	protected $subsubjectTable;
 
 	protected $userCourseTable;
 
@@ -50,6 +56,7 @@ class TeacherController extends AbstractActionController {
 			return new ViewModel(array(
 				'course' => $course,
 				'subjects' => $subjects,
+				'subsubjectTable' => $this->getSubsubjectTable(),
 			));
 		}
 		return $this->redirect()->toRoute('errors/no-permission');
@@ -154,6 +161,33 @@ class TeacherController extends AbstractActionController {
 	}
 	*/
 
+	public function addSubsubjectAction() {
+		$subjectId = $this->params()->fromRoute('id');
+		$subject = $this->getSubjectTable()->getSubject($subjectId);
+
+		$form = new SubsubjectForm();
+		$form->get('subject_id')->setValue($subjectId);
+		$request = $this->getRequest();
+	
+		if ($request->isPost()) {
+			$subsubject = new Subsubject();
+
+			$form->setInputFilter(new SubsubjectFilter($this->getServiceLocator()));
+			$form->setData($request->getPost());
+	
+			if ($form->isValid()) {
+				$subsubject->exchangeArray($form->getData());
+				$this->getSubsubjectTable()->saveSubsubject($subsubject);
+
+				return $this->redirect()->toRoute('teacher/my-course');
+			}
+		}
+		return array(
+				'form' => $form,
+				'subjectId' => $subjectId,
+		);
+	}
+
 	public function getCourseTable() {
 		if (!$this->courseTable) {
 			$sm = $this->getServiceLocator();
@@ -168,6 +202,14 @@ class TeacherController extends AbstractActionController {
 			$this->subjectTable = $sm->get('EksamiKeskkond\Model\SubjectTable');
 		}
 		return $this->subjectTable;
+	}
+
+	public function getSubsubjectTable() {
+		if (!$this->subsubjectTable) {
+			$sm = $this->getServiceLocator();
+			$this->subsubjectTable = $sm->get('EksamiKeskkond\Model\SubsubjectTable');
+		}
+		return $this->subsubjectTable;
 	}
 
 	public function getUserCourseTable() {

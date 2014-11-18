@@ -198,6 +198,18 @@ return array(
 							),
 						),
 					),
+					'add-lecture' => array(
+							'type' => 'Segment',
+							'options' => array(
+									'route' => '/add-lecture[/:id]',
+									'constraints' => array(
+											'id' => '[0-9]+',
+									),
+									'defaults' => array(
+											'action' => 'add-lecture',
+									),
+							),
+					),
 					'add-subject' => array(
 						'type' => 'Segment',
 						'options' => array(
@@ -233,6 +245,18 @@ return array(
 								'action' => 'delete-subject',
 							),
 						),
+					),
+					'add-subsubject' => array(
+							'type' => 'Segment',
+							'options' => array(
+									'route' => '/add-subsubject[/:id]',
+									'constraints' => array(
+											'id' => '[0-9]+',
+									),
+									'defaults' => array(
+											'action' => 'add-subsubject',
+									),
+							),
 					),
 					'students' => array(
 						'type' => 'Literal',

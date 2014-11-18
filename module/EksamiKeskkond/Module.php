@@ -21,10 +21,12 @@ use Zend\Db\TableGateway\TableGateway;
 use EksamiKeskkond\Model\User;
 use EksamiKeskkond\Model\Course;
 use EksamiKeskkond\Model\Subject;
+use EksamiKeskkond\Model\Subsubject;
 use EksamiKeskkond\Model\UserCourse;
 use EksamiKeskkond\Model\UserTable;
 use EksamiKeskkond\Model\CourseTable;
 use EksamiKeskkond\Model\SubjectTable;
+use EksamiKeskkond\Model\SubsubjectTable;
 use EksamiKeskkond\Model\UserCourseTable;
 
 use EksamiKeskkond\Acl\Acl;
@@ -77,6 +79,12 @@ class Module {
 				
 					return $table;
 				},
+				'EksamiKeskkond\Model\SubsubjectTable' => function($sm) {
+					$tableGateway = $sm->get('SubsubjectTableGateway');
+					$table = new SubsubjectTable($tableGateway);
+				
+					return $table;
+				},
 				'EksamiKeskkond\Model\UserCourseTable' => function($sm) {
 					$tableGateway = $sm->get('UserCourseTableGateway');
 					$table = new UserCourseTable($tableGateway);
@@ -106,6 +114,14 @@ class Module {
 					$resultSetPrototype->setArrayObjectPrototype(new Subject());
 				
 					return new TableGateway('subject', $dbAdapter, null, $resultSetPrototype);
+				},
+				'SubsubjectTableGateway' => function($sm) {
+					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+				
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new Subsubject());
+				
+					return new TableGateway('subsubject', $dbAdapter, null, $resultSetPrototype);
 				},
 				'UserCourseTableGateway' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');

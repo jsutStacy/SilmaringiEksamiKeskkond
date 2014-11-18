@@ -1,0 +1,24 @@
+<?php
+	$this->headTitle('Lisa uus tund - ');
+?>
+<h1>Lisa uus teema</h1>
+<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('teacher/add-lecture', array('id' => $subjectId)));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
+	echo $this->formHidden($form->get('subject_id'));
+
+?>
+<div class="form-group">
+	<?php echo $this->formRow($form->get('name')); ?>
+</div>
+<div class="form-group">
+	<?php echo $this->formRow($form->get('content')); ?>
+</div>
+<div class="form-group">
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+</div>
+<?php echo $this->form()->closeTag(); ?>

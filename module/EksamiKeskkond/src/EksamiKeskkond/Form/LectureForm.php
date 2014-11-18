@@ -3,7 +3,7 @@ namespace EksamiKeskkond\Form;
 
 use Zend\Form\Form;
 
-class SubsubjectForm extends Form {
+class LectureForm extends Form {
 
 	public function __construct($name = null) {
 
@@ -23,10 +23,10 @@ class SubsubjectForm extends Form {
 		));
 
 		$this->add(array(
-			'name' => 'subject_id',
-			'attributes' => array(
-				'type' => 'hidden',
-			),
+				'name' => 'subject_id',
+				'attributes' => array(
+						'type' => 'hidden',
+				),
 		));
 
 		$this->add(array(
@@ -36,7 +36,18 @@ class SubsubjectForm extends Form {
 				'class' => 'form-control',
 			),
 			'options' => array(
-				'label' => 'Alateema nimi',
+				'label' => 'Tunni nimi',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'content',
+			'attributes' => array(
+				'type' => 'textarea',
+				'class' => 'form-control',
+			),
+			'options' => array(
+				'label' => 'Tunni sisu',
 			),
 		));
 
