@@ -38,7 +38,10 @@
 		<div class="panel-body">
 			<ul class="list-group">
 				<?php foreach ($subsubjectTable->getSubsubjectsBySubjectId($subject->id) as $subsubject) : ?>
-				<li class="list-group-item"><?php echo $this->escapeHtml($subsubject->name) ?></li>
+				<li class="list-group-item">
+					<?php echo $this->escapeHtml($subsubject->name) ?>
+					<a class="glyphicon glyphicon-trash pull-right" href="<?php echo $this->url('teacher/delete-subsubject', array('id' => $subsubject->id)) ?>"></a>
+				</li>
 				<?php endforeach; ?>
 			</ul>
 			<a class="btn btn-default btn-xs pull-right" href="<?php echo $this->url('teacher/add-subsubject', array('id' => $subject->id)) ?>">

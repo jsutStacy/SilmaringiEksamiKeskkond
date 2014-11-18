@@ -258,6 +258,18 @@ return array(
 									),
 							),
 					),
+					'delete-subsubject' => array(
+							'type' => 'Segment',
+							'options' => array(
+									'route' => '/delete-subsubject[/:id]',
+									'constraints' => array(
+											'id' => '[0-9]+',
+									),
+									'defaults' => array(
+											'action' => 'delete-subsubject',
+									),
+							),
+					),
 					'students' => array(
 						'type' => 'Literal',
 						'options' => array(

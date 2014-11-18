@@ -188,6 +188,12 @@ class TeacherController extends AbstractActionController {
 		);
 	}
 
+	public function deleteSubsubjectAction() {
+		$this->getSubsubjectTable()->deleteSubsubject($this->params()->fromRoute('id'));
+
+		return $this->redirect()->toRoute('teacher/my-course');
+	}
+
 	public function getCourseTable() {
 		if (!$this->courseTable) {
 			$sm = $this->getServiceLocator();
