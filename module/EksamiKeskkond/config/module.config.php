@@ -198,15 +198,15 @@ return array(
 							),
 						),
 					),
-					'add-lecture' => array(
+					'add-lesson' => array(
 							'type' => 'Segment',
 							'options' => array(
-									'route' => '/add-lecture[/:id]',
+									'route' => '/add-lesson[/:id]',
 									'constraints' => array(
 											'id' => '[0-9]+',
 									),
 									'defaults' => array(
-											'action' => 'add-lecture',
+											'action' => 'add-lesson',
 									),
 							),
 					),

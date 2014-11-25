@@ -4,7 +4,7 @@ namespace EksamiKeskkond\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 
-class LectureTable {
+class LessonTable {
 
 	protected $tableGateway;
 
@@ -18,7 +18,7 @@ class LectureTable {
 		return $resultSet;
 	}
 
-	public function getLecture($id) {
+	public function getLesson($id) {
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 
@@ -28,19 +28,18 @@ class LectureTable {
 		return $row;
 	}
 
-	public function saveLecture(Lecture $lecture) {
+	public function saveLesson(Lesson $lesson) {
 		$data = array(
-			'course_id' => $lecture->course_id,
-			'subject_id' => $lecture->subject_id,
-			'name' => $lecture->name,
-			'content' => $lecture->content,
+			'subsubject_id' => $lesson->subsubject_id,
+			'name' => $lesson->name,
+			'content' => $lesson->content,
 		);
-		if ($lecture->id == 0) {
+		if ($Lesson->id == 0) {
 			$this->tableGateway->insert($data);
 		}
 		else {
-			if ($this->getSubject($lecture->id)) {
-				$this->tableGateway->update($data, array('id' => $subject->id));
+			if ($this->getSubject($Lesson->id)) {
+				$this->tableGateway->update($data, array('id' => $subsubject->id));
 			}
 			else {
 				throw new \Exception('Form id does not exist');
@@ -48,7 +47,7 @@ class LectureTable {
 		}
 	}
 
-	public function getLecturesByIds(array $ids) {
+	public function getLessonsByIds(array $ids) {
 		$data = array();
 
 		foreach ($ids as $id) {
@@ -58,13 +57,13 @@ class LectureTable {
 		return $data;
 	}
 
-	public function deleteLecture($id) {
+	public function deleteLesson($id) {
 		$this->tableGateway->delete(array('id' => $id));
 	}
 
-	public function getLecturesBySubjectId($subjectId) {
+	public function getLessonsBySubsubjectId($subsubjectId) {
 		$result = array();
-		$rowset = $this->tableGateway->select(array('subject_id' => $subjectId));
+		$rowset = $this->tableGateway->select(array('subsubject_id' => $subsubjectId));
 	
 		foreach ($rowset as $row) {
 			$result[$row->id] = $rowset->current();

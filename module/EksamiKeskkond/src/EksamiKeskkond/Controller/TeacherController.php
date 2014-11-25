@@ -18,13 +18,19 @@ use EksamiKeskkond\Model\Subsubject;
 use EksamiKeskkond\Form\SubsubjectForm;
 use EksamiKeskkond\Filter\SubsubjectFilter;
 
+use EksamiKeskkond\Model\Lesson;
+use EksamiKeskkond\Form\LessonForm;
+use EksamiKeskkond\Filter\LessonFilter;
+
 class TeacherController extends AbstractActionController {
 
 	protected $courseTable;
 
 	protected $subjectTable;
-	
+
 	protected $subsubjectTable;
+
+	protected $lessonTable;
 
 	protected $userCourseTable;
 
@@ -57,6 +63,7 @@ class TeacherController extends AbstractActionController {
 				'course' => $course,
 				'subjects' => $subjects,
 				'subsubjectTable' => $this->getSubsubjectTable(),
+				'lessonTable' => $this->getLessonTable(),
 			));
 		}
 		return $this->redirect()->toRoute('errors/no-permission');
@@ -194,6 +201,33 @@ class TeacherController extends AbstractActionController {
 		return $this->redirect()->toRoute('teacher/my-course');
 	}
 
+	public function addLessonAction() {
+		$subsubjectId = $this->params()->fromRoute('id');
+		$subsubject = $this->getSubsubjectTable()->getSubsubject($subsubjectId);
+	
+		$form = new LessonForm();
+		$form->get('subsubject_id')->setValue($subsubjectId);
+		$request = $this->getRequest();
+	
+		if ($request->isPost()) {
+			$lesson = new Lesson();
+	
+			$form->setInputFilter(new LessonFilter($this->getServiceLocator()));
+			$form->setData($request->getPost());
+	
+			if ($form->isValid()) {
+				$lesson->exchangeArray($form->getData());
+				$this->getLessonTable()->saveLesson($lesson);
+	
+				return $this->redirect()->toRoute('teacher/my-course');
+			}
+		}
+		return array(
+				'form' => $form,
+				'subsubjectId' => $subsubjectId,
+		);
+	}
+
 	public function getCourseTable() {
 		if (!$this->courseTable) {
 			$sm = $this->getServiceLocator();
@@ -208,6 +242,14 @@ class TeacherController extends AbstractActionController {
 			$this->subjectTable = $sm->get('EksamiKeskkond\Model\SubjectTable');
 		}
 		return $this->subjectTable;
+	}
+
+	public function getLessonTable() {
+		if (!$this->lessonTable) {
+			$sm = $this->getServiceLocator();
+			$this->lessonTable = $sm->get('EksamiKeskkond\Model\LessonTable');
+		}
+		return $this->lessonTable;
 	}
 
 	public function getSubsubjectTable() {
