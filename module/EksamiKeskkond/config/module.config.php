@@ -210,6 +210,18 @@ return array(
 									),
 							),
 					),
+					'delete-lesson' => array(
+							'type' => 'Segment',
+							'options' => array(
+									'route' => '/delete-lesson[/:id]',
+									'constraints' => array(
+											'id' => '[0-9]+',
+									),
+									'defaults' => array(
+											'action' => 'delete-lesson',
+									),
+							),
+					),
 					'add-subject' => array(
 						'type' => 'Segment',
 						'options' => array(

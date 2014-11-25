@@ -45,6 +45,7 @@
 						<?php foreach ($lessonTable->getLessonsBySubsubjectId($subsubject->id) as $lesson) : ?>
 						<li class="list-group-item">
 							<?php echo $lesson->name; ?>
+							<a class="glyphicon glyphicon-trash pull-right" href="<?php echo $this->url('teacher/delete-lesson', array('id' => $lesson->id)) ?>"></a>
 						</li>
 						<?php endforeach; ?>
 						<a class="row btn btn-default btn-xs pull-right" href="<?php echo $this->url('teacher/add-lesson', array('id' => $subsubject->id)) ?>">
