@@ -67,6 +67,46 @@ class LessonForm extends Form {
 		));
 
 		$this->add(array(
+			'name' => 'url',
+			'attributes' => array(
+				'type' => 'text',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'user_id',
+			'attributes' => array(
+				'type' => 'hidden',
+			),
+		));
+
+		$this->add(array(
+				'name' => 'lesson_files_id',
+				'attributes' => array(
+						'type' => 'hidden',
+				),
+		));
+
+		$this->add(array(
+				'type' => 'Zend\Form\Element\Select',
+				'name' => 'type',
+				'attributes' => array(
+						'class' => 'form-control',
+				),
+				'options' => array(
+						'label' => 'Tüüp',
+						'options' => array(
+								'text' => 'Tekst',
+								'video' => 'Video',
+								'presentation' => 'Esitlus',
+								'audio' => 'Audio',
+								'test' => 'Test',
+								'images' => 'Pildid',
+						),
+				),
+		));
+
+		$this->add(array(
 			'name' => 'submit',
 			'attributes' => array(
 				'type' => 'submit',

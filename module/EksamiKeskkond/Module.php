@@ -23,12 +23,14 @@ use EksamiKeskkond\Model\Course;
 use EksamiKeskkond\Model\Subject;
 use EksamiKeskkond\Model\Subsubject;
 use EksamiKeskkond\Model\Lesson;
+use EksamiKeskkond\Model\LessonFiles;
 use EksamiKeskkond\Model\UserCourse;
 use EksamiKeskkond\Model\UserTable;
 use EksamiKeskkond\Model\CourseTable;
 use EksamiKeskkond\Model\SubjectTable;
 use EksamiKeskkond\Model\SubsubjectTable;
 use EksamiKeskkond\Model\LessonTable;
+use EksamiKeskkond\Model\LessonFilesTable;
 use EksamiKeskkond\Model\UserCourseTable;
 
 use EksamiKeskkond\Acl\Acl;
@@ -93,6 +95,12 @@ class Module {
 
 					return $table;
 				},
+				'EksamiKeskkond\Model\LessonFilesTable' => function($sm) {
+					$tableGateway = $sm->get('LessonFilesTableGateway');
+					$table = new LessonFilesTable($tableGateway);
+
+					return $table;
+				},
 				'EksamiKeskkond\Model\UserCourseTable' => function($sm) {
 					$tableGateway = $sm->get('UserCourseTableGateway');
 					$table = new UserCourseTable($tableGateway);
@@ -138,6 +146,14 @@ class Module {
 					$resultSetPrototype->setArrayObjectPrototype(new Lesson());
 
 					return new TableGateway('lesson', $dbAdapter, null, $resultSetPrototype);
+				},
+				'LessonFilesTableGateway' => function($sm) {
+					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+				
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new LessonFiles());
+				
+					return new TableGateway('lesson_files', $dbAdapter, null, $resultSetPrototype);
 				},
 				'UserCourseTableGateway' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');

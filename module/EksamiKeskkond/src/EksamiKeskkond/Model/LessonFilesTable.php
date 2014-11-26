@@ -4,7 +4,7 @@ namespace EksamiKeskkond\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 
-class LessonTable {
+class LessonFilesTable {
 
 	protected $tableGateway;
 
@@ -18,7 +18,7 @@ class LessonTable {
 		return $resultSet;
 	}
 
-	public function getLesson($id) {
+	public function getLessonFiles($id) {
 		$rowset = $this->tableGateway->select(array('id' => $id));
 		$row = $rowset->current();
 
@@ -28,20 +28,18 @@ class LessonTable {
 		return $row;
 	}
 
-	public function saveLesson(Lesson $lesson) {
+	public function saveLessonFiles(LessonFiles $lessonFile) {
 		$data = array(
-			'subsubject_id' => $lesson->subsubject_id,
-			'name' => $lesson->name,
-			'content' => $lesson->content,
-			'type' => $lesson->type,
+			'lesson_id' => $lessonFile->lesson_id,
+			'user_id' => $lessonFile->user_id,
+			'url' => $lessonFile->url,
 		);
-		if ($lesson->id == 0) {
+		if ($lessonFile->id == 0) {
 			$this->tableGateway->insert($data);
-			return $this->tableGateway->lastInsertValue;
 		}
 		else {
-			if ($this->getLesson($lesson->id)) {
-				$this->tableGateway->update($data, array('id' => $lesson->id));
+			if ($this->getLessonFiles($lessonFile->id)) {
+				$this->tableGateway->update($data, array('id' => $lessonFile->id));
 			}
 			else {
 				throw new \Exception('Form id does not exist');
@@ -49,7 +47,7 @@ class LessonTable {
 		}
 	}
 
-	public function getLessonsByIds(array $ids) {
+	public function getLessonFilesByIds(array $ids) {
 		$data = array();
 
 		foreach ($ids as $id) {
@@ -59,13 +57,13 @@ class LessonTable {
 		return $data;
 	}
 
-	public function deleteLesson($id) {
+	public function deleteLessonFile($id) {
 		$this->tableGateway->delete(array('id' => $id));
 	}
 
-	public function getLessonsBySubsubjectId($subsubjectId) {
+	public function getLessonFilesByLessonId($lessonId) {
 		$result = array();
-		$rowset = $this->tableGateway->select(array('subsubject_id' => $subsubjectId));
+		$rowset = $this->tableGateway->select(array('lesson_id' => $lessonId));
 	
 		foreach ($rowset as $row) {
 			$result[$row->id] = $rowset->current();

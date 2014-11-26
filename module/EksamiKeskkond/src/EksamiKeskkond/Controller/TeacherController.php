@@ -22,6 +22,8 @@ use EksamiKeskkond\Model\Lesson;
 use EksamiKeskkond\Form\LessonForm;
 use EksamiKeskkond\Filter\LessonFilter;
 
+use EksamiKeskkond\Model\LessonFiles;
+
 class TeacherController extends AbstractActionController {
 
 	protected $courseTable;
@@ -35,6 +37,8 @@ class TeacherController extends AbstractActionController {
 	protected $userCourseTable;
 
 	protected $userTable;
+	
+	protected $lessonFilesTable;
 
 	public function indexAction() {
 		$auth = new AuthenticationService();
@@ -50,8 +54,8 @@ class TeacherController extends AbstractActionController {
 
 	public function myCourseAction() {
 		$auth = new AuthenticationService();
-
 		$user = $auth->getIdentity();
+
 		$course = $this->getCourseTable()->getCourseByTeacherId($user->id);
 		$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
 
@@ -202,23 +206,33 @@ class TeacherController extends AbstractActionController {
 	}
 
 	public function addLessonAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
 		$subsubjectId = $this->params()->fromRoute('id');
 		$subsubject = $this->getSubsubjectTable()->getSubsubject($subsubjectId);
-	
+
 		$form = new LessonForm();
 		$form->get('subsubject_id')->setValue($subsubjectId);
+		$form->get('user_id')->setValue($user->id);
+
 		$request = $this->getRequest();
-	
+
 		if ($request->isPost()) {
 			$lesson = new Lesson();
-	
+			$lessonFiles = new LessonFiles();
 			$form->setInputFilter(new LessonFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
-	
+
 			if ($form->isValid()) {
-				$lesson->exchangeArray($form->getData());
-				$this->getLessonTable()->saveLesson($lesson);
-	
+				$data = $form->getData();
+				$lesson->exchangeArray($data);
+				$lessonId = $this->getLessonTable()->saveLesson($lesson);
+
+				$data['id'] = $lessonId;
+				$lessonFiles->exchangeArray($data);
+
+				$this->getLessonFilesTable()->saveLessonFiles($lessonFiles);
 				return $this->redirect()->toRoute('teacher/my-course');
 			}
 		}
@@ -256,6 +270,14 @@ class TeacherController extends AbstractActionController {
 			$this->lessonTable = $sm->get('EksamiKeskkond\Model\LessonTable');
 		}
 		return $this->lessonTable;
+	}
+
+	public function getLessonFilesTable() {
+		if (!$this->lessonFilesTable) {
+			$sm = $this->getServiceLocator();
+			$this->lessonFilesTable = $sm->get('EksamiKeskkond\Model\LessonFilesTable');
+		}
+		return $this->lessonFilesTable;
 	}
 
 	public function getSubsubjectTable() {

@@ -50,5 +50,10 @@ class LessonFilter extends InputFilter {
 			),
 		));
 
+		$this->add(array(
+				'name' => 'type',
+				'required' => true,
+		));
+
 	}
 }
