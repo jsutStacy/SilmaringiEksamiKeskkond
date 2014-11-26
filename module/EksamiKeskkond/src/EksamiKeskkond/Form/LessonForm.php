@@ -69,7 +69,11 @@ class LessonForm extends Form {
 		$this->add(array(
 			'name' => 'url',
 			'attributes' => array(
-				'type' => 'text',
+				'type' => 'Zend\Form\Element\Url',
+				'class' => 'form-control',
+			),
+			'options' => array(
+					'label' => 'Url',
 			),
 		));
 

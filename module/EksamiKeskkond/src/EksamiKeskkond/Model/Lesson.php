@@ -17,6 +17,7 @@ class Lesson {
 	public $type;
 
 	public function exchangeArray($data) {
+		
 		$this->id = (isset($data['id'])) ? $data['id'] : null;
 		$this->subsubject_id = (isset($data['subsubject_id'])) ? $data['subsubject_id'] : null;
 		$this->name = (isset($data['name'])) ? $data['name'] : null;
