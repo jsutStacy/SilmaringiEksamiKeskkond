@@ -340,6 +340,18 @@ return array(
 							),
 						),
 					),
+					'change-lesson' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/course/change-lesson[/:id]',
+							'constraints' => array(
+									'id' => '[0-9]+',
+							),
+							'defaults' => array(
+									'action' => 'change-lesson',
+							),
+						),
+					),
 					'all-courses' => array(
 						'type' => 'Literal',
 						'options' => array(
@@ -455,6 +467,9 @@ return array(
 		),
 		'template_path_stack' => array(
 			__DIR__ . '/../view',
+		),
+		'strategies' => array (
+				'ViewJsonStrategy'
 		),
 	),
 	// Placeholder for console routes

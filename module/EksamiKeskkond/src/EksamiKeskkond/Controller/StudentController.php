@@ -3,6 +3,7 @@
 namespace EksamiKeskkond\Controller;
 
 use Zend\View\Model\ViewModel;
+use Zend\ViewModel\JsonModel;
 
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -31,6 +32,10 @@ class StudentController extends AbstractActionController {
 	protected $userTable;
 
 	protected $subjectTable;
+	
+	protected $subsubjectTable;
+	
+	protected $lessonTable;
 
 	public function indexAction() {
 		$auth = new AuthenticationService();
@@ -63,7 +68,22 @@ class StudentController extends AbstractActionController {
 			'course' => $course,
 			'subjects' => $subjects,
 			'hasBoughtCourse' => $hasBoughtCourse,
+			'subsubjectTable' => $this->getSubsubjectTable(),
+			'lessonTable' => $this->getLessonTable(),
 		));
+	}
+
+	public function changeLessonAction(){
+		$request = $this->getRequest();
+		$response = $this->getResponse();
+
+		$lessonId = $this->params()->fromRoute('id');
+		$content = $this->getLessonTable()->getLesson($lessonId)->content;
+		
+		if ($request->isPost()) {
+				$response->setContent(\Zend\Json\Json::encode(array('response' => true, 'content' => $content)));
+		}
+		return $response;
 	}
 
 	public function allCoursesAction() {
@@ -277,4 +297,21 @@ class StudentController extends AbstractActionController {
 		}
 		return $this->subjectTable;
 	}
+
+	public function getSubsubjectTable() {
+		if (!$this->subsubjectTable) {
+			$sm = $this->getServiceLocator();
+			$this->subsubjectTable = $sm->get('EksamiKeskkond\Model\SubsubjectTable');
+		}
+		return $this->subsubjectTable;
+	}
+
+	public function getLessonTable() {
+		if (!$this->lessonTable) {
+			$sm = $this->getServiceLocator();
+			$this->lessonTable = $sm->get('EksamiKeskkond\Model\LessonTable');
+		}
+		return $this->lessonTable;
+	}
+
 }
