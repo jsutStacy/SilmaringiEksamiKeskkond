@@ -37,6 +37,8 @@ class StudentController extends AbstractActionController {
 	
 	protected $lessonTable;
 
+	protected $lessonFilesTable;
+
 	public function indexAction() {
 		$auth = new AuthenticationService();
 
@@ -78,10 +80,36 @@ class StudentController extends AbstractActionController {
 		$response = $this->getResponse();
 
 		$lessonId = $this->params()->fromRoute('id');
-		$content = $this->getLessonTable()->getLesson($lessonId)->content;
-		
+		$lesson = $this->getLessonTable()->getLesson($lessonId);
+
+		$lessonFiles = array();
+		$lessonFiles = $this->getLessonFilesTable()->getLessonFilesByLessonId($lessonId);
+
+		$html = "";
+		//Create HTML for video lesson
+		if($lesson->type == "video"){
+			$urls = array();
+			foreach ($lessonFiles as $lessonFile){
+				array_push($urls, $lessonFile->url);
+			}
+			if(!empty($urls)){
+				parse_str( parse_url( $urls[0], PHP_URL_QUERY ), $urlVars );
+				if(array_key_exists('v', $urlVars)){
+					$html =
+									'<div class="row">
+									<iframe width="420" height="315" src="//www.youtube.com/embed/'.$urlVars['v'].'" frameborder="0" allowfullscreen></iframe>
+									</div>';
+				}
+			}
+		}
+
 		if ($request->isPost()) {
-				$response->setContent(\Zend\Json\Json::encode(array('response' => true, 'content' => $content)));
+			$response->setContent(\Zend\Json\Json::encode(array(
+				'response' => true,
+				'content' => $lesson->content, 
+				'type' => $lesson->type, 
+				'html' => $html,
+			)));
 		}
 		return $response;
 	}
@@ -312,6 +340,14 @@ class StudentController extends AbstractActionController {
 			$this->lessonTable = $sm->get('EksamiKeskkond\Model\LessonTable');
 		}
 		return $this->lessonTable;
+	}
+
+	public function getLessonFilesTable() {
+		if (!$this->lessonFilesTable) {
+			$sm = $this->getServiceLocator();
+			$this->lessonFilesTable = $sm->get('EksamiKeskkond\Model\LessonFilesTable');
+		}
+		return $this->lessonFilesTable;
 	}
 
 }

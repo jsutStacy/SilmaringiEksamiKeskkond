@@ -23,6 +23,9 @@ $(document).ready(function(){
 			url:"change-lesson/"+id,
 			success: function(data){
 				$("#lessonContent").text(data.content);
+				if(data.type == "video"){
+					$("#lessonContent").append(data.html);
+				}
 			},
 			error: (function(){
 				$("#lessonContent").text("Vabandame, tekkis viga.");

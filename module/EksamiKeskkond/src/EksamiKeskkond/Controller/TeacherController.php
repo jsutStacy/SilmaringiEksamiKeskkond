@@ -256,26 +256,26 @@ class TeacherController extends AbstractActionController {
 				'subsubjectId' => $subsubjectId,
 		);
 	}
-	
+
 	public function editLessonAction() {
 		$id = $this->params()->fromRoute('id');
 		$lesson = $this->getLessonTable()->getLesson($id);
+		$lessonFiles = $this->getLessonFilesTable()->getLessonFilesByLessonId($id);
 		$subsubject = $this->getSubsubjectTable()->getSubsubject($lesson->subsubject_id);
-	
+
 		$form = new LessonForm();
 		$form->bind($lesson);
 		$form->get('subsubject_id')->setValue($subsubject->id);
 		$form->get('submit')->setAttribute('value', 'Muuda');
-	
 		$request = $this->getRequest();
-	
+
 		if ($request->isPost()) {
 			$form->setInputFilter(new LessonFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
-	
+
 			if ($form->isValid()) {
 				$this->getLessonTable()->saveLesson($form->getData());
-	
+
 				return $this->redirect()->toRoute('teacher/my-course');
 			}
 		}
