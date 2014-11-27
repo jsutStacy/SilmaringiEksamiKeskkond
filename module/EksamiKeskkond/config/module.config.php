@@ -210,6 +210,18 @@ return array(
 									),
 							),
 					),
+					'edit-lesson' => array(
+							'type' => 'Segment',
+							'options' => array(
+									'route' => '/edit-lesson[/:id]',
+									'constraints' => array(
+											'id' => '[0-9]+',
+									),
+									'defaults' => array(
+											'action' => 'edit-lesson',
+									),
+							),
+					),
 					'delete-lesson' => array(
 							'type' => 'Segment',
 							'options' => array(
@@ -267,6 +279,18 @@ return array(
 									),
 									'defaults' => array(
 											'action' => 'add-subsubject',
+									),
+							),
+					),
+					'edit-subsubject' => array(
+							'type' => 'Segment',
+							'options' => array(
+									'route' => '/edit-subsubject[/:id]',
+									'constraints' => array(
+											'id' => '[0-9]+',
+									),
+									'defaults' => array(
+											'action' => 'edit-subsubject',
 									),
 							),
 					),

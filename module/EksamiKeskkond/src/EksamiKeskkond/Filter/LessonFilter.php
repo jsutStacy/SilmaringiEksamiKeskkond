@@ -18,6 +18,11 @@ class LessonFilter extends InputFilter {
 		));
 
 		$this->add(array(
+				'name' => 'subsubject_id',
+				'required' => false,
+		));
+		
+		$this->add(array(
 				'name' => 'published',
 				'required' => true,
 		));

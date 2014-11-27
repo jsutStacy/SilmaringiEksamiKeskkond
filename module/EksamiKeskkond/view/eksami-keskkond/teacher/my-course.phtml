@@ -41,11 +41,17 @@
 				<li class="list-group-item">
 					<?php echo $this->escapeHtml($subsubject->name) ?>
 					<a class="glyphicon glyphicon-trash pull-right" href="<?php echo $this->url('teacher/delete-subsubject', array('id' => $subsubject->id)) ?>"></a>
+					<a class="btn btn-default btn-xs pull-right" href="<?php echo $this->url('teacher/edit-subsubject', array('id' => $subsubject->id)) ?>">
+						<span class="glyphicon glyphicon-plus"></span>Muuda alateemat
+					</a>					
 					<ul class="list-group">
 						<?php foreach ($lessonTable->getLessonsBySubsubjectId($subsubject->id) as $lesson) : ?>
 						<li class="list-group-item">
 							<?php echo $lesson->name; ?>
 							<a class="glyphicon glyphicon-trash pull-right" href="<?php echo $this->url('teacher/delete-lesson', array('id' => $lesson->id)) ?>"></a>
+							<a class="btn btn-default btn-xs pull-right" href="<?php echo $this->url('teacher/edit-lesson', array('id' => $lesson->id)) ?>">
+								<span class="glyphicon glyphicon-plus"></span>Muuda tundi
+							</a>
 						</li>
 						<?php endforeach; ?>
 						<a class="row btn btn-default btn-xs pull-right" href="<?php echo $this->url('teacher/add-lesson', array('id' => $subsubject->id)) ?>">

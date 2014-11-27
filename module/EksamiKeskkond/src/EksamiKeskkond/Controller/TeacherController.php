@@ -159,19 +159,6 @@ class TeacherController extends AbstractActionController {
 		return $this->redirect()->toRoute('teacher/my-course');
 	}
 
-	/*kommenteerin praegu valja, sest tundub, et seda pole vaja, aga kindel pole
-	public function courseSubjectsAction() {
-		$id = $this->params()->fromRoute('id');
-		$subjectIds = $this->getCourseSubjectTable()->getCourseSubjects($id);
-		$subjects = $this->getSubjectTable()->getSubjectsByIds($subjectIds);
-	
-		return new ViewModel(array(
-			'id' => $id,
-			'subjects' => $subjects,
-		));
-	}
-	*/
-
 	public function addSubsubjectAction() {
 		$subjectId = $this->params()->fromRoute('id');
 		$subject = $this->getSubjectTable()->getSubject($subjectId);
@@ -196,6 +183,34 @@ class TeacherController extends AbstractActionController {
 		return array(
 				'form' => $form,
 				'subjectId' => $subjectId,
+		);
+	}
+	
+	public function editSubsubjectAction() {
+		$id = $this->params()->fromRoute('id');
+		$subsubject = $this->getSubsubjectTable()->getSubsubject($id);
+		$subject = $this->getSubjectTable()->getSubject($subsubject->subject_id);
+	
+		$form  = new SubsubjectForm();
+		$form->bind($subsubject);
+		$form->get('subject_id')->setValue($subject->id);
+		$form->get('submit')->setAttribute('value', 'Muuda');
+	
+		$request = $this->getRequest();
+	
+		if ($request->isPost()) {
+			$form->setInputFilter(new SubsubjectFilter($this->getServiceLocator()));
+			$form->setData($request->getPost());
+	
+			if ($form->isValid()) {
+				$this->getSubsubjectTable()->saveSubsubject($form->getData());
+	
+				return $this->redirect()->toRoute('teacher/my-course');
+			}
+		}
+		return array(
+				'id' => $id,
+				'form' => $form,
 		);
 	}
 
@@ -239,6 +254,34 @@ class TeacherController extends AbstractActionController {
 		return array(
 				'form' => $form,
 				'subsubjectId' => $subsubjectId,
+		);
+	}
+	
+	public function editLessonAction() {
+		$id = $this->params()->fromRoute('id');
+		$lesson = $this->getLessonTable()->getLesson($id);
+		$subsubject = $this->getSubsubjectTable()->getSubsubject($lesson->subsubject_id);
+	
+		$form = new LessonForm();
+		$form->bind($lesson);
+		$form->get('subsubject_id')->setValue($subsubject->id);
+		$form->get('submit')->setAttribute('value', 'Muuda');
+	
+		$request = $this->getRequest();
+	
+		if ($request->isPost()) {
+			$form->setInputFilter(new LessonFilter($this->getServiceLocator()));
+			$form->setData($request->getPost());
+	
+			if ($form->isValid()) {
+				$this->getLessonTable()->saveLesson($form->getData());
+	
+				return $this->redirect()->toRoute('teacher/my-course');
+			}
+		}
+		return array(
+				'id' => $id,
+				'form' => $form,
 		);
 	}
 
