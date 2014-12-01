@@ -245,6 +245,7 @@ class TeacherController extends AbstractActionController {
 				$lessonId = $this->getLessonTable()->saveLesson($lesson);
 
 				$data['id'] = $lessonId;
+				$data['lesson_files_id'] = null;
 				$lessonFiles->exchangeArray($data);
 
 				$this->getLessonFilesTable()->saveLessonFiles($lessonFiles);
@@ -260,25 +261,44 @@ class TeacherController extends AbstractActionController {
 	public function editLessonAction() {
 		$id = $this->params()->fromRoute('id');
 		$lesson = $this->getLessonTable()->getLesson($id);
+
 		$lessonFiles = $this->getLessonFilesTable()->getLessonFilesByLessonId($id);
+		$lessonFile = array_values($lessonFiles)[0];
+
 		$subsubject = $this->getSubsubjectTable()->getSubsubject($lesson->subsubject_id);
 
 		$form = new LessonForm();
+
+
 		$form->bind($lesson);
-		$form->get('subsubject_id')->setValue($subsubject->id);
 		$form->get('submit')->setAttribute('value', 'Muuda');
+		$form->get('url')->setValue($lessonFile->url);
+		$form->get('lesson_files_id')->setValue($lessonFile->id);
+		$form->get('user_id')->setValue($lessonFile->user_id);
+		$form->get('url')->setValue($lessonFile->url);
+		$form->get('subsubject_id')->setValue($subsubject->id);
+
 		$request = $this->getRequest();
 
 		if ($request->isPost()) {
 			$form->setInputFilter(new LessonFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
-
 			if ($form->isValid()) {
-				$this->getLessonTable()->saveLesson($form->getData());
-
-				return $this->redirect()->toRoute('teacher/my-course');
-			}
+				$data = $form->getData();
+				$this->getLessonTable()->saveLesson($data);
 		}
+
+		$form->bind($lessonFile);
+		$form->setData($request->getPost());
+		if ($form->isValid()) {
+			$data = $form->getData();
+			$this->getLessonFilesTable()->saveLessonFiles($form->getData());
+
+			return $this->redirect()->toRoute('teacher/my-course');
+		}
+
+	}
+
 		return array(
 				'id' => $id,
 				'form' => $form,
