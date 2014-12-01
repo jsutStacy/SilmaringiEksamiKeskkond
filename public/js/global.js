@@ -1,9 +1,14 @@
 $(document).ready(function(){
 
-	//Add lesson (teacher)
+	//Add/edit lesson (teacher)
 	typeSelect = $("[name='type']");
 	urlField = $("#url-field");
 	urlField.css("display", "none");
+
+	if (typeSelect.val() == "video"){
+		urlField.css("display", "block");
+	}
+
 	typeSelect.change(function(){
 		if ($(this).val() == "video"){
 			urlField.css("display", "block");

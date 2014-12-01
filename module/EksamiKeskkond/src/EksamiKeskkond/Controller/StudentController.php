@@ -56,22 +56,36 @@ class StudentController extends AbstractActionController {
 
 		$user = $auth->getIdentity();
 
-		$subjects = array();
+		$subsubjects = array();
+		$lessons = array();
+		$course = array();
 		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
 		$hasBoughtCourse = $this->getUserCourseTable()->checkIfUserHasBoughtCourse($user->id, $course->id);
-
+		$courseData = array();
+		$courseData['course'] = $course;
 		if (!$course) {
 			return $this->redirect()->toRoute('errors');
 		}
 		if ($hasBoughtCourse) {
 			$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
+			foreach ($subjects as $subjectKey => $subject) {
+				$subsubjects = $this->getSubsubjectTable()->getSubsubjectsBySubjectId($subject->id);
+
+				foreach ($subsubjects as $subsubjectKey => $subsubject) {
+					$lessons = $this->getLessonTable()->getLessonsBySubsubjectId($subsubject->id);
+					$subsubjects[$subsubjectKey] = get_object_vars($subsubject);
+					$subsubjects[$subsubjectKey]['lessons'] = $lessons;
+				}
+			
+				$subjects[$subjectKey] = get_object_vars($subject);
+				$subjects[$subjectKey]['subsubjects'] = $subsubjects;
+			}
+
+			$courseData['subjects'] = $subjects;
 		}
 		return new ViewModel(array(
-			'course' => $course,
-			'subjects' => $subjects,
+			'courseData' => $courseData,
 			'hasBoughtCourse' => $hasBoughtCourse,
-			'subsubjectTable' => $this->getSubsubjectTable(),
-			'lessonTable' => $this->getLessonTable(),
 		));
 	}
 

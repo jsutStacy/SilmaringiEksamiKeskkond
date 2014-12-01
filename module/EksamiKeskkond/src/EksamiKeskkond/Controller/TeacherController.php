@@ -269,7 +269,6 @@ class TeacherController extends AbstractActionController {
 
 		$form = new LessonForm();
 
-
 		$form->bind($lesson);
 		$form->get('submit')->setAttribute('value', 'Muuda');
 		$form->get('url')->setValue($lessonFile->url);
