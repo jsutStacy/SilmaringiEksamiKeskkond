@@ -44,6 +44,7 @@ class CourseTable {
 		);
 		if ($course->id == 0) {
 			$this->tableGateway->insert($data);
+			return $this->tableGateway->lastInsertValue;
 		}
 		else {
 			if ($this->getCourse($course->id)) {

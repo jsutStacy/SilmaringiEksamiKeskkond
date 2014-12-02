@@ -63,9 +63,11 @@ class StudentController extends AbstractActionController {
 		$hasBoughtCourse = $this->getUserCourseTable()->checkIfUserHasBoughtCourse($user->id, $course->id);
 		$courseData = array();
 		$courseData['course'] = $course;
+
 		if (!$course) {
 			return $this->redirect()->toRoute('errors');
 		}
+
 		if ($hasBoughtCourse) {
 			$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
 			foreach ($subjects as $subjectKey => $subject) {

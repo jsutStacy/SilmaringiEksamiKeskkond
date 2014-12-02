@@ -5,6 +5,7 @@ namespace EksamiKeskkond\Controller;
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\ViewModel\JsonModel;
 
 use EksamiKeskkond\Model\Course;
 use EksamiKeskkond\Form\CourseForm;
@@ -99,13 +100,63 @@ class TeacherController extends AbstractActionController {
 	}
 
 	public function addSubjectAction() {
-		$courseId = $this->params()->fromRoute('id');
-		$course = $this->getCourseTable()->getCourse($courseId);
+		$request = $this->getRequest();
+		$response = $this->getResponse();
 
 		$form = new SubjectForm();
-		$form->get('course_id')->setValue($courseId);
-		$request = $this->getRequest();
-	
+
+		if ($request->isPost()) {
+			$subject = new Subject();
+			
+			$form->setInputFilter(new SubjectFilter($this->getServiceLocator()));
+			$form->setData($request->getPost());
+
+			if($form->isValid()){
+				$subject->exchangeArray($form->getData());
+				$data = $request->getPost();
+				$subjectId = $this->getSubjectTable()->saveSubject($subject);
+				$html =
+					'<li class="list-group-item active">' . $data->name .
+						'<div class="btn-group pull-right" role="group" aria-label="...">'.
+							'<a class="btn btn-default btn-xs" href="edit-subject/' . $subjectId . '">' .
+								'<span class="glyphicon glyphicon-plus"></span>Muuda teemat' .
+							'</a>' .
+							'<a class="btn btn-default btn-xs" href="delete-subject/' . $subjectId . '">' .
+								'<span class="glyphicon glyphicon-trash"></span>Kustuta teema' .
+							'</a>' .
+							'</div>' .
+					'</li>' .
+					'<div class="panel-body">' .
+						'<a class="btn btn-default btn-xs pull-right" href="add-subsubject/' . $subjectId . '">' .
+						'<span class="glyphicon glyphicon-plus"></span>Lisa uus alamteema</a>' .
+					'</div>';
+
+				$response->setContent(\Zend\Json\Json::encode(array(
+						'response' => true,
+						'addedSubject' => $data,
+						'html' => $html,
+				)));
+				return $response;
+			}
+		}
+		else{
+			$viewmodel = new ViewModel();
+			$courseId = $this->params()->fromRoute('id');
+			$course = $this->getCourseTable()->getCourse($courseId);
+
+			$form->get('course_id')->setValue($courseId);
+
+			$viewmodel->setTerminal($request->isXmlHttpRequest());
+
+			$viewmodel->setVariables(array(
+				'form' => $form,
+				'courseId' => $courseId,
+			));
+
+			return $viewmodel;
+		}
+
+		/*
 		if ($request->isPost()) {
 			$subject = new Subject();
 	
@@ -122,7 +173,7 @@ class TeacherController extends AbstractActionController {
 		return array(
 			'form' => $form,
 			'courseId' => $courseId,
-		);
+		);*/
 	}
 	
 	public function editSubjectAction() {

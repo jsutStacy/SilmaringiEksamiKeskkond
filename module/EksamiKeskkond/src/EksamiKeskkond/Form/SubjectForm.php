@@ -35,9 +35,6 @@ class SubjectForm extends Form {
 				'type' => 'text',
 				'class' => 'form-control',
 			),
-			'options' => array(
-				'label' => 'Teema nimi',
-			),
 		));
 
 		$this->add(array(

@@ -17,7 +17,15 @@ $(document).ready(function(){
 			urlField.css("display", "none");
 		}
 	});
-	
+
+	//Add subject (display form)
+	$("#addSubject").click(function(e){
+		e.preventDefault();
+		$("#subjects").prepend($('<li class="list-group-item" id="addSubjectLi">').load($(this).attr('href')));
+		return false;
+	});
+
+
 	//Show lesson (student)
 	$(".change-lesson").click(function(e){
 		id = $(this).attr("href");

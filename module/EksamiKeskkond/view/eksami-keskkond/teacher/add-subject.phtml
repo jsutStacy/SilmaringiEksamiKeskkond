@@ -1,23 +1,39 @@
 <?php
-	$this->headTitle('Lisa uus teema - ');
-?>
-<h1>Lisa uus teema</h1>
-<?php
 	$form = $this->form;
-	$form->setAttribute('action', $this->url('teacher/add-subject', array('id' => $courseId)));
+	$form->setAttribute('id', 'form');
 	$form->prepare();
 
 	echo $this->form()->openTag($form);
 	echo $this->formHidden($form->get('id'));
 	echo $this->formHidden($form->get('course_id'));
+	
 ?>
 <div class="form-group">
 	<?php echo $this->formRow($form->get('name')); ?>
 </div>
 <div class="form-group">
-	<?php echo $this->formRow($form->get('description')); ?>
-</div>
-<div class="form-group">
-	<?php echo $this->formSubmit($form->get('submit')); ?>
+	<a href="<?php echo $courseId ?>" id="submitSubjectForm">Lisa</a>
 </div>
 <?php echo $this->form()->closeTag(); ?>
+<script>
+	$("a#submitSubjectForm").click(function(e) {
+		e.preventDefault();
+		var formData = $('#form').serialize();
+		
+		$.ajax({
+			type:"POST",
+			dataType: "json",
+			url:"add-subject",
+			data: formData,
+			//beforeSend: alert(formData),
+			success: function(data){
+				$("#addSubjectLi").remove();
+				$("#subjects").prepend(data.html);
+			},
+			error: (function(e) {
+				alert("viga "+e);
+			})
+		});
+	
+	});
+</script>
