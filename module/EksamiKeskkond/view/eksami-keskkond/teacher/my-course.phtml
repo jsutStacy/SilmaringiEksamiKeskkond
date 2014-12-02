@@ -25,9 +25,10 @@
 		<div class="panel-heading"><h2 class="panel-title">Teemad</h2></div>
 		<ul class="list-group" id="subjects">
 			<?php foreach ($subjects as $subject) : ?>
-				<li class="list-group-item active"><?php echo $this->escapeHtml($subject->name). " #" .$this->escapeHtml($subject->id) ?>
+				<li class="list-group-item active" id="courseId<?php echo $subject->id ?>">
+					<?php echo $this->escapeHtml($subject->name) ?>
 					<div class="btn-group pull-right" role="group" aria-label="...">
-						<a class="btn btn-default btn-xs" href="<?php echo $this->url('teacher/edit-subject', array('id' => $subject->id)) ?>">
+						<a class="btn btn-default btn-xs editSubject" href="<?php echo $this->url('teacher/edit-subject', array('id' => $subject->id)) ?>">
 							<span class="glyphicon glyphicon-plus"></span>Muuda teemat
 						</a>
 						<a class="btn btn-default btn-xs" href="<?php echo $this->url('teacher/delete-subject', array('id' => $subject->id)) ?>">
@@ -43,7 +44,7 @@
 								<a class="glyphicon glyphicon-trash pull-right" href="<?php echo $this->url('teacher/delete-subsubject', array('id' => $subsubject->id)) ?>"></a>
 								<a class="btn btn-default btn-xs pull-right" href="<?php echo $this->url('teacher/edit-subsubject', array('id' => $subsubject->id)) ?>">
 									<span class="glyphicon glyphicon-plus"></span>Muuda alateemat
-								</a>					
+								</a>
 								<ul class="list-group">
 									<?php foreach ($lessonTable->getLessonsBySubsubjectId($subsubject->id) as $lesson) : ?>
 										<li class="list-group-item">

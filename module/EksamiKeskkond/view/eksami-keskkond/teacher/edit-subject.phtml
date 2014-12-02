@@ -1,12 +1,8 @@
 <?php
-	$this->headTitle('Muuda teemat - ');
-?>
-<h1>Muuda teemat</h1>
-<?php
 	$form = $this->form;
-	$form->setAttribute('action', $this->url('teacher/edit-subject', array('id' => $this->id)));
+	$form->setAttribute('id', 'editSubjectForm');
 	$form->prepare();
-	
+
 	echo $this->form()->openTag($form);
 	echo $this->formHidden($form->get('id'));
 	echo $this->formHidden($form->get('course_id'));
@@ -16,10 +12,29 @@
 	<?php echo $this->formRow($form->get('name')); ?>
 </div>
 <div class="form-group">
-	<?php echo $this->formRow($form->get('description')); ?>
-</div>
-<div class="form-group">
-	<?php echo $this->formSubmit($form->get('submit')); ?>
+	<a href="<?php echo $courseId ?>" id="submitEditSubjectForm">Muuda</a>
 </div>
 
 <?php echo $this->form()->closeTag(); ?>
+
+<script>
+	$("a#submitEditSubjectForm").click(function(e) {
+		e.preventDefault();
+		var formData = $('#editSubjectForm').serialize();
+		
+		$.ajax({
+			type:"POST",
+			dataType: "json",
+			url:"edit-subject",
+			data: formData,
+			success: function(data){
+				$("#editSubjectForm").remove();
+				$("#courseId"+data.courseId).prepend(data.courseName);
+			},
+			error: (function(e) {
+				alert("viga "+e);
+			})
+		});
+	
+	});
+</script>

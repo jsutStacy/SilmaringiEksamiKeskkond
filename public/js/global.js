@@ -24,7 +24,13 @@ $(document).ready(function(){
 		$("#subjects").prepend($('<li class="list-group-item" id="addSubjectLi">').load($(this).attr('href')));
 		return false;
 	});
-
+	
+	//Edit subject (display form)
+	$(".editSubject").click(function(e){
+		e.preventDefault();
+		$(this).closest("li").load($(this).attr('href'));
+		return false;
+	});
 
 	//Show lesson (student)
 	$(".change-lesson").click(function(e){

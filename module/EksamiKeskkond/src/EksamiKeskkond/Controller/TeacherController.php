@@ -156,52 +156,51 @@ class TeacherController extends AbstractActionController {
 			return $viewmodel;
 		}
 
-		/*
-		if ($request->isPost()) {
-			$subject = new Subject();
-	
-			$form->setInputFilter(new SubjectFilter($this->getServiceLocator()));
-			$form->setData($request->getPost());
-	
-			if ($form->isValid()) {
-				$subject->exchangeArray($form->getData());
-				$this->getSubjectTable()->saveSubject($subject);
-	
-				return $this->redirect()->toRoute('teacher/my-course');
-			}
-		}
-		return array(
-			'form' => $form,
-			'courseId' => $courseId,
-		);*/
 	}
-	
+
 	public function editSubjectAction() {
-		$id = $this->params()->fromRoute('id');
-		$subject = $this->getSubjectTable()->getSubject($id);
-		$course = $this->getCourseTable()->getCourse($subject->course_id);
-
-		$form  = new SubjectForm();
-		$form->bind($subject);
-		$form->get('course_id')->setValue($course->id);
-		$form->get('submit')->setAttribute('value', 'Muuda');
-
 		$request = $this->getRequest();
+		$response = $this->getResponse();
 
 		if ($request->isPost()) {
-			$form->setInputFilter(new SubjectFilter($this->getServiceLocator()));
+			$id = $request->getPost()->id;
+			$subject = $this->getSubjectTable()->getSubject($id);
+
+			$form  = new SubjectForm();
+			$form->bind($subject);
+			$form->setInputFilter(new SubsubjectFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
 				$this->getSubjectTable()->saveSubject($form->getData());
-
-				return $this->redirect()->toRoute('teacher/my-course');
+				$response->setContent(\Zend\Json\Json::encode(array(
+					'response' => true,
+					'courseId' => $id,
+					'courseName' => $form->getData()->name,
+				)));
+				return $response;
 			}
 		}
-		return array(
-			'id' => $id,
-			'form' => $form,
-		);
+		else {
+			$id = $this->params()->fromRoute('id');
+			$subject = $this->getSubjectTable()->getSubject($id);
+			$course = $this->getCourseTable()->getCourse($subject->course_id);
+
+			$form  = new SubjectForm();
+			$form->bind($subject);
+			$form->get('course_id')->setValue($course->id);
+			$form->get('id')->setValue($id);
+
+			$viewmodel = new ViewModel();
+			$viewmodel->setTerminal($request->isXmlHttpRequest());
+			$viewmodel->setVariables(array(
+					'form' => $form,
+					'courseId' => $subject->course_id,
+					'id' => $id,
+			));
+
+			return $viewmodel;
+		}
 	}
 
 	public function deleteSubjectAction() {
