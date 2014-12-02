@@ -16,14 +16,17 @@
 			<tr>
 				<td><?php echo $this->escapeHtml($student['student']->firstname) ?></td>
 				<td><?php echo $this->escapeHtml($student['student']->lastname) ?></td>
-				<td><?php echo $this->escapeHtml("makstud tuleb siia") ?></td>
+				<td><?php if ($student['is_paid_by_bill'] == true) { ?> <p>Makstud arvega</p>
+					<?php } else { ?><p>Makstud pangalingiga</p>
+					<?php } ?>
+				</td>
 				<td>
 					<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/students', array('email' => $student['student']->email)) ?>">Saada kiri</a>
 					<?php if ($student['status'] == true) { ?>
 						<a class="btn btn-primary btn-me pull-right"
 							href="<?php echo $this->url('admin/change-user-course-status',
 								array('user_id' => $student['student']->id, 'course_id' => $course['course']->id, 'status' => null)) ?>">
-							Eemalda ligipääs kursusele
+							Eemalda ligipääs kursuselt
 						</a>
 					<?php } else { ?>
 						<a class="btn btn-primary btn-me pull-right"

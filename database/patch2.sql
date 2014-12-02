@@ -12,3 +12,5 @@ CREATE TABLE IF NOT EXISTS `lesson_files` (
 ALTER TABLE  `lesson_files` ADD CONSTRAINT  `fk_lesson_to_lesson_files` FOREIGN KEY (  `lesson_id` ) REFERENCES  `silmaring`.`lesson` (
 `id`
 ) ON DELETE CASCADE ON UPDATE RESTRICT ;
+
+ALTER TABLE `user_course` ADD `is_paid_by_bill` TINYINT(1) NULL DEFAULT NULL ;

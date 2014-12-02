@@ -295,7 +295,7 @@ class StudentController extends AbstractActionController {
 		$transport->send($messageToStudent);
 		$transport->send($messageToAdmin);
 
-		$this->getUserCourseTable()->buyCourse($user->id, $course->id, null);
+		$this->getUserCourseTable()->buyCourse($user->id, $course->id, null, true);
 
 		return $this->redirect()->toRoute('student/all-courses');
 	}

@@ -25,6 +25,7 @@ class UserCourseTable {
 		foreach ($resultSet as $key => $row) {
 			$userIds[$key]['id'] = $row->user_id;
 			$userIds[$key]['status'] = $row->status;
+			$userIds[$key]['is_paid_by_bill'] = $row->is_paid_by_bill;		
 		}
 		return $userIds;
 	}
@@ -45,11 +46,12 @@ class UserCourseTable {
 		return $courseIds;
 	}
 
-	public function buyCourse($userId, $courseId, $status) {
+	public function buyCourse($userId, $courseId, $status, $isPaidByBill = false) {
 		$data = array(
 			'user_id' => $userId,
 			'course_id' => $courseId,
 			'status' => $status,
+			'is_paid_by_bill' => $isPaidByBill,
 		);
 		if ($this->checkIfUserHasBoughtCourse($userId, $courseId)) {
 			return;
@@ -73,4 +75,5 @@ class UserCourseTable {
 	public function changeStatus($userId, $courseId, $status) {
 		return $this->tableGateway->update(array('status' => $status), array('user_id' => $userId, 'course_id' => $courseId));
 	}
+	
 }

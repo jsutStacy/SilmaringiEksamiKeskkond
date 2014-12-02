@@ -115,6 +115,7 @@ class AdminController extends AbstractActionController {
 		foreach ($courseParticipants as $key => $courseParticipant) {
 			$users[$key]['user'] = $this->getUserTable()->getUser($courseParticipant['id']);
 			$users[$key]['status'] = $courseParticipant['status'];
+			$users[$key]['is_paid_by_bill'] = $courseParticipant['is_paid_by_bill'];
 		}
 		return new ViewModel(array(
 			'id' => $id,
@@ -129,6 +130,16 @@ class AdminController extends AbstractActionController {
 
 		$this->getUserCourseTable()->changeStatus($userId, $courseId, $status);
 
+		return $this->redirect()->toRoute('admin/students');
+	}
+	
+	public function changeIsPaidByBillAction() {
+		$courseId = $this->params()->fromRoute('course_id');
+		$userId = $this->params()->fromRoute('user_id');
+		$status = $this->params()->fromRoute('status');
+	
+		$this->getUserCourseTable()->changeIsPaidByBill($userId, $courseId, $status, true);
+	
 		return $this->redirect()->toRoute('admin/students');
 	}
 
@@ -153,6 +164,7 @@ class AdminController extends AbstractActionController {
 
 				$studentsData[$key]['student'] = $student;
 				$studentsData[$key]['status'] = $courseParticipant['status'];
+				$studentsData[$key]['is_paid_by_bill'] = $courseParticipant['is_paid_by_bill'];
 			}
 			$coursesData[$course->id]['students'] = $studentsData;
 			$coursesData[$course->id]['course'] = $course;
