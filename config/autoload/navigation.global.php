@@ -16,6 +16,12 @@
 				'privilege' => 'all'
 			),
 			array(
+				'label' => 'Õpilased',
+				'route' => 'admin/students',
+				'resource' => 'AdminController',
+				'privilege' => 'all'
+			),
+			array(
 				'label' => 'Kursused',
 				'route' => 'admin/courses',
 				'resource' => 'AdminController',

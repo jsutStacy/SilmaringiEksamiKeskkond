@@ -151,6 +151,15 @@ return array(
 							)
 						)
 					),
+					'students' => array(
+							'type' => 'Literal',
+							'options' => array(
+									'route' => '/students',
+									'defaults' => array(
+											'action' => 'students',
+									)
+							)
+					),
 					'change-user-course-status' => array(
 						'type' => 'Segment',
 						'options' => array(

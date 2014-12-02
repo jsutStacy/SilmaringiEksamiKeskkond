@@ -1,0 +1,40 @@
+<?php
+	$this->headTitle('Õpilased - ');
+?>
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h2>Õpilased</h2>
+	</div>
+</div>
+<?php foreach ($coursesData as $course): ?>
+	<div class="row">
+		<h3><?php echo $this->escapeHtml($course['course']->name)?></h3>
+		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/students', array('id' => $id)) ?>">Saada kõigile kiri</a>
+		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/empty-course', array('id' => $course['course']->id)) ?>">Tühjenda kursus</a>
+		<table class="table table-striped">
+			<?php foreach ($course['students'] as $student): ?>
+			<tr>
+				<td><?php echo $this->escapeHtml($student['student']->firstname) ?></td>
+				<td><?php echo $this->escapeHtml($student['student']->lastname) ?></td>
+				<td><?php echo $this->escapeHtml("makstud tuleb siia") ?></td>
+				<td>
+					<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/students', array('email' => $student['student']->email)) ?>">Saada kiri</a>
+					<?php if ($student['status'] == true) { ?>
+						<a class="btn btn-primary btn-me pull-right"
+							href="<?php echo $this->url('admin/change-user-course-status',
+								array('user_id' => $student['student']->id, 'course_id' => $course['course']->id, 'status' => null)) ?>">
+							Eemalda ligipääs kursusele
+						</a>
+					<?php } else { ?>
+						<a class="btn btn-primary btn-me pull-right"
+							href="<?php echo $this->url('admin/change-user-course-status',
+								array('user_id' => $student['student']->id, 'course_id' => $course['course']->id, 'status' => true)) ?>">
+							Anna ligipääs kursusele
+						</a>
+					<?php } ?>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+		</table>
+	</div>
+<?php endforeach; ?>

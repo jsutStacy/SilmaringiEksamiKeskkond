@@ -129,7 +129,7 @@ class AdminController extends AbstractActionController {
 
 		$this->getUserCourseTable()->changeStatus($userId, $courseId, $status);
 
-		return $this->redirect()->toRoute('admin/course-participants', array('id' => $courseId));
+		return $this->redirect()->toRoute('admin/students');
 	}
 
 	public function teachersAction() {
@@ -137,6 +137,29 @@ class AdminController extends AbstractActionController {
 
 		return new ViewModel(array(
 			'teachers' => $teachers,
+		));
+	}
+
+	public function studentsAction() {
+		$courses = $this->getCourseTable()->fetchAll();
+		$coursesData = array();
+
+		foreach ($courses as $course) {
+			$courseParticipants = $this->getUserCourseTable()->getCourseParticipants($course->id);
+			$studentsData = array();
+			
+			foreach ($courseParticipants as $key => $courseParticipant) {
+				$student = $this->getUserTable()->getUser($courseParticipant['id']);
+
+				$studentsData[$key]['student'] = $student;
+				$studentsData[$key]['status'] = $courseParticipant['status'];
+			}
+			$coursesData[$course->id]['students'] = $studentsData;
+			$coursesData[$course->id]['course'] = $course;
+		}
+
+		return new ViewModel(array(
+			'coursesData' => $coursesData,
 		));
 	}
 
