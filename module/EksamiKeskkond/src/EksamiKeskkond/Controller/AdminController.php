@@ -35,10 +35,16 @@ class AdminController extends AbstractActionController {
 	}
 
 	public function addCourseAction() {
-		$teachers = $this->getUserTable()->getAllTeachersForSelect();
-
+		$allTeachers = $this->getUserTable()->getAllTeachersForSelect();		
+		$availableTeachers = array();
+		
+		foreach ($allTeachers as $id => $teacher) {	
+			if (empty($this->getCourseTable()->getCourseByTeacherId($id))) {
+				$availableTeachers[$id] = $teacher;
+			}
+		}
 		$form = new CourseForm();
-		$form->get('teacher_id')->setValueOptions($teachers);
+		$form->get('teacher_id')->setValueOptions($availableTeachers);
 		$request = $this->getRequest();
 
 		if ($request->isPost()) {
@@ -60,11 +66,18 @@ class AdminController extends AbstractActionController {
 	public function editCourseAction() {
 		$id = $this->params()->fromRoute('id');
 		$course = $this->getCourseTable()->getCourse($id);
-		$teachers = $this->getUserTable()->getAllTeachersForSelect();
+		$currentTeacherId = $course->teacher_id;
+		$allTeachers = $this->getUserTable()->getAllTeachersForSelect();
+		$availableTeachers = array();
 
+		foreach ($allTeachers as $key => $teacher) {
+			if (empty($this->getCourseTable()->getCourseByTeacherId($key)) || $currentTeacherId == $key) {
+				$availableTeachers[$key] = $teacher;
+			}
+		}
 		$form  = new CourseForm();
 		$form->bind($course);
-		$form->get('teacher_id')->setValueOptions($teachers);
+		$form->get('teacher_id')->setValueOptions($availableTeachers);
 		$form->get('submit')->setAttribute('value', 'Muuda');
 
 		$request = $this->getRequest();
@@ -79,7 +92,6 @@ class AdminController extends AbstractActionController {
 				return $this->redirect()->toRoute('admin/courses');
 			}
 		}
-
 		return array(
 			'id' => $id,
 			'form' => $form,
