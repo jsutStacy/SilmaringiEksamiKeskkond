@@ -1,0 +1,16 @@
+<div class="panel-group col-md-4">
+	<ul class="list-group">
+		<li class="list-group-item">
+			<a class="changeManageContent" href="<?php $course->id ?>">Kursuse üldinfo</a>
+		</li>
+		<li class="list-group-item">
+			<a class="changeManageContent" href="my-course">Kursuse Sisu</a>
+		</li>
+		<li class="list-group-item">
+			<a class="changeManageContent" href="">Esitatud kodutööd</a>
+		</li>
+		<li class="list-group-item">
+			<a class="changeManageContent" href="<?php echo $this->url('admin/course-participants', array('id' => $course->id)) ?>">Kes on kursusel</a>
+		</li>
+	</ul>
+</div>

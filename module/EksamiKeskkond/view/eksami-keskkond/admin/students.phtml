@@ -9,7 +9,6 @@
 <?php foreach ($coursesData as $course): ?>
 	<div class="row">
 		<h3><?php echo $this->escapeHtml($course['course']->name)?></h3>
-		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/students', array('id' => $id)) ?>">Saada kõigile kiri</a>
 		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/empty-course', array('id' => $course['course']->id)) ?>">Kustuta kursuselt kõik õpilased</a>
 		<table class="table table-striped">
 			<?php foreach ($course['students'] as $student): ?>

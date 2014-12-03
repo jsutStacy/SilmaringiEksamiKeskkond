@@ -28,10 +28,10 @@
 					<p class="subjectName"><?php echo $this->escapeHtml($subject->name) ?></p>
 					<div class="btn-group" role="group" aria-label="...">
 						<a class="btn btn-default btn-xs editSubject" href="<?php echo $this->url('teacher/edit-subject', array('id' => $subject->id)) ?>">
-							<span class="glyphicon glyphicon-plus"></span>Muuda teemat
+							<span class="glyphicon glyphicon-pencil"></span>
 						</a>
 						<a class="btn btn-default btn-xs" href="<?php echo $this->url('teacher/delete-subject', array('id' => $subject->id)) ?>">
-							<span class="glyphicon glyphicon-trash"></span>Kustuta teema
+							<span class="glyphicon glyphicon-trash"></span>
 						</a>
 					</div>
 				</li>

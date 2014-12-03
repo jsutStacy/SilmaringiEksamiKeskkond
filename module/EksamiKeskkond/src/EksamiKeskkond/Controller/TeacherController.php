@@ -155,10 +155,10 @@ class TeacherController extends AbstractActionController {
 					'<p class="subjectName">' . $data->name . '</p>' .
 						'<div class="btn-group" role="group" aria-label="...">'.
 							'<a class="btn btn-default btn-xs editSubject" href="edit-subject/' . $subjectId . '">' .
-								'<span class="glyphicon glyphicon-plus"></span>Muuda teemat' .
+								'<span class="glyphicon glyphicon-pencil"></span>' .
 							'</a>' .
 							'<a class="btn btn-default btn-xs" href="delete-subject/' . $subjectId . '">' .
-								'<span class="glyphicon glyphicon-trash"></span>Kustuta teema' .
+								'<span class="glyphicon glyphicon-trash"></span>' .
 							'</a>' .
 							'</div>' .
 					'</li>' .

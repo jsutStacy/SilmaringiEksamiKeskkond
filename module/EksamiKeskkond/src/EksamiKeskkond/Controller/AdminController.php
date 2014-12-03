@@ -23,9 +23,19 @@ class AdminController extends AbstractActionController {
 	}
 
 	public function courseAction() {
-		return new ViewModel(array(
-			'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
+		$viewmodel = new ViewModel();
+		
+		$sidebarView = new ViewModel();
+		$sidebarView->setTemplate('admin/sidebar');
+		$sidebarView->setVariables(array(
+				'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
 		));
+		
+		$viewmodel->addChild($sidebarView, 'sidebar');
+		$viewmodel->setVariables(array(
+				'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
+		));
+		return $viewmodel;
 	}
 
 	public function coursesAction() {
@@ -39,7 +49,9 @@ class AdminController extends AbstractActionController {
 		$availableTeachers = array();
 
 		foreach ($allTeachers as $id => $teacher) {
-			if (empty($this->getCourseTable()->getCourseByTeacherId($id))) {
+			$teacherCourse = $this->getCourseTable()->getCourseByTeacherId($id);
+
+			if (empty($teacherCourse)) {
 				$availableTeachers[$id] = $teacher;
 			}
 		}
@@ -71,7 +83,8 @@ class AdminController extends AbstractActionController {
 		$availableTeachers = array();
 
 		foreach ($allTeachers as $key => $teacher) {
-			if (empty($this->getCourseTable()->getCourseByTeacherId($key)) || $currentTeacherId == $key) {
+			$teacherCourse = $this->getCourseTable()->getCourseByTeacherId($key);
+			if (empty($teacherCourse) || $currentTeacherId == $key) {
 				$availableTeachers[$key] = $teacher;
 			}
 		}
@@ -100,7 +113,7 @@ class AdminController extends AbstractActionController {
 
 	public function deleteCourseAction() {
 		$this->getCourseTable()->deleteCourse($this->params()->fromRoute('id'));
-
+		
 		return $this->redirect()->toRoute('admin/courses');
 	}
 
