@@ -1,0 +1,29 @@
+<?php
+	$this->headTitle('Õppetükk - ');
+?>
+
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h2><?php echo $this->escapeHtml($lesson->name) ?></h2>
+	</div>
+</div>
+<div class="row">
+	<p><?php echo $this->escapeHtml($lesson->content) ?></p>
+</div>
+<div class="row">
+	<?php if ($lesson->type == 'images') { ?>
+		<?php foreach ($lessonFiles as $lessonFile) { ?>
+			<img src="<?php echo $this->escapeHtml($lessonFile->url) ?>" alt="<?php echo $this->escapeHtml($lesson->name) ?>" />
+		<?php } ?>
+	<?php } else if ($lesson->type == 'audio') { ?>
+		<?php foreach ($lessonFiles as $lessonFile) { ?>
+			<audio controls>
+				<source src="<?php echo $this->escapeHtml($lessonFile->url) ?>" type="audio/mpeg">
+			</audio>
+		<?php } ?>
+	<?php } else if ($lesson->type == 'presentation') {?>
+		<?php foreach ($lessonFiles as $lessonFile) { ?>
+			<iframe src="<?php echo $this->escapeHtml($lessonFile->url) ?>" style="width:600px; height:500px;"></iframe>
+		<?php } ?>
+	<?php } ?>
+</div>

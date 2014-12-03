@@ -69,11 +69,19 @@ class LessonForm extends Form {
 		$this->add(array(
 			'name' => 'url',
 			'attributes' => array(
-				'type' => 'Zend\Form\Element\Url',
+				'type' => 'Url',
 				'class' => 'form-control',
 			),
 			'options' => array(
 					'label' => 'Url',
+			),
+		));
+
+		$this->add(array(
+			'name' => 'fileupload',
+			'attributes' => array(
+				'type' => 'file',
+				'multiple' => true,
 			),
 		));
 
@@ -85,29 +93,29 @@ class LessonForm extends Form {
 		));
 
 		$this->add(array(
-				'name' => 'lesson_files_id',
-				'attributes' => array(
-						'type' => 'hidden',
-				),
+			'name' => 'lesson_files_id',
+			'attributes' => array(
+				'type' => 'hidden',
+			),
 		));
 
 		$this->add(array(
-				'type' => 'Zend\Form\Element\Select',
-				'name' => 'type',
-				'attributes' => array(
-						'class' => 'form-control',
-				),
+			'type' => 'Zend\Form\Element\Select',
+			'name' => 'type',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
+			'options' => array(
+				'label' => 'Tüüp',
 				'options' => array(
-						'label' => 'Tüüp',
-						'options' => array(
-								'text' => 'Tekst',
-								'video' => 'Video',
-								'presentation' => 'Esitlus',
-								'audio' => 'Audio',
-								'test' => 'Test',
-								'images' => 'Pildid',
-						),
+					'text' => 'Tekst',
+					'video' => 'Video',
+					'presentation' => 'Esitlus',
+					'audio' => 'Audio',
+					'test' => 'Test',
+					'images' => 'Pildid',
 				),
+			),
 		));
 
 		$this->add(array(

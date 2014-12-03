@@ -11,4 +11,6 @@
  * file.
  */
 
-return array();
+return array(
+	'upload_dir' => './public/uploads/',
+);

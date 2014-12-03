@@ -70,3 +70,8 @@ ul.nav li a{
   box-shadow: none;
   border-bottom: 5px solid #0099ff;
 }
+
+#lesson-upload #url-field,
+#lesson-upload #file-field {
+	display: none;
+}

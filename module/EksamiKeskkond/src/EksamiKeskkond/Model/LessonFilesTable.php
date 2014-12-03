@@ -62,13 +62,8 @@ class LessonFilesTable {
 	}
 
 	public function getLessonFilesByLessonId($lessonId) {
-		$result = array();
-		$rowset = $this->tableGateway->select(array('lesson_id' => $lessonId));
+		$resultSet = $this->tableGateway->select(array('lesson_id' => $lessonId));
 
-		foreach ($rowset as $row) {
-			$result[$row->id] = $rowset->current();
-		}
-		return $result;
+		return $resultSet;
 	}
-
 }

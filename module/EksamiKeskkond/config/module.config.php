@@ -207,6 +207,18 @@ return array(
 							),
 						),
 					),
+					'lesson' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/lesson[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'lesson',
+							),
+						),
+					),
 					'add-lesson' => array(
 							'type' => 'Segment',
 							'options' => array(
