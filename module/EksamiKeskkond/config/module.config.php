@@ -485,6 +485,7 @@ return array(
 			'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
 			'error/404' => __DIR__ . '/../view/error/404.phtml',
 			'error/index' => __DIR__ . '/../view/error/index.phtml',
+			'teacher/sidebar' => __DIR__ . '/../view/eksami-keskkond/teacher/sidebar.phtml',
 		),
 		'template_path_stack' => array(
 			__DIR__ . '/../view',

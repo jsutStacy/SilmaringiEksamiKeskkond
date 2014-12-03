@@ -16,19 +16,72 @@ $(document).ready(function() {
 	});
 
 	//Add subject (display form)
-	$("#addSubject").click(function(e) {
+	$('#addSubject').click(function(e) {
 		e.preventDefault();
-		$("#subjects").prepend($('<li class="list-group-item" id="addSubjectLi">').load($(this).attr('href')));
+		if(!$("#subjects").has("#addSubjectLi").length) {
+			$("#subjects").prepend($('<li class="list-group-item" id="addSubjectLi">').load($(this).attr('href')));
+			return false;
+		}
+	});
 
+	//(ajax call)
+	$(document).on('click', '#submitSubjectForm', function(e) {
+		e.preventDefault();
+		var formData = $('#form').serialize();
+
+		$.ajax({
+			type:"POST",
+			dataType: "json",
+			url:"add-subject",
+			data: formData,
+			//beforeSend: alert(formData),
+			success: function(data) {
+				$("#addSubjectLi").remove();
+				$("#subjects").prepend(data.html);
+			},
+			error: (function(e) {
+				alert("viga " + e);
+			})
+		})
+	});
+
+	//Edit subject (display form)
+	$(document).on('click', 'a#cancelSubjectAdding', function(e) {
+		e.preventDefault();
+		$("#addSubjectLi").remove();
+	});
+
+	$(document).on('click', '.editSubject', function(e) {
+		e.preventDefault();
+		if(!$("#subjects").has("#editSubjectForm").length) {
+			$(this).closest("li").append($('<div>').load($(this).attr('href')));
+		}
+		else{
+			$("#editSubjectForm").remove();
+			$(this).closest("li").append($('<div>').load($(this).attr('href')));
+		}
 		return false;
 	});
-	
-	//Edit subject (display form)
-	$(".editSubject").click(function(e) {
-		e.preventDefault();
-		$(this).closest("li").load($(this).attr('href'));
 
-		return false;
+	//(ajax call)
+	$(document).on('click', 'a#submitEditSubjectForm', function(e) {
+		e.preventDefault();
+		var formData = $('#editSubjectForm').serialize();
+
+		$.ajax({
+			type:"POST",
+			dataType: "json",
+			url:"edit-subject",
+			data: formData,
+			success: function(data) {
+				$("#editSubjectForm").remove();
+				$("#subjectId"+data.subjectId+ " p.subjectName").remove();
+				$("#subjectId"+data.subjectId).prepend("<p class='subjectName'>"+data.subjectName+"</p>");
+			},
+			error: (function(e) {
+				alert("viga " + e);
+			})
+		});
 	});
 
 	//Show lesson (student)
@@ -58,4 +111,4 @@ function displayUpload(name) {
 	$('#lesson-upload').children().hide();
 	$('input[type="file"]').val('');
 	$(name).show();
-};
+}

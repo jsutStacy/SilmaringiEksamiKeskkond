@@ -17,24 +17,5 @@
 
 <?php echo $this->form()->closeTag(); ?>
 
-<script>
-	$("a#submitEditSubjectForm").click(function(e) {
-		e.preventDefault();
-		var formData = $('#editSubjectForm').serialize();
-		
-		$.ajax({
-			type:"POST",
-			dataType: "json",
-			url:"edit-subject",
-			data: formData,
-			success: function(data){
-				$("#editSubjectForm").remove();
-				$("#courseId"+data.courseId).prepend(data.courseName);
-			},
-			error: (function(e) {
-				alert("viga "+e);
-			})
-		});
-	
-	});
-</script>
+
+

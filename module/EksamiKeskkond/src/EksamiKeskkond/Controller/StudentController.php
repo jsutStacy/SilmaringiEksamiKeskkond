@@ -187,8 +187,8 @@ class StudentController extends AbstractActionController {
 			'VK_REF' => "1234561",
 			'VK_LANG' => 'EST',
 			'VK_MSG' => $this->to_banklink_ch('Kursuse ostmine', $bankPreferences['charset']),
-			'VK_RETURN' => $this->to_banklink_ch('http://eksamikeskkond.silmaring.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
-			'VK_CANCEL' => $this->to_banklink_ch('http://eksamikeskkond.silmaring.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
+			'VK_RETURN' => $this->to_banklink_ch('http://silmaring.eksamikeskkond.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
+			'VK_CANCEL' => $this->to_banklink_ch('http://silmaring.eksamikeskkond.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
 			'VK_DATETIME' => $timestamp,
 			'VK_ENCODING' => $bankPreferences['charset'],
 		);

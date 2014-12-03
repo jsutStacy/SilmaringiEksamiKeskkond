@@ -1,15 +1,6 @@
 <?php
 	$this->headTitle('Kursus - ');
 ?>
-
-<div class="row">
-	<div class="col-md-5 pull-right">
-		<a class="btn btn-primary btn-me pull-right" id="addSubject" href="<?php echo $this->url('teacher/add-subject', array('id' => $course->id)) ?>">
-			<span class="glyphicon glyphicon-plus"></span>
-			Lisa uus teema
-		</a>
-	</div>
-</div>
 <div class="row">
 	<div class="col-md-5 pull-left">
 		<h2><?php echo $this->escapeHtml($course->name) ?></h2>
@@ -21,13 +12,21 @@
 	</div>
 </div>
 <div class="row">
-	<div class="panel panel-primary">
+	<?php echo $this->sidebar ?>
+
+	<div class="panel panel-primary col-md-8">
+		<div class="row">
+			<a class="btn btn-primary btn-me pull-right" id="addSubject" href="<?php echo $this->url('teacher/add-subject', array('id' => $course->id)) ?>">
+				<span class="glyphicon glyphicon-plus"></span>
+				Lisa uus teema
+			</a>
+		</div>
 		<div class="panel-heading"><h2 class="panel-title">Teemad</h2></div>
 		<ul class="list-group" id="subjects">
 			<?php foreach ($subjects as $subject) : ?>
-				<li class="list-group-item active" id="courseId<?php echo $subject->id ?>">
-					<?php echo $this->escapeHtml($subject->name) ?>
-					<div class="btn-group pull-right" role="group" aria-label="...">
+				<li class="list-group-item active" id="subjectId<?php echo $subject->id ?>">
+					<p class="subjectName"><?php echo $this->escapeHtml($subject->name) ?></p>
+					<div class="btn-group" role="group" aria-label="...">
 						<a class="btn btn-default btn-xs editSubject" href="<?php echo $this->url('teacher/edit-subject', array('id' => $subject->id)) ?>">
 							<span class="glyphicon glyphicon-plus"></span>Muuda teemat
 						</a>

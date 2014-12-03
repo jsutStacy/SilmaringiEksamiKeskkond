@@ -35,10 +35,10 @@ class AdminController extends AbstractActionController {
 	}
 
 	public function addCourseAction() {
-		$allTeachers = $this->getUserTable()->getAllTeachersForSelect();		
+		$allTeachers = $this->getUserTable()->getAllTeachersForSelect();
 		$availableTeachers = array();
-		
-		foreach ($allTeachers as $id => $teacher) {	
+
+		foreach ($allTeachers as $id => $teacher) {
 			if (empty($this->getCourseTable()->getCourseByTeacherId($id))) {
 				$availableTeachers[$id] = $teacher;
 			}

@@ -57,6 +57,8 @@ class TeacherController extends AbstractActionController {
 		$auth = new AuthenticationService();
 		$user = $auth->getIdentity();
 
+		$request = $this->getRequest();
+
 		$course = $this->getCourseTable()->getCourseByTeacherId($user->id);
 		$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
 
@@ -64,11 +66,36 @@ class TeacherController extends AbstractActionController {
 			return $this->redirect()->toRoute('errors');
 		}
 		if ($course->teacher_id == $user->id) {
-			return new ViewModel(array(
+			$viewmodel = new ViewModel();
+			
+			$sidebarView = new ViewModel();
+			$sidebarView->setTemplate('teacher/sidebar');
+
+			$viewmodel->addChild($sidebarView, 'sidebar');
+
+			$viewmodel->setVariables(array(
 				'course' => $course,
 				'subjects' => $subjects,
 				'subsubjectTable' => $this->getSubsubjectTable(),
 				'lessonTable' => $this->getLessonTable(),
+			));
+			return $viewmodel;
+		}
+		return $this->redirect()->toRoute('errors/no-permission');
+	}
+
+	public function manageCourseAction(){
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		$course = $this->getCourseTable()->getCourseByTeacherId($user->id);
+
+		if (!$course) {
+			return $this->redirect()->toRoute('errors');
+		}
+		if ($course->teacher_id == $user->id) {
+			return new ViewModel(array(
+				'course' => $course,
 			));
 		}
 		return $this->redirect()->toRoute('errors/no-permission');
@@ -92,9 +119,17 @@ class TeacherController extends AbstractActionController {
 			$studentsData[$key]['status'] = $student['status'];
 		}
 		if ($course->teacher_id == $user->id) {
-			return new ViewModel(array(
+			$viewmodel = new ViewModel();
+
+			$sidebarView = new ViewModel();
+			$sidebarView->setTemplate('teacher/sidebar');
+
+			$viewmodel->addChild($sidebarView, 'sidebar');
+			$viewmodel->setVariables(array(
 				'students' => $studentsData,
 			));
+
+			return $viewmodel;
 		}
 		return $this->redirect()->toRoute('errors/no-permission');
 	}
@@ -116,9 +151,10 @@ class TeacherController extends AbstractActionController {
 				$data = $request->getPost();
 				$subjectId = $this->getSubjectTable()->saveSubject($subject);
 				$html =
-					'<li class="list-group-item active">' . $data->name .
-						'<div class="btn-group pull-right" role="group" aria-label="...">'.
-							'<a class="btn btn-default btn-xs" href="edit-subject/' . $subjectId . '">' .
+					'<li class="list-group-item active" id="subjectId'.$subjectId.'">' . 
+					'<p class="subjectName">' . $data->name . '</p>' .
+						'<div class="btn-group" role="group" aria-label="...">'.
+							'<a class="btn btn-default btn-xs editSubject" href="edit-subject/' . $subjectId . '">' .
 								'<span class="glyphicon glyphicon-plus"></span>Muuda teemat' .
 							'</a>' .
 							'<a class="btn btn-default btn-xs" href="delete-subject/' . $subjectId . '">' .
@@ -175,8 +211,8 @@ class TeacherController extends AbstractActionController {
 				$this->getSubjectTable()->saveSubject($form->getData());
 				$response->setContent(\Zend\Json\Json::encode(array(
 					'response' => true,
-					'courseId' => $id,
-					'courseName' => $form->getData()->name,
+					'subjectId' => $id,
+					'subjectName' => $form->getData()->name,
 				)));
 				return $response;
 			}
