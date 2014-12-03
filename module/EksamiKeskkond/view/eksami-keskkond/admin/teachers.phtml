@@ -14,14 +14,17 @@
 			<td>Id</td>
 			<td>Eesnimi</td>
 			<td>Perekonnanimi</td>
-			<td>E-mail</td>
+			<td></td>
 		</tr>
 		<?php foreach ($teachers as $teacher) : ?>
 		<tr>
 			<td><?php echo $this->escapeHtml($teacher->id) ?></td>
 			<td><?php echo $this->escapeHtml($teacher->firstname) ?></td>
 			<td><?php echo $this->escapeHtml($teacher->lastname) ?></td>
-			<td><?php echo $this->escapeHtml($teacher->email) ?></td>
+			<td>
+				<a class="btn btn-primary btn-me pull-right" 
+					href="<?php echo $this->url('admin/send-email-to-user', array('user_id' => $teacher->id)) ?>">Saada kiri</a>
+			</td>
 		</tr>
 		<?php endforeach; ?>
 	</table>

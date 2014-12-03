@@ -163,8 +163,8 @@ class Module {
 
 					return new TableGateway('user_course', $dbAdapter, null, $resultSetPrototype);
 				},
-				'mail.transport' => function (ServiceManager $serviceManager) {
-					$config = $serviceManager->get('Config');
+				'mail.transport' => function($sm) {
+					$config = $sm->get('Config');
 
 					$transport = new Smtp();
 					$transport->setOptions(new SmtpOptions($config['mail']['transport']['options']));

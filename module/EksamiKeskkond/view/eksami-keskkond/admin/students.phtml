@@ -9,6 +9,8 @@
 <?php foreach ($coursesData as $course): ?>
 	<div class="row">
 		<h3><?php echo $this->escapeHtml($course['course']->name)?></h3>
+
+		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/send-email-to-all-participants', array('course_id' => $course['course']->id)) ?>">Saada kõigile kiri</a>
 		<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/empty-course', array('id' => $course['course']->id)) ?>">Kustuta kursuselt kõik õpilased</a>
 		<table class="table table-striped">
 			<?php foreach ($course['students'] as $student): ?>
@@ -20,7 +22,7 @@
 					<?php } ?>
 				</td>
 				<td>
-					<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/students', array('email' => $student['student']->email)) ?>">Saada kiri</a>
+					<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/send-email-to-user', array('user_id' => $student['student']->id)) ?>">Saada kiri</a>
 					<?php if ($student['status'] == true) { ?>
 						<a class="btn btn-primary btn-me pull-right"
 							href="<?php echo $this->url('admin/change-user-course-status',

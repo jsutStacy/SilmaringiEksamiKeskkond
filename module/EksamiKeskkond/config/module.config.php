@@ -152,13 +152,13 @@ return array(
 						)
 					),
 					'students' => array(
-							'type' => 'Literal',
-							'options' => array(
-									'route' => '/students',
-									'defaults' => array(
-											'action' => 'students',
-									)
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/students',
+							'defaults' => array(
+								'action' => 'students',
 							)
+						)
 					),
 					'change-user-course-status' => array(
 						'type' => 'Segment',
@@ -170,6 +170,30 @@ return array(
 							),
 							'defaults' => array(
 								'action' => 'change-user-course-status',
+							),
+						),
+					),
+					'send-email-to-user' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/send-email-to-user[/:user_id]',
+							'constraints' => array(
+								'user_id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'send-email-to-user',
+							),
+						),
+					),
+					'send-email-to-all-participants' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/send-email-to-all-participants[/:course_id]',
+							'constraints' => array(
+								'course_id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'send-email-to-all-participants',
 							),
 						),
 					),
@@ -220,40 +244,40 @@ return array(
 						),
 					),
 					'add-lesson' => array(
-							'type' => 'Segment',
-							'options' => array(
-									'route' => '/add-lesson[/:id]',
-									'constraints' => array(
-											'id' => '[0-9]+',
-									),
-									'defaults' => array(
-											'action' => 'add-lesson',
-									),
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/add-lesson[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
 							),
+							'defaults' => array(
+								'action' => 'add-lesson',
+							),
+						),
 					),
 					'edit-lesson' => array(
-							'type' => 'Segment',
-							'options' => array(
-									'route' => '/edit-lesson[/:id]',
-									'constraints' => array(
-											'id' => '[0-9]+',
-									),
-									'defaults' => array(
-											'action' => 'edit-lesson',
-									),
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/edit-lesson[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
 							),
+							'defaults' => array(
+								'action' => 'edit-lesson',
+							),
+						),
 					),
 					'delete-lesson' => array(
-							'type' => 'Segment',
-							'options' => array(
-									'route' => '/delete-lesson[/:id]',
-									'constraints' => array(
-											'id' => '[0-9]+',
-									),
-									'defaults' => array(
-											'action' => 'delete-lesson',
-									),
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/delete-lesson[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
 							),
+							'defaults' => array(
+								'action' => 'delete-lesson',
+							),
+						),
 					),
 					'add-subject' => array(
 						'type' => 'Segment',
@@ -292,40 +316,40 @@ return array(
 						),
 					),
 					'add-subsubject' => array(
-							'type' => 'Segment',
-							'options' => array(
-									'route' => '/add-subsubject[/:id]',
-									'constraints' => array(
-											'id' => '[0-9]+',
-									),
-									'defaults' => array(
-											'action' => 'add-subsubject',
-									),
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/add-subsubject[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
 							),
+							'defaults' => array(
+								'action' => 'add-subsubject',
+							),
+						),
 					),
 					'edit-subsubject' => array(
-							'type' => 'Segment',
-							'options' => array(
-									'route' => '/edit-subsubject[/:id]',
-									'constraints' => array(
-											'id' => '[0-9]+',
-									),
-									'defaults' => array(
-											'action' => 'edit-subsubject',
-									),
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/edit-subsubject[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
 							),
+							'defaults' => array(
+								'action' => 'edit-subsubject',
+							),
+						),
 					),
 					'delete-subsubject' => array(
-							'type' => 'Segment',
-							'options' => array(
-									'route' => '/delete-subsubject[/:id]',
-									'constraints' => array(
-											'id' => '[0-9]+',
-									),
-									'defaults' => array(
-											'action' => 'delete-subsubject',
-									),
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/delete-subsubject[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
 							),
+							'defaults' => array(
+								'action' => 'delete-subsubject',
+							),
+						),
 					),
 					'students' => array(
 						'type' => 'Literal',
@@ -333,6 +357,30 @@ return array(
 							'route' => '/students',
 							'defaults' => array(
 								'action' => 'students',
+							),
+						),
+					),
+					'send-email-to-user' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/send-email-to-user[/:user_id]',
+							'constraints' => array(
+								'user_id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'send-email-to-user',
+							),
+						),
+					),
+					'send-email-to-all-participants' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/send-email-to-all-participants[/:course_id]',
+							'constraints' => array(
+								'course_id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'send-email-to-all-participants',
 							),
 						),
 					),
@@ -454,6 +502,9 @@ return array(
 		'invokables' => array(
 			'my_auth_service' => 'Zend\Authentication\AuthenticationService',
 		),
+		'factories' => array(
+			'emailservice' => 'EksamiKeskkond\Factory\EmailServiceFactory',
+		),
 	),
 	'translator' => array(
 		'locale' => 'en_US',
@@ -492,7 +543,14 @@ return array(
 			__DIR__ . '/../view',
 		),
 		'strategies' => array (
-				'ViewJsonStrategy'
+			'ViewJsonStrategy'
+		),
+	),
+	'doctrine' => array(
+		'authentication' => array(
+			'orm_default' => array(
+				'credential_callable' => 'Application\Service\EmailService::sendEmail',
+			),
 		),
 	),
 	// Placeholder for console routes
