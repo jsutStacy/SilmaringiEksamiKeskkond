@@ -108,14 +108,24 @@ class AdminController extends AbstractActionController {
 
 			if ($form->isValid()) {
 				$this->getCourseTable()->saveCourse($form->getData());
-
-				return $this->redirect()->toRoute('admin/courses');
 			}
 		}
-		return array(
+
+		$viewmodel = new ViewModel();
+		
+		$sidebarView = new ViewModel();
+		$sidebarView->setTemplate('admin/sidebar');
+		$sidebarView->setVariables(array(
+			'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
+		));
+		
+		$viewmodel->addChild($sidebarView, 'sidebar');
+		$viewmodel->setVariables(array(
 			'id' => $id,
 			'form' => $form,
-		);
+			'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
+		));
+		return $viewmodel;
 	}
 
 	public function deleteCourseAction() {
@@ -149,10 +159,21 @@ class AdminController extends AbstractActionController {
 			$users[$key]['status'] = $courseParticipant['status'];
 			$users[$key]['is_paid_by_bill'] = $courseParticipant['is_paid_by_bill'];
 		}
-		return new ViewModel(array(
+
+		$viewmodel = new ViewModel();
+		
+		$sidebarView = new ViewModel();
+		$sidebarView->setTemplate('admin/sidebar');
+		$sidebarView->setVariables(array(
+				'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
+		));
+		
+		$viewmodel->addChild($sidebarView, 'sidebar');
+		$viewmodel->setVariables(array(
 			'id' => $id,
 			'participants' => $users,
 		));
+		return $viewmodel;
 	}
 
 	public function changeUserCourseStatusAction() {

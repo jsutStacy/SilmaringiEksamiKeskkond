@@ -27,9 +27,7 @@ class CourseForm extends Form {
 			'attributes' => array(
 				'type' => 'text',
 				'class' => 'form-control',
-			),
-			'options' => array(
-				'label' => 'Kursuse nimi',
+				'placeholder' => 'Kursuse nimi',
 			),
 		));
 
@@ -38,9 +36,7 @@ class CourseForm extends Form {
 			'attributes' => array(
 				'type' => 'textarea',
 				'class' => 'form-control',
-			),
-			'options' => array(
-				'label' => 'Kursuse kirjeldus',
+				'placeholder' => 'Kursuse kirjeldus',
 			),
 		));
 
@@ -50,9 +46,6 @@ class CourseForm extends Form {
 			'attributes' => array(
 				'class' => 'form-control',
 			),
-			'options' => array(
-				'label' => 'Kursuse õpetaja',
-			),
 		));
 
 		$this->add(array(
@@ -60,9 +53,7 @@ class CourseForm extends Form {
 			'attributes' => array(
 				'type' => 'text',
 				'class' => 'form-control',
-			),
-			'options' => array(
-				'label' => 'Kursuse hind',
+				'placeholder' => '€',
 			),
 		));
 
@@ -73,7 +64,6 @@ class CourseForm extends Form {
 				'class' => 'form-control',
 			),
 			'options' => array(
-				'label' => 'Kursuse nähtavus',
 				'options' => array(
 					'0' => 'Privaatne',
 					'1' => 'Nähtav',
@@ -84,26 +74,24 @@ class CourseForm extends Form {
 		$this->add(array(
 			'type' => 'Zend\Form\Element\Date',
 			'name' => 'start_date',
-			'options' => array(
-				'label' => 'Kursuse algusaeg'
-			),
 			'attributes' => array(
 				'min' => '2014-01-01',
 				'max' => '2030-01-01',
 				'step' => '1',
+				'class' => 'form-control',
+				'placeholder' => 'Alguskuupäev',
 			)
 		));
 
 		$this->add(array(
 				'type' => 'Zend\Form\Element\Date',
 				'name' => 'end_date',
-				'options' => array(
-						'label' => 'Kursuse lõpuaeg'
-				),
 				'attributes' => array(
 						'min' => '2014-01-01',
 						'max' => '2030-01-01',
 						'step' => '1',
+						'class' => 'form-control',
+						'placeholder' => 'Lõpukuupäev',
 				)
 		));
 
