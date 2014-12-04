@@ -435,15 +435,15 @@ return array(
 							),
 						),
 					),
-					'change-lesson' => array(
+					'lesson' => array(
 						'type' => 'Segment',
 						'options' => array(
-							'route' => '/course/change-lesson[/:id]',
+							'route' => '/course/lesson[/:id]',
 							'constraints' => array(
 								'id' => '[0-9]+',
 							),
 							'defaults' => array(
-								'action' => 'change-lesson',
+								'action' => 'lesson',
 							),
 						),
 					),

@@ -88,23 +88,6 @@ class TeacherController extends AbstractActionController {
 		return $this->redirect()->toRoute('errors/no-permission');
 	}
 
-	public function manageCourseAction(){
-		$auth = new AuthenticationService();
-		$user = $auth->getIdentity();
-
-		$course = $this->getCourseTable()->getCourseByTeacherId($user->id);
-
-		if (!$course) {
-			return $this->redirect()->toRoute('errors');
-		}
-		if ($course->teacher_id == $user->id) {
-			return new ViewModel(array(
-				'course' => $course,
-			));
-		}
-		return $this->redirect()->toRoute('errors/no-permission');
-	}
-
 	public function studentsAction() {
 		$auth = new AuthenticationService();
 

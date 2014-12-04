@@ -107,45 +107,16 @@ class StudentController extends AbstractActionController {
 		));
 	}
 
-	public function changeLessonAction() {
+	public function lessonAction() {
 		$request = $this->getRequest();
-		$response = $this->getResponse();
 
-		$lessonId = $this->params()->fromRoute('id');
-		$lesson = $this->getLessonTable()->getLesson($lessonId);
-
-		$lessonFiles = array();
-		$lessonFiles = $this->getLessonFilesTable()->getLessonFilesByLessonId($lessonId);
-
-		$html = "";
-
-		//Create HTML for video lesson
-		if ($lesson->type == "video") {
-			$urls = array();
-
-			foreach ($lessonFiles as $lessonFile) {
-				array_push($urls, $lessonFile->url);
-			}
-			if (!empty($urls)) {
-				parse_str(parse_url($urls[0], PHP_URL_QUERY), $urlVars);
-
-				if (array_key_exists('v', $urlVars)) {
-					$html =
-						'<div class="row">
-						<iframe width="420" height="315" src="//www.youtube.com/embed/' . $urlVars['v'] . '" frameborder="0" allowfullscreen></iframe>
-						</div>';
-				}
-			}
-		}
-		if ($request->isPost()) {
-			$response->setContent(\Zend\Json\Json::encode(array(
-				'response' => true,
-				'content' => $lesson->content,
-				'type' => $lesson->type,
-				'html' => $html,
-			)));
-		}
-		return $response;
+		$viewmodel = new ViewModel();
+		$viewmodel->setTerminal($request->isXmlHttpRequest());
+		$viewmodel->setVariables(array(
+			'lesson' => $this->getLessonTable()->getLesson($this->params()->fromRoute('id')),
+			'lessonFiles' => $this->getLessonFilesTable()->getLessonFilesByLessonId($this->params()->fromRoute('id')),
+		));
+		return $viewmodel;
 	}
 
 	public function allCoursesAction() {

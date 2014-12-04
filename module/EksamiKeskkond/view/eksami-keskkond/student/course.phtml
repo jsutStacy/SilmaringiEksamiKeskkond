@@ -38,7 +38,7 @@
 									<?php foreach ($subsubject['lessons'] as $lesson) : ?>
 										<li class="list-group-item">
 											<?php if (!$hasEnded && !$hasntStarted) { ?>
-												<a class="change-lesson" href="<?php echo $lesson->id; ?>">
+												<a class="change-lesson" href="<?php echo $this->url('student/lesson', array('id' => $lesson->id)) ?>">
 													<?php echo $lesson->name; ?>
 												</a>
 											<?php } else { ?>

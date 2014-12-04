@@ -208,24 +208,8 @@ $(document).ready(function() {
 
 	//Show lesson (student)
 	$(".change-lesson").click(function(e) {
-		id = $(this).attr("href");
 		e.preventDefault();
-
-		$.ajax({
-			type:"POST",
-			dataType: "json",
-			url:"change-lesson/" + id,
-			success: function(data) {
-				$("#lessonContent").text(data.content);
-
-				if (data.type == "video") {
-					$("#lessonContent").append(data.html);
-				}
-			},
-			error: (function() {
-				$("#lessonContent").text("Vabandame, tekkis viga.");
-			})
-		});
+		$("#lessonContent").load($(this).attr('href'));
 	});
 
 	//Delete lesson file (teacher)
