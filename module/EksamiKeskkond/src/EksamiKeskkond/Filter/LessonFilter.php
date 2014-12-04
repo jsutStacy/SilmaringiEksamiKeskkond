@@ -18,13 +18,13 @@ class LessonFilter extends InputFilter {
 		));
 
 		$this->add(array(
-				'name' => 'subsubject_id',
-				'required' => false,
+			'name' => 'subsubject_id',
+			'required' => false,
 		));
-		
+
 		$this->add(array(
-				'name' => 'published',
-				'required' => true,
+			'name' => 'published',
+			'required' => true,
 		));
 
 		$this->add(array(
@@ -50,15 +50,19 @@ class LessonFilter extends InputFilter {
 			'name' => 'content',
 			'required' => true,
 			'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
+				array('name' => 'StripTags'),
+				array('name' => 'StringTrim'),
 			),
 		));
 
 		$this->add(array(
-				'name' => 'type',
-				'required' => true,
+			'name' => 'type',
+			'required' => true,
 		));
 
+		$this->add(array(
+			'name' => 'fileupload',
+			'required' => false,
+		));
 	}
 }

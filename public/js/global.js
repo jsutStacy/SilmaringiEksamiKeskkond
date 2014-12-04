@@ -6,8 +6,23 @@ $(document).ready(function() {
 		if ($(this).val() == 'video') {
 			displayUpload('#url-field');
 		}
-		else if ($(this).val() == 'images' || $(this).val() == 'audio' || $(this).val() == 'presentation') {
+		else if ($(this).val() == 'images') {
 			displayUpload('#file-field');
+
+			$('#file-field label span').html('.jpg, .jpeg, .png');
+			$('#file-field input').addAttr('multiple', true);
+		}
+		else if ($(this).val() == 'audio') {
+			displayUpload('#file-field');
+
+			$('#file-field label span').html('.mp3, .wav');
+			$('#file-field input').removeAttr('multiple');
+		}
+		else if ($(this).val() == 'presentation') {
+			displayUpload('#file-field');
+
+			$('#file-field label span').html('.pdf');
+			$('#file-field input').removeAttr('multiple');
 		}
 		else {
 			$('#lesson-upload').children().hide();
@@ -18,6 +33,7 @@ $(document).ready(function() {
 	//Add subject (display form)
 	$('#addSubject').click(function(e) {
 		e.preventDefault();
+
 		if(!$("#subjects").has("#addSubjectLi").length) {
 			$("#subjects").prepend($('<li class="list-group-item" id="addSubjectLi">').load($(this).attr('href')));
 			return false;

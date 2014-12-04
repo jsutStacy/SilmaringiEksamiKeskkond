@@ -21,9 +21,13 @@
 				<source src="<?php echo $this->escapeHtml($lessonFile->url) ?>" type="audio/mpeg">
 			</audio>
 		<?php } ?>
-	<?php } else if ($lesson->type == 'presentation') {?>
+	<?php } else if ($lesson->type == 'presentation') { ?>
 		<?php foreach ($lessonFiles as $lessonFile) { ?>
-			<iframe src="<?php echo $this->escapeHtml($lessonFile->url) ?>" style="width:600px; height:500px;"></iframe>
+			<iframe src="<?php echo $this->escapeHtml($lessonFile->url) ?>" width="600" height="500"></iframe>
+		<?php } ?>
+	<?php } else if ($lesson->type == 'video') { ?>
+		<?php foreach ($lessonFiles as $lessonFile) { ?>
+			<iframe width="560" height="315" src="<?php echo $this->escapeHtml(preg_replace('/watch\?v=/', 'embed/', $lessonFile->url)) ?>" frameborder="0" allowfullscreen></iframe>
 		<?php } ?>
 	<?php } ?>
 </div>

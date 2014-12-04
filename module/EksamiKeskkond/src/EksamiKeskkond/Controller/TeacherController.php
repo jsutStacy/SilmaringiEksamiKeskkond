@@ -27,6 +27,7 @@ use EksamiKeskkond\Filter\LessonFilter;
 use EksamiKeskkond\Model\LessonFiles;
 
 use EksamiKeskkond\Form\EmailForm;
+use EksamiKeskkond\Filter\EmailFilter;
 
 class TeacherController extends AbstractActionController {
 
@@ -151,12 +152,12 @@ class TeacherController extends AbstractActionController {
 			$form->setInputFilter(new SubjectFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
 
-			if($form->isValid()){
+			if ($form->isValid()) {
 				$subject->exchangeArray($form->getData());
 				$data = $request->getPost();
 				$subjectId = $this->getSubjectTable()->saveSubject($subject);
 				$html =
-					'<li class="list-group-item active" id="subjectId'.$subjectId.'">' . 
+					'<li class="list-group-item active" id="subjectId' . $subjectId . '">' . 
 					'<p class="subjectName">' . $data->name . '</p>' .
 						'<div class="btn-group" role="group" aria-label="...">'.
 							'<a class="btn btn-default btn-xs editSubject" href="edit-subject/' . $subjectId . '">' .
@@ -173,30 +174,26 @@ class TeacherController extends AbstractActionController {
 					'</div>';
 
 				$response->setContent(\Zend\Json\Json::encode(array(
-						'response' => true,
-						'addedSubject' => $data,
-						'html' => $html,
+					'response' => true,
+					'addedSubject' => $data,
+					'html' => $html,
 				)));
 				return $response;
 			}
 		}
-		else{
-			$viewmodel = new ViewModel();
+		else {
 			$courseId = $this->params()->fromRoute('id');
 			$course = $this->getCourseTable()->getCourse($courseId);
-
 			$form->get('course_id')->setValue($courseId);
 
+			$viewmodel = new ViewModel();
 			$viewmodel->setTerminal($request->isXmlHttpRequest());
-
 			$viewmodel->setVariables(array(
 				'form' => $form,
 				'courseId' => $courseId,
 			));
-
 			return $viewmodel;
 		}
-
 	}
 
 	public function editSubjectAction() {
@@ -235,11 +232,10 @@ class TeacherController extends AbstractActionController {
 			$viewmodel = new ViewModel();
 			$viewmodel->setTerminal($request->isXmlHttpRequest());
 			$viewmodel->setVariables(array(
-					'form' => $form,
-					'courseId' => $subject->course_id,
-					'id' => $id,
+				'form' => $form,
+				'courseId' => $subject->course_id,
+				'id' => $id,
 			));
-
 			return $viewmodel;
 		}
 	}
@@ -257,7 +253,7 @@ class TeacherController extends AbstractActionController {
 		$form = new SubsubjectForm();
 		$form->get('subject_id')->setValue($subjectId);
 		$request = $this->getRequest();
-	
+
 		if ($request->isPost()) {
 			$subsubject = new Subsubject();
 
@@ -272,8 +268,8 @@ class TeacherController extends AbstractActionController {
 			}
 		}
 		return array(
-				'form' => $form,
-				'subjectId' => $subjectId,
+			'form' => $form,
+			'subjectId' => $subjectId,
 		);
 	}
 	
@@ -281,21 +277,21 @@ class TeacherController extends AbstractActionController {
 		$id = $this->params()->fromRoute('id');
 		$subsubject = $this->getSubsubjectTable()->getSubsubject($id);
 		$subject = $this->getSubjectTable()->getSubject($subsubject->subject_id);
-	
+
 		$form  = new SubsubjectForm();
 		$form->bind($subsubject);
 		$form->get('subject_id')->setValue($subject->id);
 		$form->get('submit')->setAttribute('value', 'Muuda');
-	
+
 		$request = $this->getRequest();
-	
+
 		if ($request->isPost()) {
 			$form->setInputFilter(new SubsubjectFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
-	
+
 			if ($form->isValid()) {
 				$this->getSubsubjectTable()->saveSubsubject($form->getData());
-	
+
 				return $this->redirect()->toRoute('teacher/my-course');
 			}
 		}
@@ -344,29 +340,30 @@ class TeacherController extends AbstractActionController {
 			if ($form->isValid()) {
 				$adapter = new \Zend\File\Transfer\Adapter\Http();
 				$files = $adapter->getFileInfo();
+
 				$filesUrls = array();
+				$error = array();
 
-				foreach ($files as $file) {
-					if ($post['type'] == 'images') {
-						$extension = new \Zend\Validator\File\Extension(array('extension' => array('jpg', 'png')));
+				if ($post['type'] == 'images' || $post['type'] == 'audio' || $post['type'] == 'presentation') {
+					foreach ($files as $key => $file) {
+						if ($post['type'] == 'images') {
+							$extension = new \Zend\Validator\File\Extension(array('extension' => array('jpg', 'jpeg', 'png')));
+						}
+						else if ($post['type'] == 'audio') {
+							$extension = new \Zend\Validator\File\Extension(array('extension' => array('mp3', 'wav')));
+							$size = new \Zend\Validator\File\Size(array(array('max' => 104857600)));
+							$adapter->setValidators(array($size), $file['name']);
+						}
+						else if ($post['type'] == 'presentation') {
+							$extension = new \Zend\Validator\File\Extension(array('extension' => array('pdf')));
+						}
+						else {
+							$extension = new \Zend\Validator\File\Extension(array('extension' => array()));
+						}
+						$adapter->setValidators(array($extension), $file['name']);
 					}
-					else if ($post['type'] == 'audio') {
-						$extension = new \Zend\Validator\File\Extension(array('extension' => array('mp3', 'wav')));
-						$size = new \Zend\Validator\File\Size(array(array('max' => 104857600)));
-						$adapter->setValidators(array($size), $post['fileupload']['name']);
-					}
-					else if ($post['type'] == 'presentation') {
-						$extension = new \Zend\Validator\File\Extension(array('extension' => array('pdf')));
-					}
-					else {
-						$extension = new \Zend\Validator\File\Extension(array('extension' => array()));
-					}
-					$adapter->setValidators(array($extension), $file['name']);
-
 					if (!$adapter->isValid()) {
-						$error = array();
-
-						foreach($adapter->getMessages() as $key => $row) {
+						foreach ($adapter->getMessages() as $key => $row) {
 							$error[] = $row;
 						}
 						$form->setMessages(array('fileupload' => $error));
@@ -381,29 +378,46 @@ class TeacherController extends AbstractActionController {
 							$uri = $router->getRequestUri();
 							$baseUrl = sprintf('%s://%s%s', $uri->getScheme(), $uri->getHost(), $request->getBaseUrl());
 
-							foreach ($adapter->getFileName() as $name) {
-								$fileName = preg_replace('/\.\/public\/uploads/', '', $name);
+							$adapterFileName = $adapter->getFileName();
+
+							if (is_array($adapterFileName)) {
+								foreach ($adapterFileName as $name) {
+									$fileName = preg_replace('/\.\/public\/uploads/', '', $name);
+									$filesUrls[] = $baseUrl . '/uploads/' . substr($fileName, 1);
+								}
+							}
+							else {
+								$fileName = preg_replace('/\.\/public\/uploads/', '', $adapterFileName);
 								$filesUrls[] = $baseUrl . '/uploads/' . substr($fileName, 1);
 							}
 						}
 					}
 				}
-				$lesson->exchangeArray($post);
-				$lessonId = $this->getLessonTable()->saveLesson($lesson);
-
-				$post['id'] = $lessonId;
-				$post['lesson_files_id'] = null;
-
-				foreach ($filesUrls as $fileUrl) {
-					$lessonFiles = new LessonFiles();
-
-					$post['url'] = $fileUrl;
-					$lessonFiles->exchangeArray($post);
-
-					$this->getLessonFilesTable()->saveLessonFiles($lessonFiles);
+				else if ($post['type'] == 'video') {
+					$filesUrls[] = $post['url'];
 				}
-				if (!empty($error)) {
-					return $this->redirect()->toRoute('teacher/my-course');
+				else if ($post['type'] == 'text') {
+					$lesson->exchangeArray($post);
+					$lessonId = $this->getLessonTable()->saveLesson($lesson);
+
+					return $this->redirect()->toRoute('teacher/lesson', array('id' => $lessonId));
+				}
+				if (empty($error)) {
+					$lesson->exchangeArray($post);
+					$lessonId = $this->getLessonTable()->saveLesson($lesson);
+
+					$post['id'] = $lessonId;
+					$post['lesson_files_id'] = null;
+
+					foreach ($filesUrls as $fileUrl) {
+						$lessonFiles = new LessonFiles();
+
+						$post['url'] = $fileUrl;
+						$lessonFiles->exchangeArray($post);
+
+						$this->getLessonFilesTable()->saveLessonFiles($lessonFiles);
+					}
+					return $this->redirect()->toRoute('teacher/lesson', array('id' => $lessonId));
 				}
 			}
 		}
@@ -472,60 +486,60 @@ class TeacherController extends AbstractActionController {
 	public function sendEmailToUserAction() {
 		$userId = $this->params()->fromRoute('user_id');
 		$user = $this->getUserTable()->getUser($userId);
+
 		$teacherId = $this->params()->fromRoute('teacher_id');
-		//print_r($teacherId);die;
 		$teacher = $this->getUserTable()->getUser($teacherId);
-	
+
 		$form = new EmailForm();
 		$form->get('user_id')->setValue($userId);
 		$request = $this->getRequest();
-	
+
 		if ($request->isPost()) {
 			$emailService = $this->getServiceLocator()->get('emailservice');
 			$transport = $this->getServiceLocator()->get('mail.transport');
-	
-			//$form->setInputFilter(new EmailFilter($this->getServiceLocator()));
+
+			$form->setInputFilter(new EmailFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
-	
+
 			if ($form->isValid()) {
-				//$config = $this->getServiceLocator()->get('Config');
 				$formData = $form->getData();
 				$emailService->sendEmail($user->email, $teacher->email, $formData['subject'], $formData['body'], $transport);
-	
+
 				return $this->redirect()->toRoute('teacher/students');
 			}
 		}
 		return array(
-				'user_id' => $userId,
-				'teacher_id' => $teacherId,
-				'form' => $form,
+			'user_id' => $userId,
+			'teacher_id' => $teacherId,
+			'form' => $form,
 		);
 	}
 	
 	public function sendEmailToAllParticipantsAction() {
 		$courseId = $this->params()->fromRoute('course_id');
 		$course = $this->getCourseTable()->getCourse($courseId);
-		$teacherId = $course->teacher_id;	
+
+		$teacherId = $course->teacher_id;
 		$teacher = $this->getUserTable()->getUser($teacherId);
-		
+
 		$form = new EmailForm();
 		$form->get('course_id')->setValue($courseId);
+
 		$request = $this->getRequest();
-		//print_r($teacherId);die;
+
 		if ($request->isPost()) {
 			$emailService = $this->getServiceLocator()->get('emailservice');
 			$transport = $this->getServiceLocator()->get('mail.transport');
-	
-			//$form->setInputFilter(new EmailFilter($this->getServiceLocator()));
+
+			$form->setInputFilter(new EmailFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
-	
+
 			if ($form->isValid()) {
 				$formData = $form->getData();
-				//$config = $this->getServiceLocator()->get('Config');
-	
+
 				$participants = $this->getUserCourseTable()->getCourseParticipants($formData['course_id']);
 				$userIds = array();
-	
+
 				foreach ($participants as $participant) {
 					if ($participant['status'] == true) {
 						$userIds[] = $participant['id'];
@@ -540,9 +554,9 @@ class TeacherController extends AbstractActionController {
 			}
 		}
 		return array(
-				'form' => $form,
-				'teacher_id' => $teacherId,
-				'course_id' => $courseId,
+			'form' => $form,
+			'teacher_id' => $teacherId,
+			'course_id' => $courseId,
 		);
 	}
 

@@ -10,28 +10,20 @@ class EmailFilter extends InputFilter {
 	public function __construct($sm) {
 
 		$this->add(array(
-				'name' => 'id',
-				'required' => true,
-				'filters' => array(
-						array('name' => 'Int'),
-				),
+			'name' => 'subject',
+			'required' => true,
+			'filters' => array(
+				array('name' => 'StripTags'),
+				array('name' => 'StringTrim'),
+			),
 		));
 
 		$this->add(array(
-			'name' => 'title',
+			'name' => 'body',
 			'required' => true,
 			'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-			),
-		));
-		
-		$this->add(array(
-			'name' => 'content',
-			'required' => true,
-			'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
+				array('name' => 'StripTags'),
+				array('name' => 'StringTrim'),
 			),
 		));
 	}

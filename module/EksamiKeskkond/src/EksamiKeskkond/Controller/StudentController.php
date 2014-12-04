@@ -68,9 +68,9 @@ class StudentController extends AbstractActionController {
 		if (!$course) {
 			return $this->redirect()->toRoute('errors');
 		}
-
 		if ($hasBoughtCourse && $status == true) {
 			$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
+
 			foreach ($subjects as $subjectKey => $subject) {
 				$subsubjects = $this->getSubsubjectTable()->getSubsubjectsBySubjectId($subject->id);
 
@@ -79,11 +79,9 @@ class StudentController extends AbstractActionController {
 					$subsubjects[$subsubjectKey] = get_object_vars($subsubject);
 					$subsubjects[$subsubjectKey]['lessons'] = $lessons;
 				}
-			
 				$subjects[$subjectKey] = get_object_vars($subject);
 				$subjects[$subjectKey]['subsubjects'] = $subsubjects;
 			}
-
 			$courseData['subjects'] = $subjects;
 		}
 		return new ViewModel(array(
@@ -92,7 +90,7 @@ class StudentController extends AbstractActionController {
 		));
 	}
 
-	public function changeLessonAction(){
+	public function changeLessonAction() {
 		$request = $this->getRequest();
 		$response = $this->getResponse();
 
@@ -103,28 +101,30 @@ class StudentController extends AbstractActionController {
 		$lessonFiles = $this->getLessonFilesTable()->getLessonFilesByLessonId($lessonId);
 
 		$html = "";
+
 		//Create HTML for video lesson
-		if($lesson->type == "video"){
+		if ($lesson->type == "video") {
 			$urls = array();
-			foreach ($lessonFiles as $lessonFile){
+
+			foreach ($lessonFiles as $lessonFile) {
 				array_push($urls, $lessonFile->url);
 			}
-			if(!empty($urls)){
-				parse_str( parse_url( $urls[0], PHP_URL_QUERY ), $urlVars );
-				if(array_key_exists('v', $urlVars)){
+			if (!empty($urls)) {
+				parse_str(parse_url($urls[0], PHP_URL_QUERY), $urlVars);
+
+				if (array_key_exists('v', $urlVars)) {
 					$html =
-									'<div class="row">
-									<iframe width="420" height="315" src="//www.youtube.com/embed/'.$urlVars['v'].'" frameborder="0" allowfullscreen></iframe>
-									</div>';
+						'<div class="row">
+						<iframe width="420" height="315" src="//www.youtube.com/embed/' . $urlVars['v'] . '" frameborder="0" allowfullscreen></iframe>
+						</div>';
 				}
 			}
 		}
-
 		if ($request->isPost()) {
 			$response->setContent(\Zend\Json\Json::encode(array(
 				'response' => true,
-				'content' => $lesson->content, 
-				'type' => $lesson->type, 
+				'content' => $lesson->content,
+				'type' => $lesson->type,
 				'html' => $html,
 			)));
 		}
@@ -211,6 +211,7 @@ class StudentController extends AbstractActionController {
 		$form = new BanklinkForm();
 		$form->setAttribute('action', $bankPreferences['url']);
 		$form->setAttribute('id', 'bankLinkForm');
+
 		foreach ($fields as $key => $value) {
 			$form->get($key)->setValue($value);
 		}
@@ -218,24 +219,25 @@ class StudentController extends AbstractActionController {
 		//If there is response from bank:
 		if (array_key_exists("VK_SERVICE" , $_REQUEST)) {
 			$macFields = array ();
+
 			foreach ((array)$_REQUEST as $f => $v) {
 				if (substr ($f, 0, 3) == 'VK_') {
 					$macFields[$f] = $v;
 				}
 			}
-
 			$p = $bankPreferences['charset_parameter'];
 			$banklinkCharset = '';
+
 			if ($p != '') {
 				$banklinkCharset = $macFields[$p];
 			}
 			if ($banklinkCharset == '') {
 				$banklinkCharset = 'iso-8859-1';
 			}
-
 			$key = openssl_pkey_get_public(file_get_contents($bankLinkPreferences['bank_certificate']));
 			$macString = $this->generateMACString($macFields, $bankPreferences['charset'], $bankLinkPreferences, $VK_variableOrder);
 			$response = "";
+
 			if (!openssl_verify($macString, base64_decode($macFields['VK_MAC']), $key,  OPENSSL_ALGO_SHA1)) {
 				$response = "Tekkis viga, proovige hiljem uuesti.";
 			}
@@ -251,7 +253,6 @@ class StudentController extends AbstractActionController {
 					$response = "Tekkis tundmatu viga, vabandame.";
 				}
 			}
-
 			return new ViewModel(array(
 				'course' => $course,
 				'form' => $form,
@@ -260,9 +261,9 @@ class StudentController extends AbstractActionController {
 		}
 		else {
 			return new ViewModel(array(
-					'course' => $course,
-					'form' => $form,
-					'response' => "redirect",
+				'course' => $course,
+				'form' => $form,
+				'response' => "redirect",
 			));
 		}
 	}
@@ -275,16 +276,16 @@ class StudentController extends AbstractActionController {
 		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
 		$emailService = $this->getServiceLocator()->get('emailservice');
 		$transport = $this->getServiceLocator()->get('mail.transport');
-		
+
 		$UserMessageSubject = 'Arve';
 		$UserMessageBody = 'Olete ostnud kursuse ' . $course->name . '. Palun tasuda arve summas ' . $course->price
-					. '. Palun tehke ülekanne EE21412904821049 kontole, et saada ligipääs kursusele.';
-		
+			. '. Palun tehke ülekanne EE21412904821049 kontole, et saada ligipääs kursusele.';
+
 		$AdminMessageSubject = 'Õpilane on ostnud kursuse';
 		$AdminMessageBody = 'Õpilane ' . $user->firstname . ' ' . $user->lastname . ', e-mailiga ' . $user->email
-					. ', ostis kursuse ' . $course->name . ', mis maksab ' . $course->price
-					. '. Kontrollige, et arve on tasutud ja andke talle kursuse jaoks õigused.';
-		
+			. ', ostis kursuse ' . $course->name . ', mis maksab ' . $course->price
+			. '. Kontrollige, et arve on tasutud ja andke talle kursuse jaoks õigused.';
+
 		$emailService->sendEmail($user->email,/*$config['admin_email']*/'minuuusemail@gmail.com', $UserMessageSubject, $UserMessageBody, $transport);
 		$emailService->sendEmail(/*$config['admin_email']*/'minuuusemail@gmail.com',/*$config['admin_email']*/'minuuusemail@gmail.com', $AdminMessageSubject, $AdminMessageBody, $transport);
 

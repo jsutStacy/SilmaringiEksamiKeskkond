@@ -25,7 +25,7 @@ class LessonForm extends Form {
 		$this->add(array(
 			'name' => 'subsubject_id',
 			'attributes' => array(
-					'type' => 'hidden',
+				'type' => 'hidden',
 			),
 		));
 
@@ -73,7 +73,7 @@ class LessonForm extends Form {
 				'class' => 'form-control',
 			),
 			'options' => array(
-					'label' => 'Url',
+				'label' => 'Url',
 			),
 		));
 
@@ -112,7 +112,6 @@ class LessonForm extends Form {
 					'video' => 'Video',
 					'presentation' => 'Esitlus',
 					'audio' => 'Audio',
-					'test' => 'Test',
 					'images' => 'Pildid',
 				),
 			),
@@ -127,6 +126,5 @@ class LessonForm extends Form {
 				'class' => 'btn btn-default',
 			),
 		));
-
 	}
 }

@@ -13,3 +13,4 @@ config/autoload/martin.local.php
 sublimeproject.sublime-project
 sublimeproject.sublime-workspace
 vhosts/martin/vhost.conf
+public/uploads/
