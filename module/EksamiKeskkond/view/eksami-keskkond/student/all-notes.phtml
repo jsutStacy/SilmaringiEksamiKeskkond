@@ -1,0 +1,29 @@
+<?php
+	$this->headTitle('Märkmed - ');
+?>
+
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h2>Kõik märkmed</h2>
+	</div>
+</div>
+<div class="row">
+	<div class="panel panel-primary col-md-8">
+		<table class="table table-striped">
+			<tr>
+				<td>Õppetükk</td>
+				<td>Id</td>
+				<td>Sisu</td>
+			</tr>
+			<?php if (!empty($notes)) { ?>
+				<?php foreach ($notes as $note): ?>
+						<tr>
+							<td><?php echo $this->escapeHtml($note->id) ?></td>
+							<td><?php echo $this->escapeHtml($note->lesson_id) ?></td>
+							<td><?php echo $this->escapeHtml($note->content) ?></td>
+						</tr>
+				<?php endforeach; ?>
+			<?php } ?>
+		</table>
+	</div>
+</div>

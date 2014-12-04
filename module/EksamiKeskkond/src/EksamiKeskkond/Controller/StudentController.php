@@ -23,6 +23,9 @@ use EksamiKeskkond\Model\Subject;
 use EksamiKeskkond\Form\SubjectForm;
 use EksamiKeskkond\Filter\SubjectFilter;
 
+use EksamiKeskkond\Model\Note;
+use EksamiKeskkond\Form\NoteForm;
+
 class StudentController extends AbstractActionController {
 
 	protected $courseTable;
@@ -38,6 +41,8 @@ class StudentController extends AbstractActionController {
 	protected $lessonTable;
 
 	protected $lessonFilesTable;
+	
+	protected $noteTable;
 
 	public function indexAction() {
 		$auth = new AuthenticationService();
@@ -55,7 +60,7 @@ class StudentController extends AbstractActionController {
 		$auth = new AuthenticationService();
 
 		$user = $auth->getIdentity();
-
+		
 		$subsubjects = array();
 		$lessons = array();
 		$course = array();
@@ -98,6 +103,7 @@ class StudentController extends AbstractActionController {
 			'hasBoughtCourse' => $hasBoughtCourse,
 			'hasEnded' => $courseHasEnded,
 			'hasntStarted' => $courseHasntStarted,
+			'userId' => $user->id,
 		));
 	}
 
@@ -348,6 +354,49 @@ class StudentController extends AbstractActionController {
 		}
 		return $data;
 	}
+	
+	public function addNoteAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+		
+		$lessonId = $this->params()->fromRoute('lesson_id');
+		
+		$form = new NoteForm();
+		$form->get('user_id')->setValue($user->id);
+		$form->get('lesson_id')->setValue($lessonId);
+		$request = $this->getRequest();
+	
+		if ($request->isPost()) {
+			
+			$note = new Note();
+	
+			$form->setData($request->getPost());
+	
+			if ($form->isValid()) {
+				$note->exchangeArray($form->getData());
+				$this->getNoteTable()->saveNote($note);
+	
+				return $this->redirect()->toRoute('student/all-notes');
+			}
+		}
+		return array(
+				'form' => $form,
+				'lessonId' => $lessonId,
+				'userId' => $user->id,
+		);
+	}
+	
+	public function allNotesAction() {
+		$auth = new AuthenticationService();
+	
+		$user = $auth->getIdentity();
+		//$studentCoursesIds = $this->getUserCourseTable()->getAllCoursesByUserId($user->id);
+		$notes = $this->getNoteTable()->getNotesByUserId($user->id);
+	
+		return new ViewModel(array(
+				'notes' => $notes,
+		));
+	}
 
 	public function getCourseTable() {
 		if (!$this->courseTable) {
@@ -405,4 +454,11 @@ class StudentController extends AbstractActionController {
 		return $this->lessonFilesTable;
 	}
 
+	public function getNoteTable() {
+		if (!$this->noteTable) {
+			$sm = $this->getServiceLocator();
+			$this->noteTable = $sm->get('EksamiKeskkond\Model\NoteTable');
+		}
+		return $this->noteTable;
+	}
 }

@@ -43,6 +43,9 @@
 												</a>
 											<?php } else { ?>
 													<?php echo $lesson->name; ?>
+													<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/add-note', array('user_id' => $userId,'lesson_id' => $lesson->id)) ?>">
+														<span class="glyphicon glyphicon-pencil"></span>
+													</a>
 											<?php } ?>
 										</li>
 									<?php endforeach; ?>

@@ -435,6 +435,31 @@ return array(
 							),
 						),
 					),
+					'add-note' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/add-note[/:user_id][/:lesson_id]',
+							'constraints' => array(
+								'user_id' => '[0-9]+',
+								'lesson_id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'add-note',
+							),
+						),
+					),
+					'all-notes' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/all-notes[/:user_id]',
+							'constraints' => array(
+								'user_id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'all-notes',
+							),
+						),
+					),
 					'all-courses' => array(
 						'type' => 'Literal',
 						'options' => array(

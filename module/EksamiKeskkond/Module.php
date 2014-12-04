@@ -27,6 +27,7 @@ use EksamiKeskkond\Model\LessonFiles;
 use EksamiKeskkond\Model\UserCourse;
 use EksamiKeskkond\Model\UserLesson;
 use EksamiKeskkond\Model\Homework;
+use EksamiKeskkond\Model\Note;
 use EksamiKeskkond\Model\UserTable;
 use EksamiKeskkond\Model\CourseTable;
 use EksamiKeskkond\Model\SubjectTable;
@@ -36,6 +37,7 @@ use EksamiKeskkond\Model\LessonFilesTable;
 use EksamiKeskkond\Model\UserCourseTable;
 use EksamiKeskkond\Model\UserLessonTable;
 use EksamiKeskkond\Model\HomeworkTable;
+use EksamiKeskkond\Model\NoteTable;
 
 use EksamiKeskkond\Acl\Acl;
 
@@ -120,6 +122,12 @@ class Module {
 				'EksamiKeskkond\Model\HomeworkTable' => function($sm) {
 					$tableGateway = $sm->get('HomeworkTableGateway');
 					$table = new HomeworkTable($tableGateway);
+					
+					return $table;
+				},
+				'EksamiKeskkond\Model\NoteTable' => function($sm) {
+					$tableGateway = $sm->get('NoteTableGateway');
+					$table = new NoteTable($tableGateway);
 				
 					return $table;
 				},
@@ -194,6 +202,14 @@ class Module {
 					$resultSetPrototype->setArrayObjectPrototype(new Homework());
 				
 					return new TableGateway('homework', $dbAdapter, null, $resultSetPrototype);
+				},
+				'NoteTableGateway' => function($sm) {
+					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+				
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new Note());
+				
+					return new TableGateway('note', $dbAdapter, null, $resultSetPrototype);
 				},
 				'mail.transport' => function($sm) {
 					$config = $sm->get('Config');

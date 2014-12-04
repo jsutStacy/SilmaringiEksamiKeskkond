@@ -1,0 +1,23 @@
+<?php
+	$this->headTitle('Lisa uus märge - ');
+?>
+<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('student/add-note'));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('lesson_id'));
+	echo $this->formHidden($form->get('user_id'));
+	
+
+?>
+
+<div class="form-group">
+	<?php echo $this->formRow($form->get('content')); ?>
+</div>
+
+<div class="form-group">
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+</div>
+<?php echo $this->form()->closeTag(); ?>
