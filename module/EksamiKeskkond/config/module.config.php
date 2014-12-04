@@ -351,6 +351,18 @@ return array(
 							),
 						),
 					),
+					'edit-description' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/edit-descption[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'edit-description',
+							),
+						),
+					),
 					'students' => array(
 						'type' => 'Literal',
 						'options' => array(

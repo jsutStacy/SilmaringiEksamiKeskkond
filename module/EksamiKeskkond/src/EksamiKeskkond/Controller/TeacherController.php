@@ -197,6 +197,49 @@ class TeacherController extends AbstractActionController {
 		}
 	}
 
+	public function editDescriptionAction() {
+		
+		$request = $this->getRequest();
+		$response = $this->getResponse();
+
+		if ($request->isPost()) {
+
+			$id = $request->getPost()->id;
+			$course = $this->getCourseTable()->getCourse($id);
+			
+			$form  = new CourseForm();
+			$form->bind($course);
+			$form->setInputFilter(new CourseFilter($this->getServiceLocator())); //TODO: FORM IS NOT VALID
+
+			if ($form->isValid()) {
+				echo "jiu"; die;
+				$this->getCourseTable()->saveCourse($form->getData());
+				$response->setContent(\Zend\Json\Json::encode(array(
+					'response' => true,
+				)));
+				
+			}
+			die;
+			return $response;
+		}
+		else {
+			$id = $this->params()->fromRoute('id');
+			$course = $this->getCourseTable()->getCourse($id);
+
+			$form  = new CourseForm();
+			$form->bind($course);
+			
+			$viewmodel = new ViewModel();
+			$viewmodel->setTerminal($request->isXmlHttpRequest());
+			$viewmodel->setVariables(array(
+				'form' => $form,
+				'courseId' => $course->id,
+				'id' => $id,
+			));
+			return $viewmodel;
+		}
+	}
+
 	public function editSubjectAction() {
 		$request = $this->getRequest();
 		$response = $this->getResponse();

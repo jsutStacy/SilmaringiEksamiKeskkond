@@ -17,13 +17,13 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h2 class="panel-title pull-left">Kirjeldus</h2>
-				<a class="btn btn-primary btn-sm pull-right" id="addSubject" href="<?php echo $this->url('teacher/add-subject', array('id' => $course->id)) ?>">
+				<!-- <a class="btn btn-primary btn-sm pull-right" id="editDesctiption" href="<?php echo $this->url('teacher/edit-description', array('id' => $course->id)) ?>">
 					<span class="glyphicon glyphicon-pencil"></span>
 					Muuda
-				</a>
+				</a> -->
 				<div class="clearfix"></div>
 			</div>
-			<div class="panel-body">
+			<div class="panel-body" id="courseDescription">
 				<p>
 					<?php echo $course->description ?>
 				</p>

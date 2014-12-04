@@ -60,6 +60,37 @@ $(document).ready(function() {
 		})
 	});
 
+	//Edit course description
+	$(document).on('click', '#editDesctiption', function(e) {
+		e.preventDefault();
+		if(!$("#courseDescription").has("#editDescriptionForm").length) {
+			$("#courseDescription").append($('<div>').load($(this).attr('href')));
+		}
+		return false;
+	});
+
+	//(ajax call)
+	$(document).on('click', 'a#submitEditDesc', function(e) {
+		e.preventDefault();
+		var formData = $('#editDescriptionForm').serialize();
+		var url = $(this).attr("href");
+		$.ajax({
+			type:"POST",
+			dataType: "json",
+			url:url,
+			data: formData,
+			beforeSend: alert(formData),
+			success: function(data) {
+				$("#editSubjectForm").remove();
+				$("#subjectId"+data.subjectId+ " p.subjectName").remove();
+				$("#subjectId"+data.subjectId).prepend("<p class='subjectName'>"+data.subjectName+"</p>");
+			},
+			error: (function(e) {
+				$("#courseDescription").html(JSON.stringify(e));
+			})
+		});
+	});
+
 	//Edit subject (display form)
 	$(document).on('click', 'a#cancelSubjectAdding', function(e) {
 		e.preventDefault();
