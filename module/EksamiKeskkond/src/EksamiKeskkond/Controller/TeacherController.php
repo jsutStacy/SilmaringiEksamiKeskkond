@@ -263,27 +263,27 @@ class TeacherController extends AbstractActionController {
 
 			$form->setInputFilter(new SubsubjectFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
-	
+
 			if ($form->isValid()) {
 				$subsubject->exchangeArray($form->getData());
 				$subsubjectId = $this->getSubsubjectTable()->saveSubsubject($subsubject);
-				
+
 				$html = 
-									'<li class="list-group-item" id="subsubjectId'.$subsubjectId.'">
-									<p class="subsubjectName pull-left">' .
-										$form->getData()['name'] .
-									'</p>
-									<a class="btn btn-default btn-xs pull-left" href="delete-subsubject/'. $subsubjectId .'">
-										<span class="glyphicon glyphicon-trash"></span>
-									</a>
-									<a class="btn btn-default btn-xs pull-left editSubsubject" href="edit-subsubject/'. $subsubjectId .'">
-										<span class="glyphicon glyphicon-pencil"></span>
-									</a>
-									<div class="clearfix"></div>
-									<ul class="list-group">
-										<a class="row btn btn-default btn-xs pull-right" href="add-lesson/'. $subsubjectId .'">
-										<span class="glyphicon glyphicon-plus"></span>Lisa uus tund</a>
-									</ul>';
+					'<li class="list-group-item" id="subsubjectId'.$subsubjectId.'">
+					<p class="subsubjectName pull-left">' .
+						$form->getData()['name'] .
+					'</p>
+					<a class="btn btn-default btn-xs pull-left" href="delete-subsubject/'. $subsubjectId .'">
+						<span class="glyphicon glyphicon-trash"></span>
+					</a>
+					<a class="btn btn-default btn-xs pull-left editSubsubject" href="edit-subsubject/'. $subsubjectId .'">
+						<span class="glyphicon glyphicon-pencil"></span>
+					</a>
+					<div class="clearfix"></div>
+					<ul class="list-group">
+						<a class="row btn btn-default btn-xs pull-right" href="add-lesson/'. $subsubjectId .'">
+						<span class="glyphicon glyphicon-plus"></span>Lisa uus tund</a>
+					</ul>';
 
 				$response->setContent(\Zend\Json\Json::encode(array(
 					'response' => true,
@@ -293,14 +293,13 @@ class TeacherController extends AbstractActionController {
 				return $response;
 			}
 		}
-		else{
+		else {
 			$viewmodel = new ViewModel();
 			$viewmodel->setTerminal($request->isXmlHttpRequest());
 			$viewmodel->setVariables(array(
 				'form' => $form,
 				'subjectId' => $subjectId,
 			));
-
 			return $viewmodel;
 		}
 	}
@@ -309,8 +308,7 @@ class TeacherController extends AbstractActionController {
 		$request = $this->getRequest();
 		$response = $this->getResponse();
 
-
-		if ($request->isPost()){
+		if ($request->isPost()) {
 			$subsubject = $this->getSubsubjectTable()->getSubsubject($request->getPost()->id);
 
 			$form = new SubsubjectForm();
@@ -319,7 +317,6 @@ class TeacherController extends AbstractActionController {
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
-
 				$this->getSubsubjectTable()->saveSubsubject($form->getData());
 
 				$response->setContent(\Zend\Json\Json::encode(array(
@@ -330,7 +327,7 @@ class TeacherController extends AbstractActionController {
 				return $response;
 			}
 		}
-		else{
+		else {
 			$id = $this->params()->fromRoute('id');
 			$subsubject = $this->getSubsubjectTable()->getSubsubject($id);
 
@@ -347,7 +344,6 @@ class TeacherController extends AbstractActionController {
 				'form' => $form,
 				'id' => $id,
 			));
-
 			return $viewmodel;
 		}
 	}
@@ -457,7 +453,7 @@ class TeacherController extends AbstractActionController {
 					$lesson->exchangeArray($post);
 					$lessonId = $this->getLessonTable()->saveLesson($lesson);
 
-					$post['id'] = $lessonId;
+					$post['lesson_id'] = $lessonId;
 
 					foreach ($filesUrls as $fileUrl) {
 						$lessonFiles = new LessonFiles();
