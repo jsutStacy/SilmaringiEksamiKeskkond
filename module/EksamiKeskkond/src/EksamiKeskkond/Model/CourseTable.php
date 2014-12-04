@@ -40,6 +40,8 @@ class CourseTable {
 			'name' => $course->name,
 			'description' => $course->description,
 			'price' => $course->price,
+			'start_date' => $course->start_date,
+			'end_date' => $course->end_date,
 			'published' => $course->published,
 		);
 		if ($course->id == 0) {

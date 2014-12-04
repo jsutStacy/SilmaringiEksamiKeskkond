@@ -82,6 +82,32 @@ class CourseForm extends Form {
 		));
 
 		$this->add(array(
+			'type' => 'Zend\Form\Element\Date',
+			'name' => 'start_date',
+			'options' => array(
+				'label' => 'Kursuse algusaeg'
+			),
+			'attributes' => array(
+				'min' => '2014-01-01',
+				'max' => '2030-01-01',
+				'step' => '1',
+			)
+		));
+
+		$this->add(array(
+				'type' => 'Zend\Form\Element\Date',
+				'name' => 'end_date',
+				'options' => array(
+						'label' => 'Kursuse lõpuaeg'
+				),
+				'attributes' => array(
+						'min' => '2014-01-01',
+						'max' => '2030-01-01',
+						'step' => '1',
+				)
+		));
+
+		$this->add(array(
 			'name' => 'submit',
 			'attributes' => array(
 				'type' => 'submit',

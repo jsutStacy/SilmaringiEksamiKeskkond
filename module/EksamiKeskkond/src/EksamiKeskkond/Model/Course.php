@@ -16,6 +16,10 @@ class Course {
 
 	public $published;
 
+	public $start_date;
+
+	public $end_date;
+
 	protected $inputFilter;
 
 	public function exchangeArray($data) {
@@ -24,6 +28,8 @@ class Course {
 		$this->name = (isset($data['name'])) ? $data['name'] : null;
 		$this->description = (isset($data['description'])) ? $data['description'] : null;
 		$this->price = (isset($data['price'])) ? $data['price'] : null;
+		$this->start_date = (isset($data['start_date'])) ? $data['start_date'] : null;
+		$this->end_date = (isset($data['end_date'])) ? $data['end_date'] : null;
 		$this->published = (isset($data['published'])) ? $data['published'] : null;
 	}
 

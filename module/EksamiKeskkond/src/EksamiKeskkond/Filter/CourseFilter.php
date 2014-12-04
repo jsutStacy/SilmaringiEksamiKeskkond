@@ -50,6 +50,39 @@ class CourseFilter extends InputFilter {
 		));
 
 		$this->add(array(
+			'name' => 'start_date',
+			'required' => true,
+			'filters' => array(
+				array('name' => 'StripTags'),
+				array('name' => 'StringTrim'),
+			),
+		));
+
+		$this->add(array(
+			'name' => 'end_date',
+			'required' => true,
+			'filters' => array(
+				array('name' => 'StripTags'),
+				array('name' => 'StringTrim'),
+			),
+			'validators' => array(
+				array(
+					'name' => 'Callback',
+					'options' => array(
+						'messages' => array(
+								\Zend\Validator\Callback::INVALID_VALUE => 'Lõpukuupäev peaks olema hilisem kui alguskuupäev.',
+						),
+						'callback' => function($value, $context = array()) {
+							$startDate = \DateTime::createFromFormat('Y-m-d', $context['start_date']);
+							$endDate = \DateTime::createFromFormat('Y-m-d', $value);
+							return $endDate >= $startDate;
+						},
+					),
+				),
+			),
+		));
+
+		$this->add(array(
 			'name' => 'teacher_id',
 			'required' => false,
 		));
