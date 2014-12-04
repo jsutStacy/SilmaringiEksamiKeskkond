@@ -61,6 +61,7 @@ class StudentController extends AbstractActionController {
 		$course = array();
 		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
 		$hasBoughtCourse = $this->getUserCourseTable()->checkIfUserHasBoughtCourse($user->id, $course->id);
+		$status = $this->getUserCourseTable()->checkIfUserHasAccessToCourse($user->id, $course->id);
 		$courseData = array();
 		$courseData['course'] = $course;
 
@@ -68,7 +69,7 @@ class StudentController extends AbstractActionController {
 			return $this->redirect()->toRoute('errors');
 		}
 
-		if ($hasBoughtCourse) {
+		if ($hasBoughtCourse && $status == true) {
 			$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
 			foreach ($subjects as $subjectKey => $subject) {
 				$subsubjects = $this->getSubsubjectTable()->getSubsubjectsBySubjectId($subject->id);
@@ -187,6 +188,8 @@ class StudentController extends AbstractActionController {
 			'VK_REF' => "1234561",
 			'VK_LANG' => 'EST',
 			'VK_MSG' => $this->to_banklink_ch('Kursuse ostmine', $bankPreferences['charset']),
+			//'VK_RETURN' => $this->to_banklink_ch('http://eksamikeskkond.silmaring.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
+			//'VK_CANCEL' => $this->to_banklink_ch('http://eksamikeskkond.silmaring.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
 			'VK_RETURN' => $this->to_banklink_ch('http://silmaring.eksamikeskkond.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
 			'VK_CANCEL' => $this->to_banklink_ch('http://silmaring.eksamikeskkond.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
 			'VK_DATETIME' => $timestamp,
@@ -270,32 +273,20 @@ class StudentController extends AbstractActionController {
 
 		$config = $this->getServiceLocator()->get('Config');
 		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
+		$emailService = $this->getServiceLocator()->get('emailservice');
 		$transport = $this->getServiceLocator()->get('mail.transport');
-
-		$messageToStudent = new Message();
-		$messageToAdmin = new Message();
-
-		$messageToStudent->setEncoding('UTF-8')
-			->addTo(/*$user->email*/$config['admin_email'])
-			->addFrom($config['admin_email'])
-			->setSubject('Arve')
-			->setBody(
-				'Olete ostnud kursuse ' . $course->name . '. Palun tasuda arve summas ' . $course->price
-					. '. Palun tehke ülekanne EE21412904821049 kontole, et saada ligipääs kursusele.'
-			);
-
-		$messageToAdmin->setEncoding('UTF-8')
-			->addTo($config['admin_email'])
-			->addFrom($config['admin_email'])
-			->setSubject('Õpilane on ostnud kursuse')
-			->setBody(
-				'Õpilane ' . $user->firstname . ' ' . $user->lastname . ', e-mailiga ' . $user->email
+		
+		$UserMessageSubject = 'Arve';
+		$UserMessageBody = 'Olete ostnud kursuse ' . $course->name . '. Palun tasuda arve summas ' . $course->price
+					. '. Palun tehke ülekanne EE21412904821049 kontole, et saada ligipääs kursusele.';
+		
+		$AdminMessageSubject = 'Õpilane on ostnud kursuse';
+		$AdminMessageBody = 'Õpilane ' . $user->firstname . ' ' . $user->lastname . ', e-mailiga ' . $user->email
 					. ', ostis kursuse ' . $course->name . ', mis maksab ' . $course->price
-					. '. Kontrollige, et arve on tasutud ja andke talle kursuse jaoks õigused.'
-			);
-
-		$transport->send($messageToStudent);
-		$transport->send($messageToAdmin);
+					. '. Kontrollige, et arve on tasutud ja andke talle kursuse jaoks õigused.';
+		
+		$emailService->sendEmail($user->email,/*$config['admin_email']*/'minuuusemail@gmail.com', $UserMessageSubject, $UserMessageBody, $transport);
+		$emailService->sendEmail(/*$config['admin_email']*/'minuuusemail@gmail.com',/*$config['admin_email']*/'minuuusemail@gmail.com', $AdminMessageSubject, $AdminMessageBody, $transport);
 
 		$this->getUserCourseTable()->buyCourse($user->id, $course->id, null, true);
 

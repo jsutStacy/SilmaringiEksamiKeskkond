@@ -38,7 +38,7 @@ class UserCourseTable {
 
 	public function getAllCoursesByUserId($userId) {
 		$courseIds = array();
-		$resultSet = $this->tableGateway->select(array('user_id' => $userId, 'status' => true));
+		$resultSet = $this->tableGateway->select(array('user_id' => $userId));
 
 		foreach ($resultSet as $row) {
 			$courseIds[] = $row->course_id;
@@ -53,7 +53,7 @@ class UserCourseTable {
 			'status' => $status,
 			'is_paid_by_bill' => $isPaidByBill,
 		);
-		if ($this->checkIfUserHasBoughtCourse($userId, $courseId)) {
+		if ($this->checkIfUserHasBoughtCourse($userId, $courseId)) {		
 			return;
 		}
 		return $this->tableGateway->insert($data);
@@ -64,8 +64,17 @@ class UserCourseTable {
 	}
 
 	public function checkIfUserHasBoughtCourse($userId, $courseId) {
-		$resultSet = $this->tableGateway->select(array('user_id' => $userId, 'course_id' => $courseId, 'status' => true));
+		$resultSet = $this->tableGateway->select(array('user_id' => $userId, 'course_id' => $courseId));
 
+		if ($resultSet->current()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public function checkIfUserHasAccessToCourse($userId, $courseId) {
+		$resultSet = $this->tableGateway->select(array('user_id' => $userId, 'course_id' => $courseId, 'status' => true));
+	
 		if ($resultSet->current()) {
 			return true;
 		}
