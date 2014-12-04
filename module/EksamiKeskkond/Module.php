@@ -25,6 +25,8 @@ use EksamiKeskkond\Model\Subsubject;
 use EksamiKeskkond\Model\Lesson;
 use EksamiKeskkond\Model\LessonFiles;
 use EksamiKeskkond\Model\UserCourse;
+use EksamiKeskkond\Model\UserLesson;
+use EksamiKeskkond\Model\Homework;
 use EksamiKeskkond\Model\UserTable;
 use EksamiKeskkond\Model\CourseTable;
 use EksamiKeskkond\Model\SubjectTable;
@@ -32,6 +34,8 @@ use EksamiKeskkond\Model\SubsubjectTable;
 use EksamiKeskkond\Model\LessonTable;
 use EksamiKeskkond\Model\LessonFilesTable;
 use EksamiKeskkond\Model\UserCourseTable;
+use EksamiKeskkond\Model\UserLessonTable;
+use EksamiKeskkond\Model\HomeworkTable;
 
 use EksamiKeskkond\Acl\Acl;
 
@@ -107,6 +111,18 @@ class Module {
 
 					return $table;
 				},
+				'EksamiKeskkond\Model\UserLessonTable' => function($sm) {
+					$tableGateway = $sm->get('UserLessonTableGateway');
+					$table = new UserLessonTable($tableGateway);
+				
+					return $table;
+				},
+				'EksamiKeskkond\Model\HomeworkTable' => function($sm) {
+					$tableGateway = $sm->get('HomeworkTableGateway');
+					$table = new HomeworkTable($tableGateway);
+				
+					return $table;
+				},
 				'UserTableGateway' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
 
@@ -162,6 +178,22 @@ class Module {
 					$resultSetPrototype->setArrayObjectPrototype(new UserCourse());
 
 					return new TableGateway('user_course', $dbAdapter, null, $resultSetPrototype);
+				},
+				'UserLessonTableGateway' => function($sm) {
+					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+				
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new UserLesson());
+				
+					return new TableGateway('user_lesson', $dbAdapter, null, $resultSetPrototype);
+				},
+				'HomeworkTableGateway' => function($sm) {
+					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+				
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new Homework());
+				
+					return new TableGateway('homework', $dbAdapter, null, $resultSetPrototype);
 				},
 				'mail.transport' => function($sm) {
 					$config = $sm->get('Config');
