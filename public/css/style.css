@@ -1,16 +1,16 @@
 body {
-    padding-top: 175px;
-    padding-bottom: 40px;
+	padding-top: 175px;
+	padding-bottom: 40px;
 }
 
 .zf-green {
-    color: #0099FF;;
+	color: #0099FF;
 }
 
 .btn-success {
-  background-color: #0099FF;
-  border-color: #999;
-  background-image: none;
+	background-color: #0099FF;
+	border-color: #999;
+	background-image: none;
 }
 
 .btn-success:hover,
@@ -18,57 +18,54 @@ body {
 .btn-success.active,
 .btn-success.disabled,
 .btn-success[disabled] {
-  background-color: #0099FF;
-  background-image: none;
-  border-color: #ccc;
+	background-color: #0099FF;
+	background-image: none;
+	border-color: #ccc;
 }
 
 .btn-success:active, .btn-success.active {
-  background-color: #0099FF;
-  background-image: none;
+	background-color: #0099FF;
+	background-image: none;
 }
-
 
 /*header */
 
 nav.navbar{
-  background-color: #fff;
-  background-image: none;
+	background-color: #fff;
+	background-image: none;
 }
 
 ul.nav li a{
-  font-weight: bold;
-  
+	font-weight: bold;
 }
 
-
-.navbar-default .navbar-nav>li>a{
-  color:#000;
+.navbar-default .navbar-nav>li>a {
+	color:#000;
 }
 
-.navbar-default .navbar-nav>li:hover>a{
-  color:#999;
-  border-bottom: 5px solid #999;
+.navbar-default .navbar-nav>li:hover>a {
+	color:#999;
+	border-bottom: 5px solid #999;
 }
-.navbar-default .navbar-nav>li.open>a{
-  color:#999;
-  border-bottom: 5px solid #999;
+.navbar-default .navbar-nav>li.open>a {
+	color:#999;
+	border-bottom: 5px solid #999;
 }
-.navbar-default .navbar-nav>li.active>a{
-  color:#0099FF;
-  background-image: none;
-  background-color: #fff;
-  border:none;
-  box-shadow: none;
-  border-bottom: 5px solid #0099ff;
+.navbar-default .navbar-nav>li.active>a {
+	color:#0099FF;
+	background-image: none;
+	background-color: #fff;
+	border:none;
+	box-shadow: none;
+	border-bottom: 5px solid #0099ff;
 }
-.navbar-default .navbar-nav>li.active:hover>a{
-  color:#0099FF;
-  background-image: none;
-  background-color: #fff;
-  border:none;
-  box-shadow: none;
-  border-bottom: 5px solid #0099ff;
+.navbar-default .navbar-nav>li.active:hover>a {
+	color:#0099FF;
+	background-image: none;
+	background-color: #fff;
+	border:none;
+	box-shadow: none;
+	border-bottom: 5px solid #0099ff;
 }
 
 #lesson-upload #url-field,
@@ -78,4 +75,35 @@ ul.nav li a{
 
 .list-group-item.done {
 	background: #7DF481;
+}
+
+/* SlideShow */
+
+img.page {
+	cursor: pointer;
+}
+
+#carousel-wrapper {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	width: 100%;
+}
+
+#carousel img {
+	display: block;
+	float: left;
+}
+
+#pager img {
+	cursor: pointer;
+	background: #fff;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+	display: block;
+	width: 80px;
+	height: 80px;
+	padding: 10px;
+	margin: 10px;
+	float: left;
 }

@@ -12,9 +12,26 @@
 	<div class="panel-body">
 		<p class="well"><?php echo $this->escapeHtml($lesson->content) ?></p>
 			<?php if ($lesson->type == 'images') { ?>
-				<?php foreach ($lessonFiles as $lessonFile) { ?>
-					<img src="<?php echo $this->escapeHtml($lessonFile->url) ?>" alt="<?php echo $this->escapeHtml($lesson->name) ?>" />
-				<?php } ?>
+			<?php 
+				$lessonFilesArray = array(); 
+				foreach ($lessonFiles as $lessonFile){
+					$lessonFilesArray[] = $lessonFile;
+				}
+			?>
+			<div id="carousel-wrapper" style="min-height: 450px">
+				<div id="carousel">
+					<?php foreach ($lessonFilesArray as $lessonFile) { ?>
+						<img src="<?php echo $this->escapeHtml($lessonFile->url) ?>" alt="<?php echo $this->escapeHtml($lesson->name) ?>" />
+					<?php } ?>
+				</div>
+			</div>
+			<div id="pager-wrapper">
+				<div id="pager">
+					<?php foreach ($lessonFilesArray as $lessonFile) { ?>
+						<img src="<?php echo $this->escapeHtml($lessonFile->url) ?>" class="page" alt="<?php echo $this->escapeHtml($lesson->name) ?>" width="auto" height="80px" />
+					<?php } ?>
+				</div>
+			</div>
 			<?php } else if ($lesson->type == 'audio') { ?>
 				<?php foreach ($lessonFiles as $lessonFile) { ?>
 					<audio controls>
@@ -23,7 +40,7 @@
 				<?php } ?>
 			<?php } else if ($lesson->type == 'presentation') { ?>
 				<?php foreach ($lessonFiles as $lessonFile) { ?>
-					<iframe src="<?php echo $this->escapeHtml($lessonFile->url) ?>" width="100%" height="auto"></iframe>
+					<iframe src="<?php echo $this->escapeHtml($lessonFile->url) ?>" width="100%" height="800px"></iframe>
 				<?php } ?>
 			<?php } else if ($lesson->type == 'video') { ?>
 				<?php foreach ($lessonFiles as $lessonFile) { ?>
@@ -32,3 +49,5 @@
 			<?php } ?>
 	</div>
 </div>
+
+<?php echo $this->headScript()->prependFile($this->basePath() . '/js/slideShow.js'); ?>
