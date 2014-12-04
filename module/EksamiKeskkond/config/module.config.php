@@ -575,6 +575,30 @@ return array(
 							),
 						),
 					),
+					'homework' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/homework[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'homework',
+							),
+						),
+					),
+					'add-homework-answer' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/add-homework-answer[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'add-homework-answer',
+							),
+						),
+					),
 				),
 			),
 			'errors' => array(

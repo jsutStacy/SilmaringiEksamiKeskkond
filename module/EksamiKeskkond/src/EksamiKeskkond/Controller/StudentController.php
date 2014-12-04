@@ -7,6 +7,7 @@ use Zend\ViewModel\JsonModel;
 
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
+
 use Banklink\Bank;
 use Banklink\bankLink;
 use Banklink\shoppingCart;
@@ -25,6 +26,9 @@ use EksamiKeskkond\Filter\SubjectFilter;
 
 use EksamiKeskkond\Model\Note;
 use EksamiKeskkond\Form\NoteForm;
+
+use EksamiKeskkond\Form\HomeworkAnswerForm;
+use EksamiKeskkond\Model\HomeworkAnswers;
 
 class StudentController extends AbstractActionController {
 
@@ -45,6 +49,11 @@ class StudentController extends AbstractActionController {
 	protected $noteTable;
 
 	protected $userLessonTable;
+
+	protected $homeworkTable;
+
+	protected $homeworkAnswersTable;
+
 
 	public function indexAction() {
 		$auth = new AuthenticationService();
@@ -84,6 +93,7 @@ class StudentController extends AbstractActionController {
 
 				foreach ($subsubjects as $subsubjectKey => $subsubject) {
 					$lessons = $this->getLessonTable()->getLessonsBySubsubjectId($subsubject->id);
+					$homeworks = $this->getHomeworkTable()->getHomeworkBySubsubjectId($subsubject->id);
 
 					foreach ($lessons as $lesson) {
 						$userLesson = $this->getUserLessonTable()->getUserLesson($user->id, $lesson->id);
@@ -92,6 +102,7 @@ class StudentController extends AbstractActionController {
 					}
 					$subsubjects[$subsubjectKey] = get_object_vars($subsubject);
 					$subsubjects[$subsubjectKey]['lessons'] = $lessons;
+					$subsubjects[$subsubjectKey]['homeworks'] = $homeworks;
 				}
 				$subjects[$subjectKey] = get_object_vars($subject);
 				$subjects[$subjectKey]['subsubjects'] = $subsubjects;
@@ -139,14 +150,15 @@ class StudentController extends AbstractActionController {
 
 		$user = $auth->getIdentity();
 		$studentCoursesIds = $this->getUserCourseTable()->getAllCoursesByUserId($user->id);
-		
+
 		$teachers = $this->getUserTable()->getAllTeachersForList();
 		$courses = $this->getCourseTable()->fetchAll();
 		$coursesData = array();
 
-		foreach ($courses as $key => $course){
+		foreach ($courses as $key => $course) {
 			$coursesData[$key]['course'] = $course;
 			$coursesData[$key]['hasBought'] = $this->getUserCourseTable()->checkIfUserHasBoughtCourse($user->id, $course->id);
+
 			if ($course->teacher_id) {
 				$coursesData[$key]['teacher'] = $teachers[$course->teacher_id];
 			}
@@ -174,16 +186,15 @@ class StudentController extends AbstractActionController {
 			$course = $this->getCourseTable()->getCourse($courseId);
 			$myCourses[] = $course;
 
-			if($course->teacher_id){
+			if ($course->teacher_id) {
 				$teacher = $this->getUserTable()->getUser($course->teacher_id);
 				$courseTeachers[$teacher->id] = $teacher;
 			}
-			else{
+			else {
 				$teacher = null;
 				$courseTeachers[null] = $teacher;
 			}
 		}
-
 		return new ViewModel(array(
 			'myCourses' => $myCourses,
 			'courseTeachers' => $courseTeachers,
@@ -397,6 +408,85 @@ class StudentController extends AbstractActionController {
 		return $response;
 	}
 
+	public function homeworkAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		$homeworkId = $this->params()->fromRoute('id');
+
+		$request = $this->getRequest();
+
+		$viewmodel = new ViewModel();
+		$viewmodel->setTerminal($request->isXmlHttpRequest());
+		$viewmodel->setVariables(array(
+			'homework' => $this->getHomeworkTable()->getHomework($homeworkId),
+			'homeworkAnswer' => $this->getHomeworkAnswersTable()->getHomeworkAnswerByUserIdAndHomeworkId($user->id, $homeworkId),
+		));
+		return $viewmodel;
+	}
+
+	public function addHomeworkAnswerAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		$homeworkId = $this->params()->fromRoute('id');
+
+		$form = new HomeworkAnswerForm();
+		$form->get('homework_id')->setValue($homeworkId);
+		$form->get('user_id')->setValue($user->id);
+
+		$request = $this->getRequest();
+
+		if ($request->isPost()) {
+			$homeworkAnswer = new HomeworkAnswers();
+
+			$post = array_merge_recursive(
+				$this->getRequest()->getPost()->toArray(),
+				$this->getRequest()->getFiles()->toArray()
+			);
+			$form->setData($post);
+
+			if ($form->isValid()) {
+				$adapter = new \Zend\File\Transfer\Adapter\Http();
+
+				if (!$adapter->isValid()) {
+					$error = array();
+
+					foreach ($adapter->getMessages() as $key => $row) {
+						$error[] = $row;
+					}
+					$form->setMessages(array('fileupload' => $error));
+				}
+				else {
+					$adapter->setDestination($this->getServiceLocator()->get('Config')['homework_dir']);
+
+					if ($adapter->receive()) {
+						$event = $this->getEvent();
+						$request = $event->getRequest();
+						$router = $event->getRouter();
+						$uri = $router->getRequestUri();
+						$baseUrl = sprintf('%s://%s%s', $uri->getScheme(), $uri->getHost(), $request->getBaseUrl());
+
+						$adapterFileName = $adapter->getFileName();
+
+						$filesName = $baseUrl . '/uploads/homework/' . substr(preg_replace('/\.\/public\/uploads\/homework/', '', $adapter->getFileName()), 1);
+
+						$post['url'] = $filesName;
+
+						$homeworkAnswer->exchangeArray($post);
+						$this->getHomeworkAnswersTable()->saveHomeworkAnswer($homeworkAnswer);
+
+						return $this->redirect()->toRoute('student/homework', array('id' => $homeworkId)); // tuleks midagi paremat välja mõelda
+					}
+				}
+			}
+		}
+		return array(
+			'form' => $form,
+			'id' => $homeworkId,
+		);
+	}
+
 	public function getCourseTable() {
 		if (!$this->courseTable) {
 			$sm = $this->getServiceLocator();
@@ -467,5 +557,21 @@ class StudentController extends AbstractActionController {
 			$this->userLessonTable = $sm->get('EksamiKeskkond\Model\UserLessonTable');
 		}
 		return $this->userLessonTable;
+	}
+
+	public function getHomeworkTable() {
+		if (!$this->homeworkTable) {
+			$sm = $this->getServiceLocator();
+			$this->homeworkTable = $sm->get('EksamiKeskkond\Model\HomeworkTable');
+		}
+		return $this->homeworkTable;
+	}
+
+	public function getHomeworkAnswersTable() {
+		if (!$this->homeworkAnswersTable) {
+			$sm = $this->getServiceLocator();
+			$this->homeworkAnswersTable = $sm->get('EksamiKeskkond\Model\HomeworkAnswersTable');
+		}
+		return $this->homeworkAnswersTable;
 	}
 }

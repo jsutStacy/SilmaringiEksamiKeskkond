@@ -50,6 +50,17 @@
 										</li>
 									<?php endforeach; ?>
 									</ul>
+									<ul class="list-group">
+									<?php foreach ($subsubject['homeworks'] as $homework): ?>
+										<li class="list-group-item" id="homework-<?php echo $homework->id ?>">
+											<?php if (!$hasEnded && !$hasntStarted) { ?>
+												<a class="change-lesson" href="<?php echo $this->url('student/homework', array('id' => $homework->id)) ?>">Kodutöö</a>
+											<?php } else { ?>
+												Kodutöö
+											<?php } ?>
+										</li>
+									<?php endforeach; ?>
+									</ul>
 								</li>
 							<?php endforeach; ?>
 							</ul>

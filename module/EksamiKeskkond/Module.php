@@ -27,6 +27,7 @@ use EksamiKeskkond\Model\LessonFiles;
 use EksamiKeskkond\Model\UserCourse;
 use EksamiKeskkond\Model\UserLesson;
 use EksamiKeskkond\Model\Homework;
+use EksamiKeskkond\Model\HomeworkAnswers;
 use EksamiKeskkond\Model\Note;
 use EksamiKeskkond\Model\UserTable;
 use EksamiKeskkond\Model\CourseTable;
@@ -37,6 +38,7 @@ use EksamiKeskkond\Model\LessonFilesTable;
 use EksamiKeskkond\Model\UserCourseTable;
 use EksamiKeskkond\Model\UserLessonTable;
 use EksamiKeskkond\Model\HomeworkTable;
+use EksamiKeskkond\Model\HomeworkAnswersTable;
 use EksamiKeskkond\Model\NoteTable;
 
 use EksamiKeskkond\Acl\Acl;

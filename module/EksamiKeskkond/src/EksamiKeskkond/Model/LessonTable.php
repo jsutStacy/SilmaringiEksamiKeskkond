@@ -72,5 +72,4 @@ class LessonTable {
 		}
 		return $result;
 	}
-
 }

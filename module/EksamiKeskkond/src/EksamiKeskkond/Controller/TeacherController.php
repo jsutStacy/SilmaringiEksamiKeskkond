@@ -188,7 +188,6 @@ class TeacherController extends AbstractActionController {
 	}
 
 	public function editDescriptionAction() {
-		
 		$request = $this->getRequest();
 		$response = $this->getResponse();
 
@@ -196,7 +195,7 @@ class TeacherController extends AbstractActionController {
 
 			$id = $request->getPost()->id;
 			$course = $this->getCourseTable()->getCourse($id);
-			
+
 			$form  = new CourseForm();
 			$form->bind($course);
 			$form->setInputFilter(new CourseFilter($this->getServiceLocator())); //TODO: FORM IS NOT VALID
@@ -207,7 +206,6 @@ class TeacherController extends AbstractActionController {
 				$response->setContent(\Zend\Json\Json::encode(array(
 					'response' => true,
 				)));
-				
 			}
 			die;
 			return $response;
@@ -529,8 +527,8 @@ class TeacherController extends AbstractActionController {
 		if ($request->isPost()) {
 			$form->setInputFilter(new LessonFilter($this->getServiceLocator()));
 			$post = array_merge_recursive(
-					$this->getRequest()->getPost()->toArray(),
-					$this->getRequest()->getFiles()->toArray()
+				$this->getRequest()->getPost()->toArray(),
+				$this->getRequest()->getFiles()->toArray()
 			);
 			$form->setData($post);
 

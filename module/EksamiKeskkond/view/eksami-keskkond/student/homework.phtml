@@ -1,0 +1,22 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h2 class="panel-title">Kodutöö</h2>
+		<div class="clearfix"></div>
+	</div>
+	<div class="panel-body">
+		<p class="well"><?php echo $this->escapeHtml($homework->description) ?></p>
+		<?php if (!empty($homework->url)) { ?>
+			<a href="<?php echo $this->escapeHtml($homework->url) ?>" target="_blank" download>Lae kodutöö alla</a>
+		<?php } ?>
+	</div>
+	<?php if (empty($homeworkAnswer->url)) { ?>
+		<a href="<?php echo $this->url('student/add-homework-answer', array('id' => $homework->id)) ?>">Esita lahendus</a>
+	<?php } else { ?>
+		<p>Esitasite hindamiseks faili: <?php echo $this->escapeHtml($homeworkAnswer->url) ?></p>
+		<?php if (!empty($homeworkAnswer->feedback)) { ?>
+			<p><?php echo $this->escapeHtml($homework->feedback) ?></p>
+		<?php } else { ?>
+			<p>Tagaside hetkel veel puudub</p>
+		<?php } ?>
+	<?php } ?>
+</div>

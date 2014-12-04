@@ -50,6 +50,16 @@ class HomeworkTable {
 		}
 	}
 
+	public function getHomeworkBySubsubjectId($subsubjectId) {
+		$result = array();
+		$rowset = $this->tableGateway->select(array('subsubject_id' => $subsubjectId));
+
+		foreach ($rowset as $row) {
+			$result[$row->id] = $rowset->current();
+		}
+		return $result;
+	}
+
 	public function deleteHomeworkFile($id) {
 		$this->tableGateway->update(array('url' => null), array('id' => $id));
 	}
