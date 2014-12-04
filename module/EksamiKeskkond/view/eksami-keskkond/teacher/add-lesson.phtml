@@ -1,7 +1,7 @@
 <?php
 	$this->headTitle('Lisa uus tund - ');
 ?>
-<h1>Lisa uus teema</h1>
+<h1>Lisa uus tund</h1>
 <?php
 	$form = $this->form;
 	$form->setAttribute('action', $this->url('teacher/add-lesson', array('id' => $subsubjectId)));
@@ -12,7 +12,6 @@
 	echo $this->formHidden($form->get('id'));
 	echo $this->formHidden($form->get('subsubject_id'));
 	echo $this->formHidden($form->get('user_id'));
-	echo $this->formHidden($form->get('lesson_files_id'));
 
 ?>
 <div class="form-group">

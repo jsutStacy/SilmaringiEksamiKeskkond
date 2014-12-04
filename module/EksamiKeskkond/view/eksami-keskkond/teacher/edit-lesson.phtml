@@ -4,7 +4,7 @@
 <h1>Muuda tundi</h1>
 <?php
 	$form = $this->form;
-	$form->setAttribute('action', $this->url('teacher/edit-lesson', array('id' => $this->id)));
+	$form->setAttribute('action', $this->url('teacher/edit-lesson', array('id' => $id)));
 	$form->setAttribute('enctype', 'multipart/form-data');
 	$form->prepare();
 
@@ -12,7 +12,6 @@
 	echo $this->formHidden($form->get('id'));
 	echo $this->formHidden($form->get('subsubject_id'));
 	echo $this->formHidden($form->get('user_id'));
-	echo $this->formHidden($form->get('lesson_files_id'));
 
 ?>
 <div class="form-group">
@@ -32,10 +31,36 @@
 		<?php echo $this->formRow($form->get('url')); ?>
 	</div>
 	<div id="file-field">
+		<label>Sobivad failitüübid: <span></span></label>
 		<?php echo $this->formRow($form->get('fileupload')); ?>
 	</div>
 </div>
 <div class="form-group">
 	<?php echo $this->formSubmit($form->get('submit')); ?>
 </div>
+<?php if ($lessonFiles->count() != 0) { ?>
+	<table class="lesson-files">
+		<tr>
+			<td>
+				<?php if ($lessonType == 'images') { ?>
+					Pildid
+				<?php } else if ($lessonType == 'audio') { ?>
+					Audio
+				<?php } else if ($lessonType == 'presentation') { ?>
+					Esitlus
+				<?php } else if ($lessonType == 'video') { ?>
+					Video
+				<?php } ?>
+			</td>
+			<td></td>
+		</tr>
+		<?php foreach ($lessonFiles as $lessonFile) { ?>
+			<tr>
+				<td><?php echo $this->escapeHtml($lessonFile->url) ?></td>
+				<td><a class="delete-lesson-file" id="delete-lesson-file-<?php echo $lessonFile->id ?>"
+					href="<?php echo $this->url('teacher/delete-lesson-file', array('id' => $lessonFile->id)) ?>">Kustuta</a></td>
+			</tr>
+		<?php } ?>
+	</table>
+<?php } ?>
 <?php echo $this->form()->closeTag(); ?>

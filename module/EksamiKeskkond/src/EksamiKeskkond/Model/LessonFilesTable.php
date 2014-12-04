@@ -61,6 +61,10 @@ class LessonFilesTable {
 		$this->tableGateway->delete(array('id' => $id));
 	}
 
+	public function deleteLessonFilesByLessonId($lessonId) {
+		$this->tableGateway->delete(array('lesson_id' => $lessonId));
+	}
+
 	public function getLessonFilesByLessonId($lessonId) {
 		$resultSet = $this->tableGateway->select(array('lesson_id' => $lessonId));
 

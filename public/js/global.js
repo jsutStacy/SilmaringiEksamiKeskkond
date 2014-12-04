@@ -121,6 +121,32 @@ $(document).ready(function() {
 			})
 		});
 	});
+
+	//Delete lesson file (teacher)
+	$(".delete-lesson-file").click(function(e) {
+		e.preventDefault();
+
+		var url = $(this).attr("href");
+		var linkId = $(this).attr("id");
+		var id = linkId.match(/delete-lesson-file-(\d+)/)[1];
+	
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: "http://eksamikeskkond.silmaring.dev/teacher/delete-lesson-file/" + id,
+			success: function(data) {
+				alert(data.info);
+				$("#delete-lesson-file-" + id).closest('tr').remove();
+	
+				if ($('table.lesson-files tbody').children('tr').length == 1) {
+					$('table.lesson-files').hide();
+				}
+			},
+			error: (function(e) {
+				alert(JSON.stringify(e));
+			})
+		});
+	});
 });
 
 function displayUpload(name) {

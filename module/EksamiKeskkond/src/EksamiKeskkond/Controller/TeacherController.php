@@ -407,7 +407,6 @@ class TeacherController extends AbstractActionController {
 					$lessonId = $this->getLessonTable()->saveLesson($lesson);
 
 					$post['id'] = $lessonId;
-					$post['lesson_files_id'] = null;
 
 					foreach ($filesUrls as $fileUrl) {
 						$lessonFiles = new LessonFiles();
@@ -428,9 +427,12 @@ class TeacherController extends AbstractActionController {
 	}
 
 	public function editLessonAction() {
-		$id = $this->params()->fromRoute('id');
-		$lesson = $this->getLessonTable()->getLesson($id);
-		$lessonFiles = $this->getLessonFilesTable()->getLessonFilesByLessonId($id);
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		$lessonId = $this->params()->fromRoute('id');
+		$lesson = $this->getLessonTable()->getLesson($lessonId);
+		$lessonFiles = $this->getLessonFilesTable()->getLessonFilesByLessonId($lessonId);
 
 		$subsubject = $this->getSubsubjectTable()->getSubsubject($lesson->subsubject_id);
 
@@ -438,42 +440,113 @@ class TeacherController extends AbstractActionController {
 
 		$form->bind($lesson);
 		$form->get('submit')->setAttribute('value', 'Muuda');
+		$form->get('id')->setValue($lessonId);
+		$form->get('user_id')->setValue($user->id);
 		$form->get('subsubject_id')->setValue($subsubject->id);
 
-		foreach ($lessonFiles as $lessonFile) {
-			$form->get('lesson_files_id')->setValue($lessonFile->id);
-			$form->get('user_id')->setValue($lessonFile->user_id);
-
-			if ($lesson->type == 'images' || $lesson->type == 'audio' || $lesson->type == 'presentation') {
-				$form->get('fileupload')->setValue($lessonFile->url);
-			}
-			else if ($lesson->type == 'video') {
-				$form->get('url')->setValue($lessonFile->url);
-			}
-		}
 		$request = $this->getRequest();
 
 		if ($request->isPost()) {
 			$form->setInputFilter(new LessonFilter($this->getServiceLocator()));
-			$form->setData($request->getPost());
+			$post = array_merge_recursive(
+					$this->getRequest()->getPost()->toArray(),
+					$this->getRequest()->getFiles()->toArray()
+			);
+			$form->setData($post);
 
 			if ($form->isValid()) {
-				$data = $form->getData();
-				$this->getLessonTable()->saveLesson($data);
-		}
-		$form->bind($lessonFile);
-		$form->setData($request->getPost());
+				$adapter = new \Zend\File\Transfer\Adapter\Http();
+				$files = $adapter->getFileInfo();
 
-		if ($form->isValid()) {
-			$data = $form->getData();
-			$this->getLessonFilesTable()->saveLessonFiles($form->getData());
+				$filesUrls = array();
+				$error = array();
 
-			return $this->redirect()->toRoute('teacher/my-course');
+				if ($post['type'] == 'images' || $post['type'] == 'audio' || $post['type'] == 'presentation') {
+					foreach ($files as $key => $file) {
+						if ($post['type'] == 'images') {
+							$extension = new \Zend\Validator\File\Extension(array('extension' => array('jpg', 'jpeg', 'png')));
+						}
+						else if ($post['type'] == 'audio') {
+							$extension = new \Zend\Validator\File\Extension(array('extension' => array('mp3', 'wav')));
+							$size = new \Zend\Validator\File\Size(array(array('max' => 104857600)));
+							$adapter->setValidators(array($size), $file['name']);
+						}
+						else if ($post['type'] == 'presentation') {
+							$extension = new \Zend\Validator\File\Extension(array('extension' => array('pdf')));
+						}
+						else {
+							$extension = new \Zend\Validator\File\Extension(array('extension' => array()));
+						}
+						$adapter->setValidators(array($extension), $file['name']);
+					}
+					if (!$adapter->isValid()) {
+						foreach ($adapter->getMessages() as $key => $row) {
+							$error[] = $row;
+						}
+						$form->setMessages(array('fileupload' => $error));
+					}
+					else {
+						$adapter->setDestination($this->getServiceLocator()->get('Config')['upload_dir']);
+
+						if ($adapter->receive()) {
+							$event = $this->getEvent();
+							$request = $event->getRequest();
+							$router = $event->getRouter();
+							$uri = $router->getRequestUri();
+							$baseUrl = sprintf('%s://%s%s', $uri->getScheme(), $uri->getHost(), $request->getBaseUrl());
+
+							$adapterFileName = $adapter->getFileName();
+
+							if (is_array($adapterFileName)) {
+								foreach ($adapterFileName as $name) {
+									$fileName = preg_replace('/\.\/public\/uploads/', '', $name);
+									$filesUrls[] = $baseUrl . '/uploads/' . substr($fileName, 1);
+								}
+							}
+							else {
+								$fileName = preg_replace('/\.\/public\/uploads/', '', $adapterFileName);
+								$filesUrls[] = $baseUrl . '/uploads/' . substr($fileName, 1);
+							}
+						}
+					}
+				}
+				else if ($post['type'] == 'video') {
+					$filesUrls[] = $post['url'];
+				}
+				else if ($post['type'] == 'text') {
+					$lesson->exchangeArray($post);
+					$this->getLessonTable()->saveLesson($lesson);
+					$this->getLessonFilesTable()->deleteLessonFilesByLessonId($lessonId);
+
+					return $this->redirect()->toRoute('teacher/lesson', array('id' => $lessonId));
+				}
+				if (empty($error)) {
+					if ($lesson->type != $post['type'] || $post['type'] == 'presentation' || $post['type'] == 'audio') {
+						$this->getLessonFilesTable()->deleteLessonFilesByLessonId($lessonId);
+					}
+					$lesson->exchangeArray($post);
+					$this->getLessonTable()->saveLesson($lesson);
+
+					$post['lesson_id'] = $post['id'];
+					$post['id'] = 0;
+
+					foreach ($filesUrls as $fileUrl) {
+						$lessonFiles = new LessonFiles();
+
+						$post['url'] = $fileUrl;
+						$lessonFiles->exchangeArray($post);
+
+						$this->getLessonFilesTable()->saveLessonFiles($lessonFiles);
+					}
+					return $this->redirect()->toRoute('teacher/lesson', array('id' => $lessonId));
+				}
+			}
 		}
-	}
 		return array(
-			'id' => $id,
+			'id' => $lessonId,
 			'form' => $form,
+			'lessonFiles' => $lessonFiles,
+			'lessonType' => $lesson->type,
 		);
 	}
 
@@ -482,7 +555,19 @@ class TeacherController extends AbstractActionController {
 
 		return $this->redirect()->toRoute('teacher/my-course');
 	}
-	
+
+	public function deleteLessonFileAction() {
+		$response = $this->getResponse();
+
+		$this->getLessonFilesTable()->deleteLessonFile($this->params()->fromRoute('id'));
+
+		$response->setContent(\Zend\Json\Json::encode(array(
+			'response' => true,
+			'info' => 'Fail kustutatud',
+		)));
+		return $response;
+	}
+
 	public function sendEmailToUserAction() {
 		$userId = $this->params()->fromRoute('user_id');
 		$user = $this->getUserTable()->getUser($userId);

@@ -17,7 +17,6 @@ class Subject {
 		$this->course_id = (isset($data['course_id'])) ? $data['course_id'] : null;
 		$this->name = (isset($data['name'])) ? $data['name'] : null;
 		$this->description = (isset($data['description'])) ? $data['description'] : null;
-
 	}
 
 	public function getArrayCopy() {

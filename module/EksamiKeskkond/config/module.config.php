@@ -386,6 +386,18 @@ return array(
 							),
 						),
 					),
+					'delete-lesson-file' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/delete-lesson-file[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'delete-lesson-file',
+							),
+						),
+					),
 				),
 			),
 			'student' => array(
@@ -416,10 +428,10 @@ return array(
 						'options' => array(
 							'route' => '/course/change-lesson[/:id]',
 							'constraints' => array(
-									'id' => '[0-9]+',
+								'id' => '[0-9]+',
 							),
 							'defaults' => array(
-									'action' => 'change-lesson',
+								'action' => 'change-lesson',
 							),
 						),
 					),

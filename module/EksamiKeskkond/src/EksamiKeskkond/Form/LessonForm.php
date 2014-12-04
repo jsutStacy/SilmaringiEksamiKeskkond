@@ -93,13 +93,6 @@ class LessonForm extends Form {
 		));
 
 		$this->add(array(
-			'name' => 'lesson_files_id',
-			'attributes' => array(
-				'type' => 'hidden',
-			),
-		));
-
-		$this->add(array(
 			'type' => 'Zend\Form\Element\Select',
 			'name' => 'type',
 			'attributes' => array(
