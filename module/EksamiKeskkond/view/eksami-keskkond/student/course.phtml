@@ -4,57 +4,63 @@
 ?>
 
 <div class="row">
-	<div class="col-md-5 pull-right"></div>
-</div>
-<div class="row">
 	<div class="col-md-5 pull-left">
 		<h2><?php echo $this->escapeHtml($course->name) ?></h2>
 	</div>
 </div>
+
 <div class="row">
-	<div class="col-md-5 pull-left">
-		<p><?php echo $this->escapeHtml($course->description) ?></p>
-	</div>
-</div>
-<div class="row">
-<?php if (!empty($courseData)) { ?>
+<?php if (!empty($courseData) && $hasBoughtCourse) { ?>
 	<?php if (!empty($courseData['subjects'])) { ?>
 		<div class="panel-group col-md-4" id="accordion" role="tablist" aria-multiselectable="true">
-		<?php foreach ($courseData['subjects'] as $subject) : ?>
-			<div class="panel panel-default">
-				<div class="panel-heading" role="tab" id="heading<?php echo $subject['id']; ?>">
-					<h4 class="panel-title">
-						<a data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $subject['id']; ?>" aria-controls="collapse<?php echo $subject['id']; ?>" aria-expanded="false">
-							<?php echo $this->escapeHtml($subject['name']) ?>
-						</a>
-					</h4>
-				</div>
-				<div id="collapse<?php echo $subject['id']; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<?php echo $subject['id']; ?>">
-					<div class="panel-body">
-						<ul class="list-group">
-						<?php foreach ($subject['subsubjects'] as $subsubject) : ?>
-							<li class="list-group-item">
-								<?php echo $this->escapeHtml($subsubject['name']) ?>
-								<ul class="list-group">
-								<?php foreach ($subsubject['lessons'] as $lesson) : ?>
-									<li class="list-group-item">
-										<a class="change-lesson" href="<?php echo $lesson->id; ?>">
-											<?php echo $lesson->name; ?>
-										</a>
-									</li>
-								<?php endforeach; ?>
-								</ul>
-							</li>
-						<?php endforeach; ?>
-						</ul>
+			<?php if ($hasEnded) { ?>
+				<span class="label label-danger">Kursus on läbi!</span>
+			<?php } ?>
+			<?php if ($hasntStarted) { ?>
+				<span class="label label-warning">Kursus pole veel alanud!</span>
+			<?php } ?>
+			<?php foreach ($courseData['subjects'] as $subject) : ?>
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="heading<?php echo $subject['id']; ?>">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $subject['id']; ?>" aria-controls="collapse<?php echo $subject['id']; ?>" aria-expanded="false">
+								<?php echo $this->escapeHtml($subject['name']) ?>
+							</a>
+						</h4>
+					</div>
+					<div id="collapse<?php echo $subject['id']; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<?php echo $subject['id']; ?>">
+						<div class="panel-body">
+							<ul class="list-group">
+							<?php foreach ($subject['subsubjects'] as $subsubject) : ?>
+								<li class="list-group-item">
+									<?php echo $this->escapeHtml($subsubject['name']) ?>
+									<ul class="list-group">
+									<?php foreach ($subsubject['lessons'] as $lesson) : ?>
+										<li class="list-group-item">
+											<?php if (!$hasEnded && !$hasntStarted) { ?>
+												<a class="change-lesson" href="<?php echo $lesson->id; ?>">
+													<?php echo $lesson->name; ?>
+												</a>
+											<?php } else { ?>
+													<?php echo $lesson->name; ?>
+											<?php } ?>
+										</li>
+									<?php endforeach; ?>
+									</ul>
+								</li>
+							<?php endforeach; ?>
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
-		<?php endforeach; ?>
-	<?php } ?>
-<?php } ?>
-</div><!-- Left col end -->
-<div class="col-md-8" id="lessonContent"></div>
+			<?php endforeach; ?>
+		</div>
+	<?php } ?><!--  if has subjects -->
+<?php } ?><!-- if has bought -->
+<div class="col-md-8" id="lessonContent">
+	<p><?php echo $this->escapeHtml($course->description) ?></p>
+</div>
+</div>
 <?php if (!$hasBoughtCourse) { ?>
 	<a class="btn btn-primary btn-me" href="<?php echo $this->url('student/buy-course', array('id' => $course->id, 'bank' => 'test')) ?>">
 		<span class="glyphicon glyphicon-plus"></span>Osta kursus pangalingiga
@@ -63,4 +69,5 @@
 		<span class="glyphicon glyphicon-plus"></span>Osta kursus arvega
 	</a>
 <?php } ?>
+
 

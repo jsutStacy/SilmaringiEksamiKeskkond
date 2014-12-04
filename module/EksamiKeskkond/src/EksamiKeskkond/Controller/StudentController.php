@@ -84,9 +84,20 @@ class StudentController extends AbstractActionController {
 			}
 			$courseData['subjects'] = $subjects;
 		}
+		$courseHasEnded = false;
+		$courseHasntStarted = false;
+		if ((time()-(60*60*24)) > strtotime($course->end_date)) {
+			$courseHasEnded = true;
+		}
+		if ((time()-(60*60*24)) < strtotime($course->start_date)) {
+			$courseHasntStarted = true;
+		}
+
 		return new ViewModel(array(
 			'courseData' => $courseData,
 			'hasBoughtCourse' => $hasBoughtCourse,
+			'hasEnded' => $courseHasEnded,
+			'hasntStarted' => $courseHasntStarted,
 		));
 	}
 
@@ -136,9 +147,23 @@ class StudentController extends AbstractActionController {
 
 		$user = $auth->getIdentity();
 		$studentCoursesIds = $this->getUserCourseTable()->getAllCoursesByUserId($user->id);
+		
+		$teachers = $this->getUserTable()->getAllTeachersForList();
+		$courses = $this->getCourseTable()->fetchAll();
+		$coursesData = array();
 
+		foreach ($courses as $key => $course){
+			$coursesData[$key]['course'] = $course;
+			$coursesData[$key]['hasBought'] = $this->getUserCourseTable()->checkIfUserHasBoughtCourse($user->id, $course->id);
+			if ($course->teacher_id) {
+				$coursesData[$key]['teacher'] = $teachers[$course->teacher_id];
+			}
+			else {
+				$coursesData[$key]['teacher'] = null;
+			}
+		}
 		return new ViewModel(array(
-			'courses' => $this->getCourseTable()->fetchAll(),
+			'courses' => $coursesData,
 			'studentCoursesIds' => $studentCoursesIds,
 		));
 	}
@@ -151,11 +176,25 @@ class StudentController extends AbstractActionController {
 
 		$myCourses = array();
 
+		$courseTeachers = array();
+
 		foreach ($studentCoursesIds as $courseId) {
-			$myCourses[] = $this->getCourseTable()->getCourse($courseId);
+			$course = $this->getCourseTable()->getCourse($courseId);
+			$myCourses[] = $course;
+
+			if($course->teacher_id){
+				$teacher = $this->getUserTable()->getUser($course->teacher_id);
+				$courseTeachers[$teacher->id] = $teacher;
+			}
+			else{
+				$teacher = null;
+				$courseTeachers[null] = $teacher;
+			}
 		}
+
 		return new ViewModel(array(
 			'myCourses' => $myCourses,
+			'courseTeachers' => $courseTeachers,
 		));
 	}
 
@@ -324,6 +363,14 @@ class StudentController extends AbstractActionController {
 			$this->userCourseTable = $sm->get('EksamiKeskkond\Model\UserCourseTable');
 		}
 		return $this->userCourseTable;
+	}
+
+	public function getUserTable() {
+		if (!$this->userTable) {
+			$sm = $this->getServiceLocator();
+			$this->userTable = $sm->get('EksamiKeskkond\Model\UserTable');
+		}
+		return $this->userTable;
 	}
 
 	public function getSubjectTable() {
