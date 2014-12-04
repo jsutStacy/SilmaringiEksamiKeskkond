@@ -1,7 +1,6 @@
 $(document).ready(function() {
-	//Add lesson
-	$('select[name="type"] option[value="text"]').prop('selected', 'selected');
 
+	//Add lesson
 	$('select[name="type"]').change(function() {
 		if ($(this).val() == 'video') {
 			displayUpload('#url-field');
@@ -29,6 +28,31 @@ $(document).ready(function() {
 			$('input[type="file"]').val('');
 		}
 	});
+
+	//Edit lesson
+	var selectedOption = $('select[name="type"] option[selected="selected"]').val();
+
+	if (selectedOption == 'video') {
+		displayUpload('#url-field');
+	}
+	else if (selectedOption == 'images') {
+		displayUpload('#file-field');
+
+		$('#file-field label span').html('.jpg, .jpeg, .png');
+		$('#file-field input').addAttr('multiple', true);
+	}
+	else if (selectedOption == 'audio') {
+		displayUpload('#file-field');
+
+		$('#file-field label span').html('.mp3, .wav');
+		$('#file-field input').removeAttr('multiple');
+	}
+	else if (selectedOption == 'presentation') {
+		displayUpload('#file-field');
+
+		$('#file-field label span').html('.pdf');
+		$('#file-field input').removeAttr('multiple');
+	}
 
 	//Add subject (display form)
 	$(document).on('click', '#addSubject', function(e) {

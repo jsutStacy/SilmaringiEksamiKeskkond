@@ -52,21 +52,6 @@ class LessonForm extends Form {
 		));
 
 		$this->add(array(
-			'type' => 'Zend\Form\Element\Select',
-			'name' => 'published',
-			'attributes' => array(
-				'class' => 'form-control',
-			),
-			'options' => array(
-				'label' => 'Tunni nähtavus',
-				'options' => array(
-					'0' => 'Privaatne',
-					'1' => 'Nähtav',
-				),
-			),
-		));
-
-		$this->add(array(
 			'name' => 'url',
 			'attributes' => array(
 				'type' => 'Url',
@@ -93,7 +78,7 @@ class LessonForm extends Form {
 		));
 
 		$this->add(array(
-			'type' => 'Zend\Form\Element\Select',
+			'type' => 'Select',
 			'name' => 'type',
 			'attributes' => array(
 				'class' => 'form-control',
@@ -101,11 +86,27 @@ class LessonForm extends Form {
 			'options' => array(
 				'label' => 'Tüüp',
 				'options' => array(
-					'text' => 'Tekst',
-					'video' => 'Video',
-					'presentation' => 'Esitlus',
-					'audio' => 'Audio',
-					'images' => 'Pildid',
+					'text' => array(
+						'value' => 'text',
+						'label' => 'Tekst',
+						'selected' => true,
+					),
+					'video' => array(
+						'value' => 'video',
+						'label' => 'Video',
+					),
+					'presentation' => array(
+						'value' => 'presentation',
+						'label' => 'Esitlus',
+					),
+					'audio' => array(
+						'value' => 'audio',
+						'label' => 'Audio',
+					),
+					'images' => array(
+						'value' => 'images',
+						'label' => 'Pildid',
+					),
 				),
 			),
 		));

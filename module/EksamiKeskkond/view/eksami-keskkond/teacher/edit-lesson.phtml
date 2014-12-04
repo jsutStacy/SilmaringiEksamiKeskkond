@@ -12,16 +12,12 @@
 	echo $this->formHidden($form->get('id'));
 	echo $this->formHidden($form->get('subsubject_id'));
 	echo $this->formHidden($form->get('user_id'));
-
 ?>
 <div class="form-group">
 	<?php echo $this->formRow($form->get('name')); ?>
 </div>
 <div class="form-group">
 	<?php echo $this->formRow($form->get('content')); ?>
-</div>
-<div class="form-group">
-	<?php echo $this->formRow($form->get('published')); ?>
 </div>
 <div class="form-group">
 	<?php echo $this->formRow($form->get('type')); ?>
@@ -38,29 +34,29 @@
 <div class="form-group">
 	<?php echo $this->formSubmit($form->get('submit')); ?>
 </div>
-<?php if ($lessonFiles->count() != 0) { ?>
-	<table class="lesson-files">
-		<tr>
-			<td>
-				<?php if ($lessonType == 'images') { ?>
-					Pildid
-				<?php } else if ($lessonType == 'audio') { ?>
-					Audio
-				<?php } else if ($lessonType == 'presentation') { ?>
-					Esitlus
-				<?php } else if ($lessonType == 'video') { ?>
-					Video
-				<?php } ?>
-			</td>
-			<td></td>
-		</tr>
-		<?php foreach ($lessonFiles as $lessonFile) { ?>
+<?php if ($lessonType != 'video') { ?>
+	<?php if ($lessonFiles->count() != 0) { ?>
+		<table class="lesson-files">
 			<tr>
-				<td><?php echo $this->escapeHtml($lessonFile->url) ?></td>
-				<td><a class="delete-lesson-file" id="delete-lesson-file-<?php echo $lessonFile->id ?>"
-					href="<?php echo $this->url('teacher/delete-lesson-file', array('id' => $lessonFile->id)) ?>">Kustuta</a></td>
+				<td>
+					<?php if ($lessonType == 'images') { ?>
+						Pildid
+					<?php } else if ($lessonType == 'audio') { ?>
+						Audio
+					<?php } else if ($lessonType == 'presentation') { ?>
+						Esitlus
+					<?php } ?>
+				</td>
+				<td></td>
 			</tr>
-		<?php } ?>
-	</table>
+			<?php foreach ($lessonFiles as $lessonFile) { ?>
+				<tr>
+					<td><?php echo $this->escapeHtml($lessonFile->url) ?></td>
+					<td><a class="delete-lesson-file" id="delete-lesson-file-<?php echo $lessonFile->id ?>"
+						href="<?php echo $this->url('teacher/delete-lesson-file', array('id' => $lessonFile->id)) ?>">Kustuta</a></td>
+				</tr>
+			<?php } ?>
+		</table>
+	<?php } ?>
 <?php } ?>
 <?php echo $this->form()->closeTag(); ?>

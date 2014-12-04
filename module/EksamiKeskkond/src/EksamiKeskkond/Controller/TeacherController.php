@@ -527,6 +527,36 @@ class TeacherController extends AbstractActionController {
 		$form->get('id')->setValue($lessonId);
 		$form->get('user_id')->setValue($user->id);
 		$form->get('subsubject_id')->setValue($subsubject->id);
+		$form->get('type')->setValueOptions(array(
+			'text' => array(
+				'value' => 'text',
+				'label' => 'Tekst',
+				'selected' => $lesson->type == 'text' ? true : false,
+			),
+			'video' => array(
+				'value' => 'video',
+				'label' => 'Video',
+				'selected' => $lesson->type == 'video' ? true : false,
+			),
+			'presentation' => array(
+				'value' => 'presentation',
+				'label' => 'Esitlus',
+				'selected' => $lesson->type == 'presentation' ? true : false,
+			),
+			'audio' => array(
+				'value' => 'audio',
+				'label' => 'Audio',
+				'selected' => $lesson->type == 'audio' ? true : false,
+			),
+			'images' => array(
+				'value' => 'images',
+				'label' => 'Pildid',
+				'selected' => $lesson->type == 'images' ? true : false,
+			),
+		));
+		if ($lesson->type == 'video') {
+			$form->get('url')->setValue($lessonFiles->current()->url);
+		}
 
 		$request = $this->getRequest();
 
