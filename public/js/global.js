@@ -31,9 +31,8 @@ $(document).ready(function() {
 	});
 
 	//Add subject (display form)
-	$('#addSubject').click(function(e) {
+	$(document).on('click', '#addSubject', function(e) {
 		e.preventDefault();
-
 		if(!$("#subjects").has("#addSubjectLi").length) {
 			$("#subjects").prepend($('<li class="list-group-item" id="addSubjectLi">').load($(this).attr('href')));
 			return false;
@@ -56,7 +55,7 @@ $(document).ready(function() {
 				$("#subjects").prepend(data.html);
 			},
 			error: (function(e) {
-				alert("viga " + e);
+				alert("viga " + JSON.stringify(e));
 			})
 		})
 	});
@@ -96,6 +95,82 @@ $(document).ready(function() {
 			},
 			error: (function(e) {
 				alert("viga " + e);
+			})
+		});
+	});
+
+	//Add subsubject (display form)
+	$(document).on('click', '.addSubsubject', function(e) {
+		e.preventDefault();
+		var subsubjectsUl =  $(this).parent().next().find(".subsubjects");
+		if(!subsubjectsUl.has("#addSubsubjectLi").length) {
+			$( "ul.subsubjects" ).each(function() {
+				if ($(this).has("#addSubsubjectLi").length) {
+					$("#addSubsubjectLi").remove();
+				}
+			});
+			subsubjectsUl.prepend($('<li class="list-group-item" id="addSubsubjectLi">').load($(this).attr('href')));
+			return false;
+		}
+	});
+
+	//(ajax call)
+	$(document).on('click', '#submitSubsubjectForm', function(e) {
+		e.preventDefault();
+		var formData = $('#subsubjectForm').serialize();
+		var url = $(this).attr('href');
+		var subsubjectsUl = $("#addSubsubjectLi").parent();
+		$.ajax({
+			type:"POST",
+			dataType: "json",
+			url:url,
+			data: formData,
+			success: function(data) {
+				$("#addSubsubjectLi").remove();
+				subsubjectsUl.prepend(data.html);
+			},
+			error: (function(e) {
+				$("#addSubsubjectLi").prepend(JSON.stringify(e));
+			})
+		})
+	});
+
+	//Edit subsubject (display form)
+	$(document).on('click', 'a#cancelSubsubjectAdding', function(e) {
+		e.preventDefault();
+		$("#addSubsubjectLi").remove();
+	});
+
+	$(document).on('click', '.editSubsubject', function(e) {
+		e.preventDefault();
+		if (!$(this).closest("li").has("#editSubsubjectForm").length) {
+			$( "ul.subsubjects" ).each(function() {
+				if ($(this).has("#editSubsubjectForm").length) {
+					$("#editSubsubjectForm").remove();
+				}
+			});
+			$(this).closest("li").prepend($('<div id="temporary">').load($(this).attr('href')));
+		}		
+		return false;
+	});
+
+	//(ajax call)
+	$(document).on('click', 'a#submitEditSubsubjectForm', function(e) {
+		e.preventDefault();
+		var formData = $('#editSubsubjectForm').serialize();
+
+		$.ajax({
+			type:"POST",
+			dataType: "json",
+			url:"edit-subsubject",
+			data: formData,
+			success: function(data) {
+				$("#temporary").remove();
+				$("#subsubjectId"+data.subsubjectId+ " p.subsubjectName").remove();
+				$("#subsubjectId"+data.subsubjectId).prepend("<p class='subsubjectName pull-left'>"+data.subsubjectName+"</p>");
+			},
+			error: (function(e) {
+				$( "ul.subsubjects" ).text(JSON.stringify(e));
 			})
 		});
 	});

@@ -35,6 +35,7 @@ class SubsubjectTable {
 		);
 		if ($subsubject->id == 0) {
 			$this->tableGateway->insert($data);
+			return $this->tableGateway->lastInsertValue;
 		}
 		else {
 			if ($this->getSubsubject($subsubject->id)) {

@@ -1,11 +1,7 @@
 <?php
-	$this->headTitle('Lisa uus alamteema - ');
-?>
-<h1>Lisa uus alamteema</h1>
-<?php
 	$form = $this->form;
-	$form->setAttribute('action', $this->url('teacher/add-subsubject', array('id' => $subjectId)));
 	$form->prepare();
+	$form->setAttribute('id', 'subsubjectForm');
 
 	echo $this->form()->openTag($form);
 	echo $this->formHidden($form->get('id'));
@@ -16,6 +12,6 @@
 	<?php echo $this->formRow($form->get('name')); ?>
 </div>
 <div class="form-group">
-	<?php echo $this->formSubmit($form->get('submit')); ?>
+	<a href="<?php echo $this->url('teacher/add-subsubject', array('id' => $subjectId)); ?>" id="submitSubsubjectForm">Lisa</a>
 </div>
 <?php echo $this->form()->closeTag(); ?>

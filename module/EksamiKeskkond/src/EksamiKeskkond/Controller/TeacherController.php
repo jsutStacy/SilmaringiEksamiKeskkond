@@ -167,10 +167,11 @@ class TeacherController extends AbstractActionController {
 								'<span class="glyphicon glyphicon-trash"></span>' .
 							'</a>' .
 							'</div>' .
+							'<a class="btn btn-default btn-xs pull-right addSubsubject" href="'.$this->url()->fromRoute('teacher/add-subsubject',  array('id' => $subjectId )).'">' .
+							'<span class="glyphicon glyphicon-plus"></span>Lisa uus alamteema</a>' .
 					'</li>' .
 					'<div class="panel-body">' .
-						'<a class="btn btn-default btn-xs pull-right" href="add-subsubject/' . $subjectId . '">' .
-						'<span class="glyphicon glyphicon-plus"></span>Lisa uus alamteema</a>' .
+						'<ul class="list-group subsubjects"></ul>'.
 					'</div>';
 
 				$response->setContent(\Zend\Json\Json::encode(array(
@@ -247,6 +248,9 @@ class TeacherController extends AbstractActionController {
 	}
 
 	public function addSubsubjectAction() {
+		$request = $this->getRequest();
+		$response = $this->getResponse();
+
 		$subjectId = $this->params()->fromRoute('id');
 		$subject = $this->getSubjectTable()->getSubject($subjectId);
 
@@ -262,43 +266,90 @@ class TeacherController extends AbstractActionController {
 	
 			if ($form->isValid()) {
 				$subsubject->exchangeArray($form->getData());
-				$this->getSubsubjectTable()->saveSubsubject($subsubject);
+				$subsubjectId = $this->getSubsubjectTable()->saveSubsubject($subsubject);
+				
+				$html = 
+									'<li class="list-group-item" id="subsubjectId'.$subsubjectId.'">
+									<p class="subsubjectName pull-left">' .
+										$form->getData()['name'] .
+									'</p>
+									<a class="btn btn-default btn-xs pull-left" href="delete-subsubject/'. $subsubjectId .'">
+										<span class="glyphicon glyphicon-trash"></span>
+									</a>
+									<a class="btn btn-default btn-xs pull-left editSubsubject" href="edit-subsubject/'. $subsubjectId .'">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</a>
+									<div class="clearfix"></div>
+									<ul class="list-group">
+										<a class="row btn btn-default btn-xs pull-right" href="add-lesson/'. $subsubjectId .'">
+										<span class="glyphicon glyphicon-plus"></span>Lisa uus tund</a>
+									</ul>';
 
-				return $this->redirect()->toRoute('teacher/my-course');
+				$response->setContent(\Zend\Json\Json::encode(array(
+					'response' => true,
+					'subsubjectId' => $subsubjectId,
+					'html' => $html,
+				)));
+				return $response;
 			}
 		}
-		return array(
-			'form' => $form,
-			'subjectId' => $subjectId,
-		);
+		else{
+			$viewmodel = new ViewModel();
+			$viewmodel->setTerminal($request->isXmlHttpRequest());
+			$viewmodel->setVariables(array(
+				'form' => $form,
+				'subjectId' => $subjectId,
+			));
+
+			return $viewmodel;
+		}
 	}
 	
 	public function editSubsubjectAction() {
-		$id = $this->params()->fromRoute('id');
-		$subsubject = $this->getSubsubjectTable()->getSubsubject($id);
-		$subject = $this->getSubjectTable()->getSubject($subsubject->subject_id);
-
-		$form  = new SubsubjectForm();
-		$form->bind($subsubject);
-		$form->get('subject_id')->setValue($subject->id);
-		$form->get('submit')->setAttribute('value', 'Muuda');
-
 		$request = $this->getRequest();
+		$response = $this->getResponse();
 
-		if ($request->isPost()) {
+
+		if ($request->isPost()){
+			$subsubject = $this->getSubsubjectTable()->getSubsubject($request->getPost()->id);
+
+			$form = new SubsubjectForm();
+			$form->bind($subsubject);
 			$form->setInputFilter(new SubsubjectFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
+
 				$this->getSubsubjectTable()->saveSubsubject($form->getData());
 
-				return $this->redirect()->toRoute('teacher/my-course');
+				$response->setContent(\Zend\Json\Json::encode(array(
+					'response' => true,
+					'subsubjectId' => $form->getData()->id,
+					'subsubjectName' => $form->getData()->name,
+				)));
+				return $response;
 			}
 		}
-		return array(
-			'id' => $id,
-			'form' => $form,
-		);
+		else{
+			$id = $this->params()->fromRoute('id');
+			$subsubject = $this->getSubsubjectTable()->getSubsubject($id);
+
+			$subject = $this->getSubjectTable()->getSubject($subsubject->subject_id);
+
+			$form = new SubsubjectForm();
+			$form->bind($subsubject);
+			$form->get('subject_id')->setValue($subject->id);
+			$form->get('submit')->setAttribute('value', 'Muuda');
+
+			$viewmodel = new ViewModel();
+			$viewmodel->setTerminal($request->isXmlHttpRequest());
+			$viewmodel->setVariables(array(
+				'form' => $form,
+				'id' => $id,
+			));
+
+			return $viewmodel;
+		}
 	}
 
 	public function deleteSubsubjectAction() {
