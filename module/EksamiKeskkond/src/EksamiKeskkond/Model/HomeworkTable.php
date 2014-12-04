@@ -17,4 +17,40 @@ class HomeworkTable {
 
 		return $resultSet;
 	}
+
+	public function getHomework($id) {
+		$rowset = $this->tableGateway->select(array('id' => $id));
+		$row = $rowset->current();
+	
+		if (!$row) {
+			throw new \Exception("Could not find row $id");
+		}
+		return $row;
+	}
+
+	public function saveHomework(Homework $homework) {
+		$data = array(
+			'subsubject_id' => $homework->subsubject_id,
+			'user_id' => $homework->user_id,
+			'description' => $homework->description,
+			'url' => $homework->url,
+		);
+		if ($homework->id == 0) {
+			$this->tableGateway->insert($data);
+
+			return $this->tableGateway->lastInsertValue;
+		}
+		else {
+			if ($this->getHomework($homework->id)) {
+				$this->tableGateway->update($data, array('id' => $homework->id));
+			}
+			else {
+				throw new \Exception('Form id does not exist');
+			}
+		}
+	}
+
+	public function deleteHomeworkFile($id) {
+		$this->tableGateway->update(array('url' => null), array('id' => $id));
+	}
 }

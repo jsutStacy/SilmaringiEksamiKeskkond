@@ -116,19 +116,25 @@ class Module {
 				'EksamiKeskkond\Model\UserLessonTable' => function($sm) {
 					$tableGateway = $sm->get('UserLessonTableGateway');
 					$table = new UserLessonTable($tableGateway);
-				
+
 					return $table;
 				},
 				'EksamiKeskkond\Model\HomeworkTable' => function($sm) {
 					$tableGateway = $sm->get('HomeworkTableGateway');
 					$table = new HomeworkTable($tableGateway);
-					
+
 					return $table;
 				},
 				'EksamiKeskkond\Model\NoteTable' => function($sm) {
 					$tableGateway = $sm->get('NoteTableGateway');
 					$table = new NoteTable($tableGateway);
-				
+
+					return $table;
+				},
+				'EksamiKeskkond\Model\HomeworkAnswersTable' => function($sm) {
+					$tableGateway = $sm->get('HomeworkAnswersTableGateway');
+					$table = new HomeworkAnswersTable($tableGateway);
+
 					return $table;
 				},
 				'UserTableGateway' => function($sm) {
@@ -189,27 +195,35 @@ class Module {
 				},
 				'UserLessonTableGateway' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-				
+
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new UserLesson());
-				
+
 					return new TableGateway('user_lesson', $dbAdapter, null, $resultSetPrototype);
 				},
 				'HomeworkTableGateway' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-				
+
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new Homework());
-				
+
 					return new TableGateway('homework', $dbAdapter, null, $resultSetPrototype);
 				},
 				'NoteTableGateway' => function($sm) {
 					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-				
+
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new Note());
-				
+
 					return new TableGateway('note', $dbAdapter, null, $resultSetPrototype);
+				},
+				'HomeworkAnswersTableGateway' => function($sm) {
+					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new HomeworkAnswers());
+
+					return new TableGateway('homework_answers', $dbAdapter, null, $resultSetPrototype);
 				},
 				'mail.transport' => function($sm) {
 					$config = $sm->get('Config');

@@ -1,0 +1,37 @@
+<?php
+	$this->headTitle('Muuda kodutööd - ');
+?>
+<h1>Muuda kodutööd</h1>
+<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('teacher/edit-homework', array('id' => $id)));
+	$form->setAttribute('enctype', 'multipart/form-data');
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
+	echo $this->formHidden($form->get('user_id'));
+	echo $this->formHidden($form->get('subsubject_id'));
+
+?>
+<div class="form-group">
+	<?php echo $this->formRow($form->get('description')); ?>
+</div>
+<?php echo $this->formRow($form->get('fileupload')); ?>
+<div class="form-group">
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+</div>
+<?php if (!empty($homework->url)) { ?>
+	<table class="homework-file">
+		<tr>
+			<td>Kodutöö fail</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->escapeHtml($homework->url) ?></td>
+			<td><a class="delete-homework-file" id="delete-homework-file-<?php echo $homework->id ?>"
+				href="<?php echo $this->url('teacher/delete-homework-file', array('id' => $homework->id)) ?>">Kustuta</a></td>
+		</tr>
+	</table>
+<?php } ?>
+<?php echo $this->form()->closeTag(); ?>

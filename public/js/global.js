@@ -223,13 +223,39 @@ $(document).ready(function() {
 		$.ajax({
 			type: "POST",
 			dataType: "json",
-			url: "http://eksamikeskkond.silmaring.dev/teacher/delete-lesson-file/" + id,
+			url: url,
 			success: function(data) {
 				alert(data.info);
 				$("#delete-lesson-file-" + id).closest('tr').remove();
 	
 				if ($('table.lesson-files tbody').children('tr').length == 1) {
 					$('table.lesson-files').hide();
+				}
+			},
+			error: (function(e) {
+				alert(JSON.stringify(e));
+			})
+		});
+	});
+
+	//Delete homework file (teacher)
+	$(".delete-homework-file").click(function(e) {
+		e.preventDefault();
+
+		var url = $(this).attr("href");
+		var linkId = $(this).attr("id");
+		var id = linkId.match(/delete-homework-file-(\d+)/)[1];
+	
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: url,
+			success: function(data) {
+				alert(data.info);
+				$("#delete-homework-file-" + id).closest('tr').remove();
+	
+				if ($('table.homework-file tbody').children('tr').length == 1) {
+					$('table.homework-file').hide();
 				}
 			},
 			error: (function(e) {

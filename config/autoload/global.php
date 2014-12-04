@@ -13,4 +13,5 @@
 
 return array(
 	'upload_dir' => './public/uploads/',
+	'homework_dir' => './public/uploads/homework/',
 );

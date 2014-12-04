@@ -40,7 +40,7 @@
 				<div class="clearfix"></div>
 			</div>
 			<ul class="list-group" id="subjects">
-				<?php foreach ($subjects as $subject) : ?>
+				<?php foreach ($subjects as $subject): ?>
 					<li class="list-group-item active" id="subjectId<?php echo $subject->id ?>">
 						<p class="subjectName"><?php echo $this->escapeHtml($subject->name) ?></p>
 						<div class="btn-group" role="group" aria-label="...">
@@ -56,7 +56,7 @@
 					</li>
 					<div class="panel-body">
 						<ul class="list-group subsubjects" id="subId<?php echo $subject->id ?>">
-							<?php foreach ($subsubjectTable->getSubsubjectsBySubjectId($subject->id) as $subsubject) : ?>
+							<?php foreach ($subsubjectTable->getSubsubjectsBySubjectId($subject->id) as $subsubject): ?>
 								<li class="list-group-item" id="subsubjectId<?php echo $subsubject->id ?>">
 									<p class="subsubjectName pull-left">
 										<?php echo $this->escapeHtml($subsubject->name) ?>
@@ -67,9 +67,13 @@
 									<a class="btn btn-default btn-xs pull-left editSubsubject" href="<?php echo $this->url('teacher/edit-subsubject', array('id' => $subsubject->id)) ?>">
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a>
+									<a class="btn btn-default btn-sm pull-right addHomework" href="<?php echo $this->url('teacher/add-homework', array('id' => $subsubject->id)) ?>">
+										<span class="glyphicon glyphicon-plus"></span>
+										Lisa kodutöö
+									</a>
 									<div class="clearfix"></div>
 									<ul class="list-group">
-										<?php foreach ($lessonTable->getLessonsBySubsubjectId($subsubject->id) as $lesson) : ?>
+										<?php foreach ($lessonTable->getLessonsBySubsubjectId($subsubject->id) as $lesson): ?>
 											<li class="list-group-item">
 												<a href="<?php echo $this->url('teacher/lesson', array('id' => $lesson->id)) ?>"><?php echo $lesson->name; ?></a>
 												<a class="glyphicon glyphicon-trash pull-right" href="<?php echo $this->url('teacher/delete-lesson', array('id' => $lesson->id)) ?>"></a>

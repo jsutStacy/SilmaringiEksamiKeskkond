@@ -410,6 +410,54 @@ return array(
 							),
 						),
 					),
+					'homework' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/homework[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'homework',
+							),
+						),
+					),
+					'add-homework' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/add-homework[/:subsubject_id]',
+							'constraints' => array(
+								'subsubject_id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'add-homework',
+							),
+						),
+					),
+					'edit-homework' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/edit-homework[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'edit-homework',
+							),
+						),
+					),
+					'delete-homework-file' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/delete-homework-file[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'delete-homework-file',
+							),
+						),
+					),
 				),
 			),
 			'student' => array(

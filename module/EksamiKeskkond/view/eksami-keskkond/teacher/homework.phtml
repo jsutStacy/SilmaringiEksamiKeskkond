@@ -1,0 +1,16 @@
+<?php
+	$this->headTitle('Kodutöö - ');
+?>
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h2>Kodutöö</h2>
+	</div>
+</div>
+<div class="row">
+	<p><?php echo $this->escapeHtml($homework->description) ?></p>
+</div>
+<?php if (!empty($homework->url)) { ?>
+	<div class="row">
+		<a href="<?php echo $this->escapeHtml($homework->url) ?>" target="_blank" download>Lae kodutöö alla</a>
+	</div>
+<?php } ?>

@@ -4,7 +4,7 @@ namespace EksamiKeskkond\Controller;
 
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
-use EksamiKeskkond\Service\EmailService;
+
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ViewModel\JsonModel;
 
@@ -29,6 +29,12 @@ use EksamiKeskkond\Model\LessonFiles;
 use EksamiKeskkond\Form\EmailForm;
 use EksamiKeskkond\Filter\EmailFilter;
 
+use EksamiKeskkond\Model\Homework;
+use EksamiKeskkond\Form\HomeworkForm;
+use EksamiKeskkond\Filter\HomeworkFilter;
+
+use EksamiKeskkond\Service\EmailService;
+
 class TeacherController extends AbstractActionController {
 
 	protected $courseTable;
@@ -42,8 +48,10 @@ class TeacherController extends AbstractActionController {
 	protected $userCourseTable;
 
 	protected $userTable;
-	
+
 	protected $lessonFilesTable;
+
+	protected $homeworkTable;
 
 	public function indexAction() {
 		$auth = new AuthenticationService();
@@ -117,7 +125,6 @@ class TeacherController extends AbstractActionController {
 				'courseId' => $course->id,
 				'teacherId' => $course->teacher_id,
 			));
-
 			return $viewmodel;
 		}
 		return $this->redirect()->toRoute('errors/no-permission');
@@ -718,6 +725,154 @@ class TeacherController extends AbstractActionController {
 		);
 	}
 
+	public function homeworkAction() {
+		return new ViewModel(array(
+			'homework' => $this->getHomeworkTable()->getHomework($this->params()->fromRoute('id')),
+		));
+	}
+
+	public function addHomeworkAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		$subsubjectId = $this->params()->fromRoute('subsubject_id');
+
+		$form = new HomeworkForm();
+		$form->get('user_id')->setValue($user->id);
+		$form->get('subsubject_id')->setValue($subsubjectId);
+
+		$request = $this->getRequest();
+
+		if ($request->isPost()) {
+			$homework = new Homework();
+
+			$form->setInputFilter(new HomeworkFilter($this->getServiceLocator()));
+			$post = array_merge_recursive(
+				$this->getRequest()->getPost()->toArray(),
+				$this->getRequest()->getFiles()->toArray()
+			);
+			$form->setData($post);
+
+			if ($form->isValid()) {
+				$adapter = new \Zend\File\Transfer\Adapter\Http();
+
+				if (!$adapter->isValid()) {
+					$error = array();
+
+					foreach ($adapter->getMessages() as $key => $row) {
+						$error[] = $row;
+					}
+					$form->setMessages(array('fileupload' => $error));
+				}
+				else {
+					$adapter->setDestination($this->getServiceLocator()->get('Config')['homework_dir']);
+
+					if ($adapter->receive()) {
+						$event = $this->getEvent();
+						$request = $event->getRequest();
+						$router = $event->getRouter();
+						$uri = $router->getRequestUri();
+						$baseUrl = sprintf('%s://%s%s', $uri->getScheme(), $uri->getHost(), $request->getBaseUrl());
+
+						$adapterFileName = $adapter->getFileName();
+
+						$filesName = $baseUrl . '/uploads/homework/' . substr(preg_replace('/\.\/public\/uploads\/homework/', '', $adapter->getFileName()), 1);
+
+						$post['url'] = $filesName;
+
+						$homework->exchangeArray($post);
+						$this->getHomeworkTable()->saveHomework($homework);
+
+						return $this->redirect()->toRoute('teacher/my-course');
+					}
+				}
+			}
+		}
+		return array(
+			'form' => $form,
+			'subsubjectId' => $subsubjectId,
+		);
+	}
+
+	public function editHomeworkAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		$id = $this->params()->fromRoute('id');
+		$homework = $this->getHomeworkTable()->getHomework($id);
+
+		$form = new HomeworkForm();
+		$form->bind($homework);
+
+		$form->get('submit')->setAttribute('value', 'Muuda');
+		$form->get('id')->setValue($id);
+		$form->get('user_id')->setValue($user->id);
+		$form->get('subsubject_id')->setValue($homework->subsubject_id);
+
+		$request = $this->getRequest();
+
+		if ($request->isPost()) {
+			$form->setInputFilter(new HomeworkFilter($this->getServiceLocator()));
+			$post = array_merge_recursive(
+					$this->getRequest()->getPost()->toArray(),
+					$this->getRequest()->getFiles()->toArray()
+			);
+			$form->setData($post);
+
+			if ($form->isValid()) {
+				$adapter = new \Zend\File\Transfer\Adapter\Http();
+
+				if (!$adapter->isValid()) {
+					$error = array();
+
+					foreach ($adapter->getMessages() as $key => $row) {
+						$error[] = $row;
+					}
+					$form->setMessages(array('fileupload' => $error));
+				}
+				else {
+					$adapter->setDestination($this->getServiceLocator()->get('Config')['homework_dir']);
+
+					if ($adapter->receive()) {
+						$event = $this->getEvent();
+						$request = $event->getRequest();
+						$router = $event->getRouter();
+						$uri = $router->getRequestUri();
+						$baseUrl = sprintf('%s://%s%s', $uri->getScheme(), $uri->getHost(), $request->getBaseUrl());
+
+						$adapterFileName = $adapter->getFileName();
+
+						$filesName = $baseUrl . '/uploads/homework/' . substr(preg_replace('/\.\/public\/uploads\/homework/', '', $adapter->getFileName()), 1);
+
+						$post['url'] = $filesName;
+
+						$homework->exchangeArray($post);
+						$this->getHomeworkTable()->saveHomework($homework);
+
+						return $this->redirect()->toRoute('teacher/my-course');
+					}
+				}
+			}
+		}
+		return array(
+			'form' => $form,
+			'id' => $id,
+			'homework' => $homework,
+		);
+	}
+
+	public function deleteHomeworkFileAction() {
+		$response = $this->getResponse();
+
+		$this->getHomeworkTable()->deleteHomeworkFile($this->params()->fromRoute('id'));
+
+		$response->setContent(\Zend\Json\Json::encode(array(
+			'response' => true,
+			'info' => 'Fail kustutatud',
+		)));
+		return $response;
+	}
+
 	public function getCourseTable() {
 		if (!$this->courseTable) {
 			$sm = $this->getServiceLocator();
@@ -772,5 +927,13 @@ class TeacherController extends AbstractActionController {
 			$this->userTable = $sm->get('EksamiKeskkond\Model\UserTable');
 		}
 		return $this->userTable;
+	}
+
+	public function getHomeworkTable() {
+		if (!$this->homeworkTable) {
+			$sm = $this->getServiceLocator();
+			$this->homeworkTable = $sm->get('EksamiKeskkond\Model\HomeworkTable');
+		}
+		return $this->homeworkTable;
 	}
 }
