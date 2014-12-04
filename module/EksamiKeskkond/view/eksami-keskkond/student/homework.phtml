@@ -14,7 +14,7 @@
 	<?php } else { ?>
 		<p>Esitasite hindamiseks faili: <?php echo $this->escapeHtml($homeworkAnswer->url) ?></p>
 		<?php if (!empty($homeworkAnswer->feedback)) { ?>
-			<p><?php echo $this->escapeHtml($homework->feedback) ?></p>
+			<p>Tagasiside: <?php echo $this->escapeHtml($homeworkAnswer->feedback) ?></p>
 		<?php } else { ?>
 			<p>Tagaside hetkel veel puudub</p>
 		<?php } ?>

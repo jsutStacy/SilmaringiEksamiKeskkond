@@ -52,4 +52,16 @@ class HomeworkAnswersTable {
 
 		return $rowset->current();
 	}
+
+	public function getHomeworkAnswersByHomeworkId($homeworkId) {
+		return $this->tableGateway->select(array('homework_id' => $homeworkId));
+	}
+
+	public function updateFeedback($homeworkId, $userId, $feedback) {
+		return $this->tableGateway->update(array('feedback' => $feedback), array('homework_id' => $homeworkId, 'user_id' => $userId));
+	}
+
+	public function deleteFeedback($id) {
+		return $this->tableGateway->update(array('feedback' => NULL), array('id' => $id));
+	}
 }

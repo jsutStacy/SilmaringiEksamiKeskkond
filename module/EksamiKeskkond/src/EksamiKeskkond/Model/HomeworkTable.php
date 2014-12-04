@@ -60,6 +60,16 @@ class HomeworkTable {
 		return $result;
 	}
 
+	public function getHomeworkByUserId($userId) {
+		$result = array();
+		$rowset = $this->tableGateway->select(array('user_id' => $userId));
+
+		foreach ($rowset as $row) {
+			$result[$row->id] = $rowset->current();
+		}
+		return $result;
+	}
+
 	public function deleteHomeworkFile($id) {
 		$this->tableGateway->update(array('url' => null), array('id' => $id));
 	}

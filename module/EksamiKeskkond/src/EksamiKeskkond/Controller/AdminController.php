@@ -110,15 +110,14 @@ class AdminController extends AbstractActionController {
 				$this->getCourseTable()->saveCourse($form->getData());
 			}
 		}
-
 		$viewmodel = new ViewModel();
-		
+
 		$sidebarView = new ViewModel();
 		$sidebarView->setTemplate('admin/sidebar');
 		$sidebarView->setVariables(array(
 			'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
 		));
-		
+
 		$viewmodel->addChild($sidebarView, 'sidebar');
 		$viewmodel->setVariables(array(
 			'id' => $id,

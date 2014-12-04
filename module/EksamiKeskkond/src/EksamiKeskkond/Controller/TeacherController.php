@@ -35,6 +35,10 @@ use EksamiKeskkond\Filter\HomeworkFilter;
 
 use EksamiKeskkond\Service\EmailService;
 
+use EksamiKeskkond\Model\HomeworkAnswers;
+
+use EksamiKeskkond\Form\FeedbackForm;
+
 class TeacherController extends AbstractActionController {
 
 	protected $courseTable;
@@ -52,6 +56,8 @@ class TeacherController extends AbstractActionController {
 	protected $lessonFilesTable;
 
 	protected $homeworkTable;
+
+	protected $homeworkAnswersTable;
 
 	public function indexAction() {
 		$auth = new AuthenticationService();
@@ -729,6 +735,34 @@ class TeacherController extends AbstractActionController {
 		));
 	}
 
+	public function homeworksAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		$homeworks = array();
+		$homeworksAnswers = array();
+
+		$homeworks = $this->getHomeworkTable()->getHomeworkByUserId($user->id);
+
+		foreach ($homeworks as $homework) {
+			$subsubject = $this->getSubsubjectTable()->getSubsubject($homework->subsubject_id);
+			$answers = $this->getHomeworkAnswersTable()->getHomeworkAnswersByHomeworkId($homework->id);
+
+			$homework->subsubjectName = $subsubject->name;
+
+			foreach ($answers as $answer) {
+				$userData = $this->getUserTable()->getUser($answer->user_id);
+
+				$homeworksAnswers[$homework->id][$answer->id]['answer'] = $answer;
+				$homeworksAnswers[$homework->id][$answer->id]['user'] = $userData;
+			}
+		}
+		return new ViewModel(array(
+			'homeworks' => $homeworks,
+			'homeworkAnswers' => $homeworksAnswers,
+		));
+	}
+
 	public function addHomeworkAction() {
 		$auth = new AuthenticationService();
 		$user = $auth->getIdentity();
@@ -859,6 +893,72 @@ class TeacherController extends AbstractActionController {
 		);
 	}
 
+	public function addFeedbackAction() {
+		$homeworkId = $this->params()->fromRoute('homework_id');
+		$userId = $this->params()->fromRoute('user_id');
+
+		$form = new FeedbackForm();
+		$form->get('homework_id')->setValue($homeworkId);
+		$form->get('user_id')->setValue($userId);
+
+		$request = $this->getRequest();
+
+		if ($request->isPost()) {
+			$feedback = new HomeworkAnswers();
+
+			$form->setData($request->getPost());
+
+			if ($form->isValid()) {
+				$data = $form->getData();
+				$feedback->exchangeArray($data);
+
+				$this->getHomeworkAnswersTable()->updateFeedback($data['homework_id'], $data['user_id'], $data['feedback']);
+
+				return $this->redirect()->toRoute('teacher/homeworks');
+			}
+		}
+		return array(
+			'form' => $form,
+			'homeworkId' => $homeworkId,
+			'userId' => $userId,
+		);
+	}
+
+	public function editFeedbackAction() {
+		$feedbackId = $this->params()->fromRoute('id');
+		$feedback = $this->getHomeworkAnswersTable()->getHomeworkAnswer($feedbackId);
+
+		$form = new FeedbackForm();
+		$form->bind($feedback);
+
+		$form->get('homework_id')->setValue($feedback->homework_id);
+		$form->get('user_id')->setValue($feedback->user_id);
+		$form->get('submit')->setAttribute('value', 'Muuda');
+
+		$request = $this->getRequest();
+
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+
+			if ($form->isValid()) {
+				$data = $form->getData();
+				$this->getHomeworkAnswersTable()->updateFeedback($data->homework_id, $data->user_id, $data->feedback);
+
+				return $this->redirect()->toRoute('teacher/homeworks');
+			}
+		}
+		return array(
+			'form' => $form,
+			'feedbackId' => $feedbackId,
+		);
+	}
+
+	public function deleteFeedbackAction() {
+		$this->getHomeworkAnswersTable()->deleteFeedback($this->params()->fromRoute('id'));
+
+		return $this->redirect()->toRoute('teacher/homeworks');
+	}
+
 	public function deleteHomeworkFileAction() {
 		$response = $this->getResponse();
 
@@ -933,5 +1033,13 @@ class TeacherController extends AbstractActionController {
 			$this->homeworkTable = $sm->get('EksamiKeskkond\Model\HomeworkTable');
 		}
 		return $this->homeworkTable;
+	}
+
+	public function getHomeworkAnswersTable() {
+		if (!$this->homeworkAnswersTable) {
+			$sm = $this->getServiceLocator();
+			$this->homeworkAnswersTable = $sm->get('EksamiKeskkond\Model\HomeworkAnswersTable');
+		}
+		return $this->homeworkAnswersTable;
 	}
 }

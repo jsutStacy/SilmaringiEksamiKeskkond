@@ -458,6 +458,52 @@ return array(
 							),
 						),
 					),
+					'homeworks' => array(
+						'type' => 'Literal',
+						'options' => array(
+							'route' => '/homeworks',
+							'defaults' => array(
+								'action' => 'homeworks',
+							),
+						),
+					),
+					'add-feedback' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/add-feedback[/:homework_id][/:user_id]',
+							'constraints' => array(
+								'homework_id' => '[0-9]+',
+								'user_id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'add-feedback',
+							),
+						),
+					),
+					'edit-feedback' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/edit-feedback[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'edit-feedback',
+							),
+						),
+					),
+					'delete-feedback' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/delete-feedback[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'delete-feedback',
+							),
+						),
+					),
 				),
 			),
 			'student' => array(
