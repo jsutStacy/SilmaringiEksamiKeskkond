@@ -563,6 +563,18 @@ return array(
 							),
 						),
 					),
+					'mark-lesson-done' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/mark-lesson-done[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'mark-lesson-done',
+							),
+						),
+					),
 				),
 			),
 			'errors' => array(

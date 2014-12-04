@@ -17,4 +17,19 @@ class UserLessonTable {
 
 		return $resultSet;
 	}
+
+	public function getUserLesson($userId, $lessonId) {
+		$rowset = $this->tableGateway->select(array('user_id' => $userId, 'lesson_id' => $lessonId));
+
+		return $rowset->current();
+	}
+
+	public function markLessonDone($userId, $lessonId) {
+		$data = array(
+			'user_id' => $userId,
+			'lesson_id' => $lessonId,
+			'done' => true,
+		);
+		$this->tableGateway->insert($data);
+	}
 }

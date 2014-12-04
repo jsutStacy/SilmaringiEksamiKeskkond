@@ -263,6 +263,30 @@ $(document).ready(function() {
 			})
 		});
 	});
+
+	//Mark lesson done (student)
+	$(".mark-lesson-done").click(function(e) {
+		e.preventDefault();
+
+		var url = $(this).attr("href");
+		var linkId = $(this).attr("id");
+		var id = linkId.match(/mark-lesson-done-(\d+)/)[1];
+
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			url: url,
+			success: function() {
+				$("#mark-lesson-done-" + id).hide();
+				$("#mark-lesson-done-" + id).after("<p>Tund on märgitud tehtuks!</p>");
+
+				$("#lesson-" + id).addClass("done");
+			},
+			error: (function(e) {
+				alert(JSON.stringify(e));
+			})
+		});
+	});
 });
 
 function displayUpload(name) {

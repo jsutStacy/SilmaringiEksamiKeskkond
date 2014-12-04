@@ -19,7 +19,7 @@
 			<?php if ($hasntStarted) { ?>
 				<span class="label label-warning">Kursus pole veel alanud!</span>
 			<?php } ?>
-			<?php foreach ($courseData['subjects'] as $subject) : ?>
+			<?php foreach ($courseData['subjects'] as $subject): ?>
 				<div class="panel panel-default">
 					<div class="panel-heading" role="tab" id="heading<?php echo $subject['id']; ?>">
 						<h4 class="panel-title">
@@ -31,21 +31,21 @@
 					<div id="collapse<?php echo $subject['id']; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<?php echo $subject['id']; ?>">
 						<div class="panel-body">
 							<ul class="list-group">
-							<?php foreach ($subject['subsubjects'] as $subsubject) : ?>
+							<?php foreach ($subject['subsubjects'] as $subsubject): ?>
 								<li class="list-group-item">
 									<?php echo $this->escapeHtml($subsubject['name']) ?>
 									<ul class="list-group">
-									<?php foreach ($subsubject['lessons'] as $lesson) : ?>
-										<li class="list-group-item">
+									<?php foreach ($subsubject['lessons'] as $lesson): ?>
+										<li class="list-group-item<?php echo $lesson->done == true ? " done" : "" ?>" id="lesson-<?php echo $lesson->id ?>">
 											<?php if (!$hasEnded && !$hasntStarted) { ?>
 												<a class="change-lesson" href="<?php echo $this->url('student/lesson', array('id' => $lesson->id)) ?>">
 													<?php echo $lesson->name; ?>
 												</a>
+												<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/add-note', array('user_id' => $userId, 'lesson_id' => $lesson->id)) ?>">
+													<span class="glyphicon glyphicon-pencil"></span>
+												</a>
 											<?php } else { ?>
-													<?php echo $lesson->name; ?>
-													<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/add-note', array('user_id' => $userId,'lesson_id' => $lesson->id)) ?>">
-														<span class="glyphicon glyphicon-pencil"></span>
-													</a>
+												<?php echo $lesson->name; ?>
 											<?php } ?>
 										</li>
 									<?php endforeach; ?>

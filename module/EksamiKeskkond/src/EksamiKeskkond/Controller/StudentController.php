@@ -35,14 +35,16 @@ class StudentController extends AbstractActionController {
 	protected $userTable;
 
 	protected $subjectTable;
-	
+
 	protected $subsubjectTable;
-	
+
 	protected $lessonTable;
 
 	protected $lessonFilesTable;
-	
+
 	protected $noteTable;
+
+	protected $userLessonTable;
 
 	public function indexAction() {
 		$auth = new AuthenticationService();
@@ -58,16 +60,17 @@ class StudentController extends AbstractActionController {
 
 	public function courseAction() {
 		$auth = new AuthenticationService();
-
 		$user = $auth->getIdentity();
-		
+
 		$subsubjects = array();
 		$lessons = array();
 		$course = array();
+		$courseData = array();
+
 		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
 		$hasBoughtCourse = $this->getUserCourseTable()->checkIfUserHasBoughtCourse($user->id, $course->id);
 		$status = $this->getUserCourseTable()->checkIfUserHasAccessToCourse($user->id, $course->id);
-		$courseData = array();
+
 		$courseData['course'] = $course;
 
 		if (!$course) {
@@ -81,6 +84,12 @@ class StudentController extends AbstractActionController {
 
 				foreach ($subsubjects as $subsubjectKey => $subsubject) {
 					$lessons = $this->getLessonTable()->getLessonsBySubsubjectId($subsubject->id);
+
+					foreach ($lessons as $lesson) {
+						$userLesson = $this->getUserLessonTable()->getUserLesson($user->id, $lesson->id);
+
+						$lesson->done = !empty($userLesson) ? true : false;
+					}
 					$subsubjects[$subsubjectKey] = get_object_vars($subsubject);
 					$subsubjects[$subsubjectKey]['lessons'] = $lessons;
 				}
@@ -91,13 +100,13 @@ class StudentController extends AbstractActionController {
 		}
 		$courseHasEnded = false;
 		$courseHasntStarted = false;
-		if ((time()-(60*60*24)) > strtotime($course->end_date)) {
+
+		if ((time() - (60 * 60 * 24)) > strtotime($course->end_date)) {
 			$courseHasEnded = true;
 		}
-		if ((time()-(60*60*24)) < strtotime($course->start_date)) {
+		if ((time() - (60 * 60 * 24)) < strtotime($course->start_date)) {
 			$courseHasntStarted = true;
 		}
-
 		return new ViewModel(array(
 			'courseData' => $courseData,
 			'hasBoughtCourse' => $hasBoughtCourse,
@@ -108,13 +117,19 @@ class StudentController extends AbstractActionController {
 	}
 
 	public function lessonAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		$id = $this->params()->fromRoute('id');
+
 		$request = $this->getRequest();
 
 		$viewmodel = new ViewModel();
 		$viewmodel->setTerminal($request->isXmlHttpRequest());
 		$viewmodel->setVariables(array(
-			'lesson' => $this->getLessonTable()->getLesson($this->params()->fromRoute('id')),
-			'lessonFiles' => $this->getLessonFilesTable()->getLessonFilesByLessonId($this->params()->fromRoute('id')),
+			'lesson' => $this->getLessonTable()->getLesson($id),
+			'lessonFiles' => $this->getLessonFilesTable()->getLessonFilesByLessonId($id),
+			'isLessonMarkedDone' => $this->getUserLessonTable()->getUserLesson($user->id, $id),
 		));
 		return $viewmodel;
 	}
@@ -325,48 +340,61 @@ class StudentController extends AbstractActionController {
 		}
 		return $data;
 	}
-	
+
 	public function addNoteAction() {
 		$auth = new AuthenticationService();
 		$user = $auth->getIdentity();
-		
+
 		$lessonId = $this->params()->fromRoute('lesson_id');
-		
+
 		$form = new NoteForm();
 		$form->get('user_id')->setValue($user->id);
 		$form->get('lesson_id')->setValue($lessonId);
+
 		$request = $this->getRequest();
-	
+
 		if ($request->isPost()) {
-			
 			$note = new Note();
-	
 			$form->setData($request->getPost());
-	
+
 			if ($form->isValid()) {
 				$note->exchangeArray($form->getData());
 				$this->getNoteTable()->saveNote($note);
-	
+
 				return $this->redirect()->toRoute('student/all-notes');
 			}
 		}
 		return array(
-				'form' => $form,
-				'lessonId' => $lessonId,
-				'userId' => $user->id,
+			'form' => $form,
+			'lessonId' => $lessonId,
+			'userId' => $user->id,
 		);
 	}
-	
+
 	public function allNotesAction() {
 		$auth = new AuthenticationService();
-	
+
 		$user = $auth->getIdentity();
 		//$studentCoursesIds = $this->getUserCourseTable()->getAllCoursesByUserId($user->id);
 		$notes = $this->getNoteTable()->getNotesByUserId($user->id);
-	
+
 		return new ViewModel(array(
-				'notes' => $notes,
+			'notes' => $notes,
 		));
+	}
+
+	public function markLessonDoneAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+
+		$response = $this->getResponse();
+
+		$this->getUserLessonTable()->markLessonDone($user->id, $this->params()->fromRoute('id'));
+
+		$response->setContent(\Zend\Json\Json::encode(array(
+			'response' => true,
+		)));
+		return $response;
 	}
 
 	public function getCourseTable() {
@@ -431,5 +459,13 @@ class StudentController extends AbstractActionController {
 			$this->noteTable = $sm->get('EksamiKeskkond\Model\NoteTable');
 		}
 		return $this->noteTable;
+	}
+
+	public function getUserLessonTable() {
+		if (!$this->userLessonTable) {
+			$sm = $this->getServiceLocator();
+			$this->userLessonTable = $sm->get('EksamiKeskkond\Model\UserLessonTable');
+		}
+		return $this->userLessonTable;
 	}
 }

@@ -29,8 +29,10 @@
 		</tr>
 		<tr>
 			<td><?php echo $this->escapeHtml($homework->url) ?></td>
-			<td><a class="delete-homework-file" id="delete-homework-file-<?php echo $homework->id ?>"
-				href="<?php echo $this->url('teacher/delete-homework-file', array('id' => $homework->id)) ?>">Kustuta</a></td>
+			<td>
+				<a class="delete-homework-file" id="delete-homework-file-<?php echo $homework->id ?>"
+					href="<?php echo $this->url('teacher/delete-homework-file', array('id' => $homework->id)) ?>">Kustuta</a>
+			</td>
 		</tr>
 	</table>
 <?php } ?>

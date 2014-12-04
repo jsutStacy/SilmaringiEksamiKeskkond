@@ -75,3 +75,7 @@ ul.nav li a{
 #lesson-upload #file-field {
 	display: none;
 }
+
+.list-group-item.done {
+	background: #7DF481;
+}
