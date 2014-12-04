@@ -1,10 +1,10 @@
 <?php
 	$this->headTitle('Saada e-mail - ');
 ?>
-<h1>Muuda kursust</h1>
+<h1>Saada e-mail</h1>
 <?php
 	$form = $this->form;
-	$form->setAttribute('action', $this->url('teacher/send-email-to-user', array('user_id' => $this->user_id)));
+	$form->setAttribute('action', $this->url('teacher/send-email-to-user', array('user_id' => $this->user_id, 'teacher_id' => $this->teacher_id)));
 	$form->prepare();
 
 	echo $this->form()->openTag($form);

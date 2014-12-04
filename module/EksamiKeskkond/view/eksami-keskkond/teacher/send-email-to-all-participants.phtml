@@ -4,11 +4,10 @@
 <h1>Saada e-mail</h1>
 <?php
 	$form = $this->form;
-	$form->setAttribute('action', $this->url('admin/send-email-to-user', array('user_id' => $this->user_id)));
+	$form->setAttribute('action', $this->url('teacher/send-email-to-all-participants', array('course_id' => $this->course_id, 'teacher_id' => $this->teacher_id)));
 	$form->prepare();
-
 	echo $this->form()->openTag($form);
-	echo $this->formHidden($form->get('user_id'));
+	echo $this->formHidden($form->get('course_id'));
 ?>
 <div class="form-group">
 	<?php echo $this->formRow($form->get('subject')); ?>

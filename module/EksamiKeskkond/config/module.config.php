@@ -363,9 +363,10 @@ return array(
 					'send-email-to-user' => array(
 						'type' => 'Segment',
 						'options' => array(
-							'route' => '/send-email-to-user[/:user_id]',
+							'route' => '/send-email-to-user[/:teacher_id][/:user_id]',
 							'constraints' => array(
 								'user_id' => '[0-9]+',
+								'teacher_id' => '[0-9]+',
 							),
 							'defaults' => array(
 								'action' => 'send-email-to-user',
@@ -375,9 +376,10 @@ return array(
 					'send-email-to-all-participants' => array(
 						'type' => 'Segment',
 						'options' => array(
-							'route' => '/send-email-to-all-participants[/:course_id]',
+							'route' => '/send-email-to-all-participants[/:course_id][/:teacher_id]',
 							'constraints' => array(
 								'course_id' => '[0-9]+',
+								'teacher_id' => '[0-9]+',
 							),
 							'defaults' => array(
 								'action' => 'send-email-to-all-participants',

@@ -4,6 +4,7 @@ namespace EksamiKeskkond\Controller;
 
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
+use EksamiKeskkond\Service\EmailService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ViewModel\JsonModel;
 
@@ -24,6 +25,8 @@ use EksamiKeskkond\Form\LessonForm;
 use EksamiKeskkond\Filter\LessonFilter;
 
 use EksamiKeskkond\Model\LessonFiles;
+
+use EksamiKeskkond\Form\EmailForm;
 
 class TeacherController extends AbstractActionController {
 
@@ -127,6 +130,8 @@ class TeacherController extends AbstractActionController {
 			$viewmodel->addChild($sidebarView, 'sidebar');
 			$viewmodel->setVariables(array(
 				'students' => $studentsData,
+				'courseId' => $course->id,
+				'teacherId' => $course->teacher_id,
 			));
 
 			return $viewmodel;
@@ -462,6 +467,83 @@ class TeacherController extends AbstractActionController {
 		$this->getLessonTable()->deleteLesson($this->params()->fromRoute('id'));
 
 		return $this->redirect()->toRoute('teacher/my-course');
+	}
+	
+	public function sendEmailToUserAction() {
+		$userId = $this->params()->fromRoute('user_id');
+		$user = $this->getUserTable()->getUser($userId);
+		$teacherId = $this->params()->fromRoute('teacher_id');
+		//print_r($teacherId);die;
+		$teacher = $this->getUserTable()->getUser($teacherId);
+	
+		$form = new EmailForm();
+		$form->get('user_id')->setValue($userId);
+		$request = $this->getRequest();
+	
+		if ($request->isPost()) {
+			$emailService = $this->getServiceLocator()->get('emailservice');
+			$transport = $this->getServiceLocator()->get('mail.transport');
+	
+			//$form->setInputFilter(new EmailFilter($this->getServiceLocator()));
+			$form->setData($request->getPost());
+	
+			if ($form->isValid()) {
+				//$config = $this->getServiceLocator()->get('Config');
+				$formData = $form->getData();
+				$emailService->sendEmail($user->email, $teacher->email, $formData['subject'], $formData['body'], $transport);
+	
+				return $this->redirect()->toRoute('teacher/students');
+			}
+		}
+		return array(
+				'user_id' => $userId,
+				'teacher_id' => $teacherId,
+				'form' => $form,
+		);
+	}
+	
+	public function sendEmailToAllParticipantsAction() {
+		$courseId = $this->params()->fromRoute('course_id');
+		$course = $this->getCourseTable()->getCourse($courseId);
+		$teacherId = $course->teacher_id;	
+		$teacher = $this->getUserTable()->getUser($teacherId);
+		
+		$form = new EmailForm();
+		$form->get('course_id')->setValue($courseId);
+		$request = $this->getRequest();
+		//print_r($teacherId);die;
+		if ($request->isPost()) {
+			$emailService = $this->getServiceLocator()->get('emailservice');
+			$transport = $this->getServiceLocator()->get('mail.transport');
+	
+			//$form->setInputFilter(new EmailFilter($this->getServiceLocator()));
+			$form->setData($request->getPost());
+	
+			if ($form->isValid()) {
+				$formData = $form->getData();
+				//$config = $this->getServiceLocator()->get('Config');
+	
+				$participants = $this->getUserCourseTable()->getCourseParticipants($formData['course_id']);
+				$userIds = array();
+	
+				foreach ($participants as $participant) {
+					if ($participant['status'] == true) {
+						$userIds[] = $participant['id'];
+					}
+				}
+				$users = $this->getUserTable()->getUsersByIds($userIds);
+	
+				foreach ($users as $user) {
+					$emailService->sendEmail($user->email, $teacher->email, $formData['subject'], $formData['body'], $transport);
+				}
+				return $this->redirect()->toRoute('teacher/students');
+			}
+		}
+		return array(
+				'form' => $form,
+				'teacher_id' => $teacherId,
+				'course_id' => $courseId,
+		);
 	}
 
 	public function getCourseTable() {
