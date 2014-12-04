@@ -207,13 +207,13 @@ $(document).ready(function() {
 	});
 
 	//Show lesson (student)
-	$(".change-lesson").click(function(e) {
+	$(document).on('click', '.change-lesson', function(e) {
 		e.preventDefault();
 		$("#lessonContent").load($(this).attr('href'));
 	});
 
 	//Delete lesson file (teacher)
-	$(".delete-lesson-file").click(function(e) {
+	$(document).on('click', '.delete-lesson-file', function(e) {
 		e.preventDefault();
 
 		var url = $(this).attr("href");
@@ -239,7 +239,7 @@ $(document).ready(function() {
 	});
 
 	//Delete homework file (teacher)
-	$(".delete-homework-file").click(function(e) {
+	$(document).on('click', '.delete-homework-file', function(e) {
 		e.preventDefault();
 
 		var url = $(this).attr("href");
@@ -265,7 +265,7 @@ $(document).ready(function() {
 	});
 
 	//Mark lesson done (student)
-	$(".mark-lesson-done").click(function(e) {
+	$(document).on('click', '.mark-lesson-done', function(e) {
 		e.preventDefault();
 
 		var url = $(this).attr("href");
