@@ -2,15 +2,17 @@
 	$this->headTitle('Kodutöö - ');
 ?>
 <div class="row">
-	<div class="col-md-5 pull-left">
+
 		<h2>Kodutöö</h2>
-	</div>
+
 </div>
 <div class="row">
-	<p><?php echo $this->escapeHtml($homework->description) ?></p>
+	<p class="well"><?php echo $this->escapeHtml($homework->description) ?></p>
 </div>
 <?php if (!empty($homework->url)) { ?>
-	<div class="row">
-		<a href="<?php echo $this->escapeHtml($homework->url) ?>" target="_blank" download>Lae kodutöö alla</a>
-	</div>
+
+	<a class="btn btn-default btn-sm" href="<?php echo $this->escapeHtml($homework->url) ?>" target="_blank" download>Lae kodutöö alla</a>
+
 <?php } ?>
+
+<a class="btn btn-default btn-sm" href="<?php echo $this->url('teacher/edit-homework', array('id' => $homework->id)) ?>">Muuda kodutööd</a>

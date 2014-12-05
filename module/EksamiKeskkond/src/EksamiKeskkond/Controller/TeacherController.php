@@ -77,13 +77,38 @@ class TeacherController extends AbstractActionController {
 
 		$request = $this->getRequest();
 
+		$subsubjects = array();
+		$lessons = array();
+
 		$course = $this->getCourseTable()->getCourseByTeacherId($user->id);
 		$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
-
+		
+		$courseData = array();
+		$courseData['course'] = $course;
+		
 		if (!$course) {
 			return $this->redirect()->toRoute('errors');
 		}
+		
 		if ($course->teacher_id == $user->id) {
+			$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
+
+			foreach ($subjects as $subjectKey => $subject) {
+				$subsubjects = $this->getSubsubjectTable()->getSubsubjectsBySubjectId($subject->id);
+
+				foreach ($subsubjects as $subsubjectKey => $subsubject) {
+					$lessons = $this->getLessonTable()->getLessonsBySubsubjectId($subsubject->id);
+					$homeworks = $this->getHomeworkTable()->getHomeworkBySubsubjectId($subsubject->id);
+
+					$subsubjects[$subsubjectKey] = get_object_vars($subsubject);
+					$subsubjects[$subsubjectKey]['lessons'] = $lessons;
+					$subsubjects[$subsubjectKey]['homeworks'] = $homeworks;
+				}
+				$subjects[$subjectKey] = get_object_vars($subject);
+				$subjects[$subjectKey]['subsubjects'] = $subsubjects;
+			}
+			$courseData['subjects'] = $subjects;
+
 			$viewmodel = new ViewModel();
 			
 			$sidebarView = new ViewModel();
@@ -92,10 +117,8 @@ class TeacherController extends AbstractActionController {
 			$viewmodel->addChild($sidebarView, 'sidebar');
 
 			$viewmodel->setVariables(array(
-				'course' => $course,
+				'courseData' => $courseData,
 				'subjects' => $subjects,
-				'subsubjectTable' => $this->getSubsubjectTable(),
-				'lessonTable' => $this->getLessonTable(),
 			));
 			return $viewmodel;
 		}
@@ -489,7 +512,7 @@ class TeacherController extends AbstractActionController {
 					$lesson->exchangeArray($post);
 					$lessonId = $this->getLessonTable()->saveLesson($lesson);
 
-					return $this->redirect()->toRoute('teacher/lesson', array('id' => $lessonId));
+					return $this->redirect()->toRoute('teacher/my-course');
 				}
 				if (empty($error)) {
 					$lesson->exchangeArray($post);
@@ -505,7 +528,7 @@ class TeacherController extends AbstractActionController {
 
 						$this->getLessonFilesTable()->saveLessonFiles($lessonFiles);
 					}
-					return $this->redirect()->toRoute('teacher/lesson', array('id' => $lessonId));
+					return $this->redirect()->toRoute('teacher/my-course');
 				}
 			}
 		}
@@ -637,7 +660,7 @@ class TeacherController extends AbstractActionController {
 					$this->getLessonTable()->saveLesson($lesson);
 					$this->getLessonFilesTable()->deleteLessonFilesByLessonId($lessonId);
 
-					return $this->redirect()->toRoute('teacher/lesson', array('id' => $lessonId));
+					return $this->redirect()->toRoute('teacher/my-course');
 				}
 				if (empty($error)) {
 					if ($lesson->type != $post['type'] || $post['type'] == 'presentation' || $post['type'] == 'audio') {
@@ -657,7 +680,7 @@ class TeacherController extends AbstractActionController {
 
 						$this->getLessonFilesTable()->saveLessonFiles($lessonFiles);
 					}
-					return $this->redirect()->toRoute('teacher/lesson', array('id' => $lessonId));
+					return $this->redirect()->toRoute('teacher/my-course');
 				}
 			}
 		}

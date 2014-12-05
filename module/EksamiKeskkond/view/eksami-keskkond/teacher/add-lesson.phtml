@@ -1,7 +1,7 @@
 <?php
 	$this->headTitle('Lisa uus tund - ');
 ?>
-<h1>Lisa uus tund</h1>
+<h2>Lisa uus tund</h2>
 <?php
 	$form = $this->form;
 	$form->setAttribute('action', $this->url('teacher/add-lesson', array('id' => $subsubjectId)));
@@ -13,17 +13,24 @@
 	echo $this->formHidden($form->get('subsubject_id'));
 	echo $this->formHidden($form->get('user_id'));
 ?>
-<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon">Nimi</span>
 	<?php echo $this->formRow($form->get('name')); ?>
 </div>
-<div class="form-group">
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Sisu</span>
 	<?php echo $this->formRow($form->get('content')); ?>
 </div>
-<div class="form-group">
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Tüüp</span>
 	<?php echo $this->formRow($form->get('type')); ?>
 </div>
+<br>
 <div id="lesson-upload">
-	<div class="form-group" id="url-field">
+	<div class="input-group" id="url-field">
+		<span class="input-group-addon">Youtube url</span>
 		<?php echo $this->formRow($form->get('url')); ?>
 	</div>
 	<div id="file-field">
@@ -31,7 +38,8 @@
 		<?php echo $this->formRow($form->get('fileupload')); ?>
 	</div>
 </div>
-<div class="form-group">
+<br>
+<div class="input-group">
 	<?php echo $this->formSubmit($form->get('submit')); ?>
 </div>
 <?php echo $this->form()->closeTag(); ?>

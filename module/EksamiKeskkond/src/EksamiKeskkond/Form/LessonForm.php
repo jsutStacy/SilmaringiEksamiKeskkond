@@ -35,9 +35,6 @@ class LessonForm extends Form {
 				'type' => 'text',
 				'class' => 'form-control',
 			),
-			'options' => array(
-				'label' => 'Tunni nimi',
-			),
 		));
 
 		$this->add(array(
@@ -46,9 +43,6 @@ class LessonForm extends Form {
 				'type' => 'textarea',
 				'class' => 'form-control',
 			),
-			'options' => array(
-				'label' => 'Tunni sisu',
-			),
 		));
 
 		$this->add(array(
@@ -56,9 +50,6 @@ class LessonForm extends Form {
 			'attributes' => array(
 				'type' => 'Url',
 				'class' => 'form-control',
-			),
-			'options' => array(
-				'label' => 'Url',
 			),
 		));
 
@@ -84,7 +75,6 @@ class LessonForm extends Form {
 				'class' => 'form-control',
 			),
 			'options' => array(
-				'label' => 'Tüüp',
 				'options' => array(
 					'text' => array(
 						'value' => 'text',
