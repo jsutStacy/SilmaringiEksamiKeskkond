@@ -16,10 +16,10 @@ class NoteForm extends Form {
 		));
 
 		$this->add(array(
-				'name' => 'id',
-				'attributes' => array(
-						'type' => 'hidden',
-				),
+			'name' => 'id',
+			'attributes' => array(
+				'type' => 'hidden',
+			),
 		));
 
 		$this->add(array(
@@ -30,10 +30,10 @@ class NoteForm extends Form {
 		));
 
 		$this->add(array(
-				'name' => 'lesson_id',
-				'attributes' => array(
-						'type' => 'hidden',
-				),
+			'name' => 'lesson_id',
+			'attributes' => array(
+				'type' => 'hidden',
+			),
 		));
 
 		$this->add(array(
@@ -50,7 +50,7 @@ class NoteForm extends Form {
 		$this->add(array(
 			'name' => 'submit',
 			'attributes' => array(
-				'type' => 'noteSubmit',
+				'type' => 'submit',
 				'value' => 'Salvesta',
 				'id' => 'submitbutton',
 				'class' => 'btn btn-default',

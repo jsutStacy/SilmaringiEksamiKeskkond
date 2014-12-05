@@ -381,16 +381,80 @@ class StudentController extends AbstractActionController {
 			'userId' => $user->id,
 		);
 	}
+	
+	public function editNoteAction() {
+		$auth = new AuthenticationService();
+		$user = $auth->getIdentity();
+		
+		$request = $this->getRequest();
+		$response = $this->getResponse();
+
+		if ($request->isPost()) {
+			$id = $request->getPost()->id;
+			$note = $this->getNoteTable()->getNote($id);
+
+			$form  = new NoteForm();
+			$form->bind($note);
+			//$form->setInputFilter(new NoteFilter($this->getServiceLocator()));
+			$form->setData($request->getPost());
+
+			if ($form->isValid()) {
+				$this->getNoteTable()->saveNote($form->getData());
+				$response->setContent(\Zend\Json\Json::encode(array(
+					'response' => true,
+					'noteId' => $id,
+					'userId' => $user->id,
+					'lessonId' => $form->getData()->lesson_id,
+					'content' => $form->getData()->content,
+				)));
+				return $response;
+			}
+		}
+		else {
+			$id = $this->params()->fromRoute('id');
+			$note = $this->getNoteTable()->getNote($id);
+			$lesson = $this->getLessonTable()->getLesson($note->lesson_id);
+
+			$form  = new NoteForm();
+			$form->bind($note);
+			$form->get('lesson_id')->setValue($lesson->id);
+			$form->get('id')->setValue($id);
+
+			$viewmodel = new ViewModel();
+			$viewmodel->setTerminal($request->isXmlHttpRequest());
+			$viewmodel->setVariables(array(
+				'form' => $form,
+				'lessonId' => $note->lesson_id,
+				'userId' => $user->id,
+				'id' => $id,
+			));
+			return $viewmodel;
+		}
+	}
+	
+	public function deleteNoteAction() {
+		$this->getNoteTable()->deleteNote($this->params()->fromRoute('id'));
+	
+		return $this->redirect()->toRoute('student/all-notes');
+	}
 
 	public function allNotesAction() {
 		$auth = new AuthenticationService();
-
 		$user = $auth->getIdentity();
-		//$studentCoursesIds = $this->getUserCourseTable()->getAllCoursesByUserId($user->id);
-		$notes = $this->getNoteTable()->getNotesByUserId($user->id);
-
+		$courseIds = $this->getUserCourseTable()->getAllCoursesByUserId($user->id);
+		$courses = array();
+		
+		foreach ($courseIds as $courseId) {
+			$course = $this->getCourseTable()->getCourse($courseId);
+			$courses[] = $course;
+		}
+	
 		return new ViewModel(array(
-			'notes' => $notes,
+				'courses' => $courses,
+				'subjectTable' => $this->getSubjectTable(),
+				'subsubjectTable' => $this->getSubsubjectTable(),
+				'lessonTable' => $this->getLessonTable(),
+				'noteTable' => $this->getNoteTable(),
 		));
 	}
 

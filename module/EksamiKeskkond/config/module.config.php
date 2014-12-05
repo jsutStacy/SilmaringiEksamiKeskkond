@@ -544,13 +544,36 @@ return array(
 					'add-note' => array(
 						'type' => 'Segment',
 						'options' => array(
-							'route' => '/add-note[/:user_id][/:lesson_id]',
+							'route' => '/add-note[/:lesson_id]',
 							'constraints' => array(
-								'user_id' => '[0-9]+',
 								'lesson_id' => '[0-9]+',
 							),
 							'defaults' => array(
 								'action' => 'add-note',
+							),
+						),
+					),
+					'edit-note' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/edit-note[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'edit-note',
+							),
+						),
+					),
+					'delete-note' => array(
+						'type' => 'Segment',
+						'options' => array(
+							'route' => '/delete-note[/:id]',
+							'constraints' => array(
+								'id' => '[0-9]+',
+							),
+							'defaults' => array(
+								'action' => 'delete-note',
 							),
 						),
 					),

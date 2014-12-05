@@ -1,12 +1,10 @@
 <?php
-	$this->headTitle('Tee uusi märkmeid - ');
-?>
-<?php
 	$form = $this->form;
-	$form->setAttribute('action', $this->url('student/add-note'));
+	$form->setAttribute('id', 'submit');
 	$form->prepare();
 
 	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
 	echo $this->formHidden($form->get('lesson_id'));
 	echo $this->formHidden($form->get('user_id'));
 ?>
@@ -17,4 +15,5 @@
 <div class="form-group">
 	<?php echo $this->formSubmit($form->get('submit')); ?>
 </div>
+
 <?php echo $this->form()->closeTag(); ?>

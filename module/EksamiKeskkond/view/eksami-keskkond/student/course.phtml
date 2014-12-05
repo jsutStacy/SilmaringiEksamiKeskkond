@@ -42,12 +42,18 @@
 												<a class="change-lesson" href="<?php echo $this->url('student/lesson', array('id' => $lesson->id)) ?>">
 													<?php echo $lesson->name; ?>
 												</a>
-												<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/add-note', array('user_id' => $userId, 'lesson_id' => $lesson->id)) ?>">
-													<span class="glyphicon glyphicon-pencil"></span>
-												</a>
 											<?php } else { ?>
 												<?php echo $lesson->name; ?>
 											<?php } ?>
+											<a class="btn btn-primary btn-sm pull-right" id="addSubject" href="<?php echo $this->url('student/add-note', array('lesson_id' => $lesson->id)) ?>">
+												<span class="glyphicon glyphicon-plus"></span>Tee uusi märkmeid
+											</a>
+											<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/edit-note', array('id' => $note->id)) ?>">
+												<span class="glyphicon glyphicon-pencil"></span>
+											</a>
+											<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/delete-note', array('id' => $note->id)) ?>">
+												<span class="glyphicon glyphicon-trash"></span>
+											</a>
 										</li>
 									<?php endforeach; ?>
 									</ul>
