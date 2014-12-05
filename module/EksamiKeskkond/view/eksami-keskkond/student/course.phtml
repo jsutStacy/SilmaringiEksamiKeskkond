@@ -1,15 +1,15 @@
 <?php
 	$this->headTitle('Kursus - ');
 	$course = $courseData['course'];
-
 ?>
-
 <div class="row">
 	<div class="col-md-5 pull-left">
 		<h2><?php echo $this->escapeHtml($course->name) ?></h2>
 	</div>
+	<div class="col-md-5 pull-right">
+		<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('student/all-notes') ?>">Vaata kõiki märkmeid</a>
+	</div>
 </div>
-
 <div class="row">
 <?php if (!empty($courseData) && $hasBoughtCourse) { ?>
 	<?php if (!empty($courseData['subjects'])) { ?>
@@ -45,15 +45,6 @@
 											<?php } else { ?>
 												<?php echo $lesson->name; ?>
 											<?php } ?>
-											<a class="btn btn-primary btn-sm pull-right" id="addSubject" href="<?php echo $this->url('student/add-note', array('lesson_id' => $lesson->id)) ?>">
-												<span class="glyphicon glyphicon-plus"></span>Tee uusi märkmeid
-											</a>
-											<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/edit-note', array('id' => $note->id)) ?>">
-												<span class="glyphicon glyphicon-pencil"></span>
-											</a>
-											<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/delete-note', array('id' => $note->id)) ?>">
-												<span class="glyphicon glyphicon-trash"></span>
-											</a>
 										</li>
 									<?php endforeach; ?>
 									</ul>

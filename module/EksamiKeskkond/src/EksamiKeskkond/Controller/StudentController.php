@@ -141,6 +141,7 @@ class StudentController extends AbstractActionController {
 			'lesson' => $this->getLessonTable()->getLesson($id),
 			'lessonFiles' => $this->getLessonFilesTable()->getLessonFilesByLessonId($id),
 			'isLessonMarkedDone' => $this->getUserLessonTable()->getUserLesson($user->id, $id),
+			'notes' => $this->getNoteTable()->getNotesByUserIdAndLessonId($user->id, $id),
 		));
 		return $viewmodel;
 	}
@@ -372,7 +373,7 @@ class StudentController extends AbstractActionController {
 				$note->exchangeArray($form->getData());
 				$this->getNoteTable()->saveNote($note);
 
-				return $this->redirect()->toRoute('student/all-notes');
+				return $this->redirect()->toRoute('student/all-notes'); // hea oleks muuta
 			}
 		}
 		return array(
@@ -385,76 +386,88 @@ class StudentController extends AbstractActionController {
 	public function editNoteAction() {
 		$auth = new AuthenticationService();
 		$user = $auth->getIdentity();
-		
+
+		$id = $this->params()->fromRoute('id');
+		$note = $this->getNoteTable()->getNote($id);
+
 		$request = $this->getRequest();
-		$response = $this->getResponse();
+
+		$form = new NoteForm();
+		$form->bind($note);
+		$form->get('user_id')->setValue($user->id);
+		$form->get('lesson_id')->setValue($note->lesson_id);
+		$form->get('submit')->setAttribute('value', 'Muuda');
 
 		if ($request->isPost()) {
-			$id = $request->getPost()->id;
-			$note = $this->getNoteTable()->getNote($id);
-
-			$form  = new NoteForm();
-			$form->bind($note);
-			//$form->setInputFilter(new NoteFilter($this->getServiceLocator()));
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
-				$this->getNoteTable()->saveNote($form->getData());
-				$response->setContent(\Zend\Json\Json::encode(array(
-					'response' => true,
-					'noteId' => $id,
-					'userId' => $user->id,
-					'lessonId' => $form->getData()->lesson_id,
-					'content' => $form->getData()->content,
-				)));
-				return $response;
+				$this->getNoteTable()->saveNote($note);
+
+				return $this->redirect()->toRoute('student/all-notes'); // hea oleks muuta
 			}
 		}
-		else {
-			$id = $this->params()->fromRoute('id');
-			$note = $this->getNoteTable()->getNote($id);
-			$lesson = $this->getLessonTable()->getLesson($note->lesson_id);
-
-			$form  = new NoteForm();
-			$form->bind($note);
-			$form->get('lesson_id')->setValue($lesson->id);
-			$form->get('id')->setValue($id);
-
-			$viewmodel = new ViewModel();
-			$viewmodel->setTerminal($request->isXmlHttpRequest());
-			$viewmodel->setVariables(array(
-				'form' => $form,
-				'lessonId' => $note->lesson_id,
-				'userId' => $user->id,
-				'id' => $id,
-			));
-			return $viewmodel;
-		}
+		return array(
+			'form' => $form,
+			'id' => $id,
+		);
 	}
 	
 	public function deleteNoteAction() {
 		$this->getNoteTable()->deleteNote($this->params()->fromRoute('id'));
-	
+
 		return $this->redirect()->toRoute('student/all-notes');
 	}
 
 	public function allNotesAction() {
 		$auth = new AuthenticationService();
 		$user = $auth->getIdentity();
+
+		$coursesData = array();
 		$courseIds = $this->getUserCourseTable()->getAllCoursesByUserId($user->id);
-		$courses = array();
-		
+
 		foreach ($courseIds as $courseId) {
 			$course = $this->getCourseTable()->getCourse($courseId);
-			$courses[] = $course;
+			$subjects = $this->getSubjectTable()->getSubjectsByCourseId($courseId);
+
+			$subjectsData = array();
+
+			foreach ($subjects as $subject) {
+				$subjectsData[$subject->id] = $subject;
+				$subsubjects = $this->getSubsubjectTable()->getSubsubjectsBySubjectId($subject->id);
+
+				$subsubjectsData = array();
+
+				foreach ($subsubjects as $subsubject) {
+					$subsubjectsData[$subsubject->id] = $subsubject;
+					$lessons = $this->getLessonTable()->getLessonsBySubsubjectId($subsubject->id);
+
+					$lessonsData = array();
+
+					foreach ($lessons as $lesson) {
+						$lessonsData[$lesson->id] = $lesson;
+						$notes = $this->getNoteTable()->getNotesByUserIdAndLessonId($user->id, $lesson->id);
+
+						$notesData = array();
+
+						foreach ($notes as $note) {
+							$notesData[$note->id] = $note;
+						}
+						$lessonsData[$lesson->id]->notes = $notesData;
+					}
+					$subsubjectsData[$subsubject->id]->lessons = $lessonsData;
+				}
+				$subjectsData[$subject->id]->subsubjects = $subsubjectsData;
+			}
+			$coursesData[$courseId] = $course;
+			$coursesData[$courseId]->subjects = $subjectsData;
 		}
-	
 		return new ViewModel(array(
-				'courses' => $courses,
-				'subjectTable' => $this->getSubjectTable(),
-				'subsubjectTable' => $this->getSubsubjectTable(),
-				'lessonTable' => $this->getLessonTable(),
-				'noteTable' => $this->getNoteTable(),
+			'courses' => $coursesData,
+			'subjects' => $subjectsData,
+			'subsubjects' => $subsubjectsData,
+			'lessons' => $lessonsData,
+			'notes' => $notesData,
 		));
 	}
 

@@ -49,5 +49,21 @@
 			<?php } ?>
 	</div>
 </div>
-
+<div class="row">
+	<?php if (empty($notes)) { ?>
+		<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('student/add-note', array('lesson_id' => $lesson->id)) ?>">
+			<span class="glyphicon glyphicon-plus"></span>Tee uusi märkmeid
+		</a>
+	<?php } else { ?>
+		<?php foreach ($notes as $note) { ?>
+			<p><?php echo $this->escapeHtml($note->content) ?></p>
+			<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/edit-note', array('id' => $note->id)) ?>">
+				<span class="glyphicon glyphicon-pencil"></span>
+			</a>
+			<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/delete-note', array('id' => $note->id)) ?>">
+				<span class="glyphicon glyphicon-trash"></span>
+			</a>
+		<?php } ?>
+	<?php } ?>
+</div>
 <?php echo $this->headScript()->prependFile($this->basePath() . '/js/slideShow.js'); ?>

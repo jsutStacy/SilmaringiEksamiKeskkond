@@ -1,12 +1,6 @@
 <?php
-	$this->headTitle('Märkmed - ');
+	$this->headTitle('Kõik märkmed - ');
 ?>
-<!-- 				'courseIds' => $courseIds,
-				'subjectTable' => $this->getSubjectTable(),
-				'subsubjectTable' => $this->getSubsubjectTable(),
-				'lessonTable' => $this->getLessonTable(), -->
-				
-				
 <div class="row">
 	<div class="col-md-5 pull-left">
 		<h3>Kõik märkmed</h3>
@@ -14,38 +8,40 @@
 </div>
 <div class="row">
 	<div class="panel panel-primary col-md-8">
-		<table class="table table-striped">
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<?php if (!empty($courses)) { ?>
-				<?php foreach ($courses as $course) : ?>
-					<tr><td><?php echo $this->escapeHtml($course->name) ?></td>
-						<?php foreach ($subjectTable->getSubjectsByCourseId($course->id) as $subject) : ?>
-							<tr><td><?php echo $this->escapeHtml($subject->name) ?></td>
-								<?php foreach ($subsubjectTable->getSubsubjectsBySubjectId($subject->id) as $subsubject) : ?>
-									<tr><td><?php echo $this->escapeHtml($subsubject->name) ?></td>									
-										<?php foreach ($lessonTable->getLessonsBySubsubjectId($subsubject->id) as $lesson) : ?>
-											<tr><td><?php echo $this->escapeHtml($lesson->name) ?></td><td></td><td></td>
-											<td><a class="btn btn-primary btn-sm " href="<?php echo $this->url('student/add-note', array('lesson_id' => $lesson->id)) ?>">
-												<span class="glyphicon glyphicon-plus"></span>Tee uusi märkmeid
-											</a></td>
-												<?php foreach ($noteTable->getNotesByLessonId($lesson->id) as $note) : ?>
-													<tr><td><?php echo $this->escapeHtml($note->content) ?></td>
-													<td><a class="btn btn-default btn-xs" href="<?php echo $this->url('student/edit-note', array('id' => $note->id)) ?>">
-														<span class="glyphicon glyphicon-pencil"></span>
-													</a></td>
-													<td><a class="btn btn-default btn-xs" href="<?php echo $this->url('student/delete-note', array('id' => $note->id)) ?>">
-														<span class="glyphicon glyphicon-trash"></span>
-													</a></td>
-												<?php endforeach; ?></tr><!-- note -->
-										<?php endforeach; ?></tr><!-- lesson -->
-								<?php endforeach; ?></tr><!-- subsubject -->
-						<?php endforeach; ?></tr><!-- subject -->
-				<?php endforeach; ?><!-- course -->
-			<?php } ?><!-- course -->
-		</table>
+		<?php if (!empty($courses)) { ?>
+			<?php foreach ($courses as $course) { ?>
+				<h2>Kursuse: <?php echo $this->escapeHtml($course->name) ?></h2>
+				<?php if (!empty($course->subjects)) { ?>
+					<?php foreach ($course->subjects as $subject) { ?>
+						<h2>Teema: <?php echo $this->escapeHtml($subject->name) ?></h2>
+						<?php if (!empty($subject->subsubjects)) { ?>
+							<?php foreach ($subject->subsubjects as $subsubject) { ?>
+								<h2>Alamteema: <?php echo $this->escapeHtml($subsubject->name) ?></h2>
+								<?php if (!empty($subject->subsubjects)) { ?>
+									<?php foreach ($subsubject->lessons as $lesson) { ?>
+										<h2>Tunni: <?php echo $this->escapeHtml($lesson->name) ?></h2>
+										<ul>
+											<?php foreach ($lesson->notes as $note) { ?>
+												<li>
+													<?php if (!empty($note)) { ?>
+														<p><?php echo $this->escapeHtml($note->content) ?></p>
+														<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/edit-note', array('id' => $note->id)) ?>">
+															<span class="glyphicon glyphicon-pencil"></span>
+														</a>
+														<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/delete-note', array('id' => $note->id)) ?>">
+															<span class="glyphicon glyphicon-trash"></span>
+														</a>
+													<?php } ?>
+												</li>
+											<?php } ?>
+										</ul>
+									<?php } ?>
+								<?php } ?>
+							<?php } ?>
+						<?php } ?>
+					<?php } ?>
+				<?php } ?>
+			<?php } ?>
+		<?php } ?>
 	</div>
 </div>

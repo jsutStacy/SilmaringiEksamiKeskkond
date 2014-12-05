@@ -62,20 +62,10 @@ class NoteTable {
 		$this->tableGateway->delete(array('id' => $id));
 	}
 
-	public function getNotesByLessonId($lessonId) {
+	public function getNotesByUserIdAndLessonId($userId, $lessonId) {
 		$result = array();
-		$rowset = $this->tableGateway->select(array('lesson_id' => $lessonId));
-
-		foreach ($rowset as $row) {
-			$result[$row->id] = $rowset->current();
-		}
-		return $result;
-	}
-
-	public function getNotesByUserId($userId) {
-		$result = array();
-		$rowset = $this->tableGateway->select(array('user_id' => $userId));
-
+		$rowset = $this->tableGateway->select(array('user_id' => $userId, 'lesson_id' => $lessonId));
+	
 		foreach ($rowset as $row) {
 			$result[$row->id] = $rowset->current();
 		}
