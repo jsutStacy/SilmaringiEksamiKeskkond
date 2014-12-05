@@ -24,6 +24,11 @@
 </div>
 <br>
 <div class="input-group">
+	<span class="input-group-addon">Nähtavus</span>
+	<?php echo $this->formRow($form->get('published')); ?>
+</div>
+<br>
+<div class="input-group">
 	<span class="input-group-addon">Tüüp</span>
 	<?php echo $this->formRow($form->get('type')); ?>
 </div>

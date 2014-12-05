@@ -46,6 +46,27 @@ class LessonForm extends Form {
 		));
 
 		$this->add(array(
+			'type' => 'Select',
+			'name' => 'published',
+			'attributes' => array(
+				'class' => 'form-control',
+			),
+			'options' => array(
+				'options' => array(
+					'0' => array(
+						'value' => '0',
+						'label' => 'Privaatne',
+						'selected' => true,
+					),
+					'1' => array(
+						'value' => '1',
+						'label' => 'Nähtav',
+					),
+				),
+			),
+		));
+
+		$this->add(array(
 			'name' => 'url',
 			'attributes' => array(
 				'type' => 'Url',

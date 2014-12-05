@@ -71,3 +71,5 @@ CREATE TABLE IF NOT EXISTS `note` (
 ALTER TABLE `note`
   ADD CONSTRAINT `fk_lesson_to_note` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_user_to_note` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+ALTER TABLE `lesson` ADD `published` TINYINT(1) NULL DEFAULT NULL;

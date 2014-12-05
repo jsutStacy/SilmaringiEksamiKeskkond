@@ -37,15 +37,17 @@
 									<?php echo $this->escapeHtml($subsubject['name']) ?>
 									<ul class="list-group">
 									<?php foreach ($subsubject['lessons'] as $lesson): ?>
-										<li class="list-group-item<?php echo $lesson->done == true ? " done" : "" ?>" id="lesson-<?php echo $lesson->id ?>">
-											<?php if (!$hasEnded && !$hasntStarted) { ?>
-												<a class="change-lesson" href="<?php echo $this->url('student/lesson', array('id' => $lesson->id)) ?>">
+										<?php if ($lesson->published == true) { ?>
+											<li class="list-group-item<?php echo $lesson->done == true ? " done" : "" ?>" id="lesson-<?php echo $lesson->id ?>">
+												<?php if (!$hasEnded && !$hasntStarted) { ?>
+													<a class="change-lesson" href="<?php echo $this->url('student/lesson', array('id' => $lesson->id)) ?>">
+														<?php echo $lesson->name; ?>
+													</a>
+												<?php } else { ?>
 													<?php echo $lesson->name; ?>
-												</a>
-											<?php } else { ?>
-												<?php echo $lesson->name; ?>
-											<?php } ?>
-										</li>
+												<?php } ?>
+											</li>
+										<?php } ?>
 									<?php endforeach; ?>
 									</ul>
 									<ul class="list-group">

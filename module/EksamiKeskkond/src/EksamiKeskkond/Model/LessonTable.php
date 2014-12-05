@@ -34,6 +34,7 @@ class LessonTable {
 			'name' => $lesson->name,
 			'content' => $lesson->content,
 			'type' => $lesson->type,
+			'published' => $lesson->published,
 		);
 		if ($lesson->id == 0) {
 			$this->tableGateway->insert($data);
