@@ -23,11 +23,6 @@ class LessonFilter extends InputFilter {
 		));
 
 		$this->add(array(
-			'name' => 'published',
-			'required' => true,
-		));
-
-		$this->add(array(
 			'name' => 'name',
 			'required' => true,
 			'filters' => array(
