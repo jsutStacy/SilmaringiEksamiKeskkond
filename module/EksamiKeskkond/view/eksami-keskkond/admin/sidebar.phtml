@@ -4,10 +4,7 @@
 			<a class="changeManageContent" href="<?php echo $this->url('admin/edit-course', array('id' => $course->id)) ?>">Kursuse üldinfo</a>
 		</li>
 		<li class="list-group-item">
-			<a class="changeManageContent" href="">Kursuse Sisu</a>
-		</li>
-		<li class="list-group-item">
-			<a class="changeManageContent" href="">Esitatud kodutööd</a>
+			<a class="changeManageContent" href="<?php echo $this->url('admin/course', array('id' => $course->id)) ?>">Kursuse Sisu</a>
 		</li>
 		<li class="list-group-item">
 			<a class="changeManageContent" href="<?php echo $this->url('admin/course-participants', array('id' => $course->id)) ?>">Kes on kursusel</a>

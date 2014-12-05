@@ -24,22 +24,57 @@ class AdminController extends AbstractActionController {
 
 	protected $userCourseTable;
 
+	protected $subjectTable;
+
+	protected $lessonTable;
+
+	protected $subsubjectTable;
+
 	public function indexAction() {
 		return $this->redirect()->toRoute('admin/courses');
 	}
 
 	public function courseAction() {
-		$viewmodel = new ViewModel();
+		$subsubjects = array();
+		$lessons = array();
 		
+		$course = $this->getCourseTable()->getCourse($this->params()->fromRoute('id'));
+		$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
+		
+		$courseData = array();
+		$courseData['course'] = $course;
+		
+		if (!$course) {
+			return $this->redirect()->toRoute('errors');
+		}
+		$subjects = $this->getSubjectTable()->getSubjectsByCourseId($course->id);
+	
+		foreach ($subjects as $subjectKey => $subject) {
+			$subsubjects = $this->getSubsubjectTable()->getSubsubjectsBySubjectId($subject->id);
+	
+			foreach ($subsubjects as $subsubjectKey => $subsubject) {
+				$lessons = $this->getLessonTable()->getLessonsBySubsubjectId($subsubject->id);
+	
+				$subsubjects[$subsubjectKey] = get_object_vars($subsubject);
+				$subsubjects[$subsubjectKey]['lessons'] = $lessons;
+			}
+			$subjects[$subjectKey] = get_object_vars($subject);
+			$subjects[$subjectKey]['subsubjects'] = $subsubjects;
+		}
+		$courseData['subjects'] = $subjects;
+	
+		$viewmodel = new ViewModel();
+			
 		$sidebarView = new ViewModel();
 		$sidebarView->setTemplate('admin/sidebar');
 		$sidebarView->setVariables(array(
 			'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
 		));
-		
 		$viewmodel->addChild($sidebarView, 'sidebar');
+	
 		$viewmodel->setVariables(array(
-			'course' => $this->getCourseTable()->getCourse($this->params()->fromRoute('id')),
+				'courseData' => $courseData,
+				'subjects' => $subjects,
 		));
 		return $viewmodel;
 	}
@@ -318,4 +353,29 @@ class AdminController extends AbstractActionController {
 		}
 		return $this->userCourseTable;
 	}
+
+	public function getSubjectTable() {
+		if (!$this->subjectTable) {
+			$sm = $this->getServiceLocator();
+			$this->subjectTable = $sm->get('EksamiKeskkond\Model\SubjectTable');
+		}
+		return $this->subjectTable;
+	}
+
+	public function getSubsubjectTable() {
+		if (!$this->subsubjectTable) {
+			$sm = $this->getServiceLocator();
+			$this->subsubjectTable = $sm->get('EksamiKeskkond\Model\SubsubjectTable');
+		}
+		return $this->subsubjectTable;
+	}
+
+	public function getLessonTable() {
+		if (!$this->lessonTable) {
+			$sm = $this->getServiceLocator();
+			$this->lessonTable = $sm->get('EksamiKeskkond\Model\LessonTable');
+		}
+		return $this->lessonTable;
+	}
+
 }

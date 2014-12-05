@@ -10,10 +10,12 @@
 	echo $this->formHidden($form->get('lesson_id'));
 	echo $this->formHidden($form->get('user_id'));
 ?>
-<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon">Märkme sisu</span>
 	<?php echo $this->formRow($form->get('content')); ?>
 </div>
-<div class="form-group">
+<br>
+<div class="input-group">
 	<?php echo $this->formSubmit($form->get('submit')); ?>
 </div>
 <?php echo $this->form()->closeTag(); ?>

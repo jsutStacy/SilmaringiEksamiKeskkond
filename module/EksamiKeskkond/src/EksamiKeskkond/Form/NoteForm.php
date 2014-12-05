@@ -42,9 +42,6 @@ class NoteForm extends Form {
 				'type' => 'textarea',
 				'class' => 'form-control',
 			),
-			'options' => array(
-				'label' => 'Märkmed',
-			),
 		));
 
 		$this->add(array(

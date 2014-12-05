@@ -2,27 +2,30 @@
 	$this->headTitle('Kõik märkmed - ');
 ?>
 <div class="row">
-	<div class="col-md-5 pull-left">
-		<h3>Kõik märkmed</h3>
-	</div>
+		<h2>Vaatad kõiki märkmeid</h2>
 </div>
 <div class="row">
-	<div class="panel panel-primary col-md-8">
 		<?php if (!empty($courses)) { ?>
 			<?php foreach ($courses as $course) { ?>
-				<h2>Kursuse: <?php echo $this->escapeHtml($course->name) ?></h2>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">Kursuse <b><?php echo $this->escapeHtml($course->name) ?></b> märkmed</h2>
+				</div>
+				<div class="panel-body">
 				<?php if (!empty($course->subjects)) { ?>
 					<?php foreach ($course->subjects as $subject) { ?>
-						<h2>Teema: <?php echo $this->escapeHtml($subject->name) ?></h2>
+						<h3>Teema: <?php echo $this->escapeHtml($subject->name) ?></h3>
+						<hr>
 						<?php if (!empty($subject->subsubjects)) { ?>
 							<?php foreach ($subject->subsubjects as $subsubject) { ?>
-								<h2>Alamteema: <?php echo $this->escapeHtml($subsubject->name) ?></h2>
+								<div class="well">
+								<p><b>Alamteema: <?php echo $this->escapeHtml($subsubject->name) ?></b></p>
+								<hr>
 								<?php if (!empty($subject->subsubjects)) { ?>
 									<?php foreach ($subsubject->lessons as $lesson) { ?>
-										<h2>Tunni: <?php echo $this->escapeHtml($lesson->name) ?></h2>
-										<ul>
+										<b><?php echo $this->escapeHtml($lesson->name) ?></b>
 											<?php foreach ($lesson->notes as $note) { ?>
-												<li>
+												<div class="alert alert-warning">
 													<?php if (!empty($note)) { ?>
 														<p><?php echo $this->escapeHtml($note->content) ?></p>
 														<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/edit-note', array('id' => $note->id)) ?>">
@@ -32,16 +35,17 @@
 															<span class="glyphicon glyphicon-trash"></span>
 														</a>
 													<?php } ?>
-												</li>
+												</div>
 											<?php } ?>
-										</ul>
 									<?php } ?>
 								<?php } ?>
+								</div>
 							<?php } ?>
 						<?php } ?>
 					<?php } ?>
+					</div>
 				<?php } ?>
+				</div>
 			<?php } ?>
 		<?php } ?>
-	</div>
 </div>

@@ -1,7 +1,7 @@
 <?php
 	$this->headTitle('Esita kodutöö - ');
 ?>
-<h1>Esita kodutöö</h1>
+<h2>Esita kodutöö</h2>
 <?php
 	$form = $this->form;
 	$form->setAttribute('action', $this->url('student/add-homework-answer', array('id' => $id)));
@@ -14,8 +14,12 @@
 	echo $this->formHidden($form->get('homework_id'));
 
 ?>
+<div class="input-group">
+<span class="input-group-addon">Lae fail</span>
 <?php echo $this->formRow($form->get('fileupload')); ?>
-<div class="form-group">
+</div>
+<br>
+<div class="input-group">
 	<?php echo $this->formSubmit($form->get('submit')); ?>
 </div>
 <?php echo $this->form()->closeTag(); ?>

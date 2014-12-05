@@ -40,9 +40,7 @@ class HomeworkAnswerForm extends Form {
 			'name' => 'fileupload',
 			'attributes' => array(
 				'type' => 'file',
-			),
-			'options' => array(
-				'label' => 'Kodutöö fail',
+				'class' => 'form-control',
 			),
 		));
 
