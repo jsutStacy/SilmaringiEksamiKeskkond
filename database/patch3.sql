@@ -57,3 +57,17 @@ CREATE TABLE IF NOT EXISTS `homework_answers` (
 ALTER TABLE `homework_answers`
   ADD CONSTRAINT `fk_homework_to_homework_answers` FOREIGN KEY (`homework_id`) REFERENCES `homework` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_user_to_homework_answers` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+
+CREATE TABLE IF NOT EXISTS `note` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) NOT NULL,
+  `lesson_id` int(10) NOT NULL,
+  `content` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_to_note` (`user_id`),
+  KEY `fk_lesson_to_note` (`lesson_id`)
+);
+
+ALTER TABLE `note`
+  ADD CONSTRAINT `fk_lesson_to_note` FOREIGN KEY (`lesson_id`) REFERENCES `lesson` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_user_to_note` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
