@@ -218,6 +218,7 @@ class StudentController extends AbstractActionController {
 		$timestamp = date("Y-m-d", $time) . 'T' . date("H:i:s", $time) .'+0200';
 
 		$stamp = 500; //Random
+		$returnUrl = $this->url()->fromRoute('student/buy-course',  array('id' => $courseId, 'bank' => $bankName), array('force_canonical' => true));
 
 		$fields = array(
 			'VK_SERVICE' => '1011',
@@ -233,8 +234,8 @@ class StudentController extends AbstractActionController {
 			'VK_MSG' => $this->to_banklink_ch('Kursuse ostmine', $bankPreferences['charset']),
 			//'VK_RETURN' => $this->to_banklink_ch('http://eksamikeskkond.silmaring.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
 			//'VK_CANCEL' => $this->to_banklink_ch('http://eksamikeskkond.silmaring.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
-			'VK_RETURN' => $this->to_banklink_ch('http://silmaring.eksamikeskkond.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
-			'VK_CANCEL' => $this->to_banklink_ch('http://silmaring.eksamikeskkond.dev/student/buy-course/'.$courseId.'/'.$bankName, $bankPreferences['charset']),
+			'VK_RETURN' => $this->to_banklink_ch($returnUrl, $bankPreferences['charset']),
+			'VK_CANCEL' => $this->to_banklink_ch($returnUrl, $bankPreferences['charset']),
 			'VK_DATETIME' => $timestamp,
 			'VK_ENCODING' => $bankPreferences['charset'],
 		);
