@@ -1,7 +1,7 @@
 <?php
 	$this->headTitle('Muuda kodutööd - ');
 ?>
-<h1>Muuda kodutööd</h1>
+<h2>Muuda kodutööd</h2>
 <?php
 	$form = $this->form;
 	$form->setAttribute('action', $this->url('teacher/edit-homework', array('id' => $id)));
@@ -14,11 +14,17 @@
 	echo $this->formHidden($form->get('subsubject_id'));
 
 ?>
-<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon">Kirjeldus</span>
 	<?php echo $this->formRow($form->get('description')); ?>
 </div>
-<?php echo $this->formRow($form->get('fileupload')); ?>
-<div class="form-group">
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Kodutöö fail</span>
+	<?php echo $this->formRow($form->get('fileupload')); ?>
+</div>
+<hr>
+<div class="input-group">
 	<?php echo $this->formSubmit($form->get('submit')); ?>
 </div>
 <?php if (!empty($homework->url)) { ?>

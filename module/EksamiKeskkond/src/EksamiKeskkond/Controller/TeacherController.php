@@ -316,8 +316,13 @@ class TeacherController extends AbstractActionController {
 					<a class="btn btn-default btn-xs pull-left editSubsubject" href="edit-subsubject/'. $subsubjectId .'">
 						<span class="glyphicon glyphicon-pencil"></span>
 					</a>
+					<a class="btn btn-default btn-xs pull-left addHomework" href="add-homework/'.$subsubjectId.'">
+						<span class="glyphicon glyphicon-plus"></span>
+						Lisa kodutöö
+					</a>
 					<div class="clearfix"></div>
 					<ul class="list-group">
+						<br>
 						<a class="row btn btn-default btn-xs pull-right" href="add-lesson/'. $subsubjectId .'">
 						<span class="glyphicon glyphicon-plus"></span>Lisa uus tund</a>
 					</ul>';

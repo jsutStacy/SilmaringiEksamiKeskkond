@@ -42,18 +42,13 @@ class HomeworkForm extends Form {
 				'type' => 'textarea',
 				'class' => 'form-control',
 			),
-			'options' => array(
-				'label' => 'Kodutöö kirjeldus',
-			),
 		));
 
 		$this->add(array(
 			'name' => 'fileupload',
 			'attributes' => array(
 				'type' => 'file',
-			),
-			'options' => array(
-				'label' => 'Kodutöö fail',
+				'class' => 'form-control',
 			),
 		));
 

@@ -8,10 +8,12 @@
 	echo $this->formHidden($form->get('subject_id'));
 
 ?>
-<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon">Nimi</span>
 	<?php echo $this->formRow($form->get('name')); ?>
 </div>
-<div class="form-group">
-	<a href="<?php echo $this->url('teacher/add-subsubject', array('id' => $subjectId)); ?>" id="submitSubsubjectForm">Lisa</a>
+<br>
+<div class="input-group">
+	<a class="btn btn-default btn-sm" href="<?php echo $this->url('teacher/add-subsubject', array('id' => $subjectId)); ?>" id="submitSubsubjectForm">Lisa</a>
 </div>
 <?php echo $this->form()->closeTag(); ?>

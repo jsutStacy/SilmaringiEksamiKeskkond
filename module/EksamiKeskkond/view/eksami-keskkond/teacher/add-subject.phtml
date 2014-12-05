@@ -8,11 +8,13 @@
 	echo $this->formHidden($form->get('course_id'));
 	
 ?>
-<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon">Nimi</span>
 	<?php echo $this->formRow($form->get('name')); ?>
 </div>
-<div class="form-group">
-	<a href="<?php echo $courseId ?>" id="submitSubjectForm">Lisa</a>
-	<a href="<?php echo $courseId ?>" id="cancelSubjectAdding">Katkesta</a>
+<br>
+<div class="input-group">
+	<a class="btn btn-default btn-sm" href="<?php echo $courseId ?>" id="submitSubjectForm">Lisa</a>
+	<a class="btn btn-default btn-sm" href="<?php echo $courseId ?>" id="cancelSubjectAdding">Katkesta</a>
 </div>
 <?php echo $this->form()->closeTag(); ?>

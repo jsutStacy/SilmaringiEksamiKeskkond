@@ -7,12 +7,14 @@
 	echo $this->formHidden($form->get('id'));
 	echo $this->formHidden($form->get('course_id'));
 ?>
-
-<div class="form-group">
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Nimi</span>
 	<?php echo $this->formRow($form->get('name')); ?>
 </div>
-<div class="form-group">
-	<a href="<?php echo $courseId ?>" id="submitEditSubjectForm">Muuda</a>
+<br>
+<div class="input-group">
+	<a class="btn btn-default btn-sm" href="<?php echo $courseId ?>" id="submitEditSubjectForm">Muuda</a>
 </div>
 
 <?php echo $this->form()->closeTag(); ?>

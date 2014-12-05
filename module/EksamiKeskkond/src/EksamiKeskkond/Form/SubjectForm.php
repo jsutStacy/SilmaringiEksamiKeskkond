@@ -34,6 +34,7 @@ class SubjectForm extends Form {
 			'attributes' => array(
 				'type' => 'text',
 				'class' => 'form-control',
+				'placeholder' => 'Kursuse nimi',
 			),
 		));
 

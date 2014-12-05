@@ -34,9 +34,7 @@ class SubsubjectForm extends Form {
 			'attributes' => array(
 				'type' => 'text',
 				'class' => 'form-control',
-			),
-			'options' => array(
-				'label' => 'Alateema nimi',
+				'placeholder' => 'Alamteema nimi'
 			),
 		));
 

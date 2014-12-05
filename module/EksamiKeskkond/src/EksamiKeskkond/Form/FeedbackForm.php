@@ -42,9 +42,6 @@ class FeedbackForm extends Form {
 				'type' => 'textarea',
 				'class' => 'form-control',
 			),
-			'options' => array(
-				'label' => 'Kodutöö tagasiside',
-			),
 		));
 
 		$this->add(array(

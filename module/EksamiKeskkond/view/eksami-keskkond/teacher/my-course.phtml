@@ -67,7 +67,7 @@
 									<a class="btn btn-default btn-xs pull-left editSubsubject" href="<?php echo $this->url('teacher/edit-subsubject', array('id' => $subsubject->id)) ?>">
 										<span class="glyphicon glyphicon-pencil"></span>
 									</a>
-									<a class="btn btn-default btn-sm pull-right addHomework" href="<?php echo $this->url('teacher/add-homework', array('subsubject_id' => $subsubject->id)) ?>">
+									<a class="btn btn-default btn-xs pull-left addHomework" href="<?php echo $this->url('teacher/add-homework', array('subsubject_id' => $subsubject->id)) ?>">
 										<span class="glyphicon glyphicon-plus"></span>
 										Lisa kodutöö
 									</a>
@@ -76,12 +76,15 @@
 										<?php foreach ($lessonTable->getLessonsBySubsubjectId($subsubject->id) as $lesson): ?>
 											<li class="list-group-item">
 												<a href="<?php echo $this->url('teacher/lesson', array('id' => $lesson->id)) ?>"><?php echo $lesson->name; ?></a>
-												<a class="glyphicon glyphicon-trash pull-right" href="<?php echo $this->url('teacher/delete-lesson', array('id' => $lesson->id)) ?>"></a>
-												<a class="btn btn-default btn-xs pull-right" href="<?php echo $this->url('teacher/edit-lesson', array('id' => $lesson->id)) ?>">
-													<span class="glyphicon glyphicon-plus"></span>Muuda tundi
+												<a class="glyphicon glyphicon-trash pull-right" href="<?php echo $this->url('teacher/delete-lesson', array('id' => $lesson->id)) ?>">
+
+												</a>
+												<a class="glyphicon glyphicon-pencil pull-right" href="<?php echo $this->url('teacher/edit-lesson', array('id' => $lesson->id)) ?>">
+
 												</a>
 											</li>
 										<?php endforeach; ?>
+										<br>
 										<a class="row btn btn-default btn-xs pull-right" href="<?php echo $this->url('teacher/add-lesson', array('id' => $subsubject->id)) ?>">
 										<span class="glyphicon glyphicon-plus"></span>Lisa uus tund</a>
 									</ul>
