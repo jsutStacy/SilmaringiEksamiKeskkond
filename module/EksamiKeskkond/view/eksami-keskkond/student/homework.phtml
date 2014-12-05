@@ -6,17 +6,20 @@
 	<div class="panel-body">
 		<p class="well"><?php echo $this->escapeHtml($homework->description) ?></p>
 		<?php if (!empty($homework->url)) { ?>
-			<a href="<?php echo $this->escapeHtml($homework->url) ?>" target="_blank" download>Lae kodutöö alla</a>
+			<a class="btn btn-default btn-sm" href="<?php echo $this->escapeHtml($homework->url) ?>" target="_blank" download>Lae kodutöö alla</a>
+			<div class="clearfix"></div>
+			<br>
+		<?php } ?>
+	
+		<?php if (empty($homeworkAnswer->url)) { ?>
+			<a href="<?php echo $this->url('student/add-homework-answer', array('id' => $homework->id)) ?>">Esita lahendus</a>
+		<?php } else { ?>
+			<p>Esitasite hindamiseks faili: <?php echo $this->escapeHtml($homeworkAnswer->url) ?></p>
+			<?php if (!empty($homeworkAnswer->feedback)) { ?>
+				<p><b>Tagasiside:</b> </p>
+				<p class="well"><?php echo $this->escapeHtml($homeworkAnswer->feedback) ?></p>
+			<?php } else { ?>
+				<p>Tagaside hetkel veel puudub</p>
+			<?php } ?>
 		<?php } ?>
 	</div>
-	<?php if (empty($homeworkAnswer->url)) { ?>
-		<a href="<?php echo $this->url('student/add-homework-answer', array('id' => $homework->id)) ?>">Esita lahendus</a>
-	<?php } else { ?>
-		<p>Esitasite hindamiseks faili: <?php echo $this->escapeHtml($homeworkAnswer->url) ?></p>
-		<?php if (!empty($homeworkAnswer->feedback)) { ?>
-			<p>Tagasiside: <?php echo $this->escapeHtml($homeworkAnswer->feedback) ?></p>
-		<?php } else { ?>
-			<p>Tagaside hetkel veel puudub</p>
-		<?php } ?>
-	<?php } ?>
-</div>

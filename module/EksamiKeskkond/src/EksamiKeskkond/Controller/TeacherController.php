@@ -787,10 +787,19 @@ class TeacherController extends AbstractActionController {
 				$homeworksAnswers[$homework->id][$answer->id]['user'] = $userData;
 			}
 		}
-		return new ViewModel(array(
+
+		$viewmodel = new ViewModel();
+
+		$sidebarView = new ViewModel();
+		$sidebarView->setTemplate('teacher/sidebar');
+
+		$viewmodel->addChild($sidebarView, 'sidebar');
+		$viewmodel->setVariables(array(
 			'homeworks' => $homeworks,
 			'homeworkAnswers' => $homeworksAnswers,
 		));
+
+		return $viewmodel;
 	}
 
 	public function addHomeworkAction() {
