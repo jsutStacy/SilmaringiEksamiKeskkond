@@ -328,8 +328,8 @@ class StudentController extends AbstractActionController {
 			. ', ostis kursuse ' . $course->name . ', mis maksab ' . $course->price
 			. '. Kontrollige, et arve on tasutud ja andke talle kursuse jaoks õigused.';
 
-		$emailService->sendEmail($user->email,/*$config['admin_email']*/'minuuusemail@gmail.com', $UserMessageSubject, $UserMessageBody, $transport);
-		$emailService->sendEmail(/*$config['admin_email']*/'minuuusemail@gmail.com',/*$config['admin_email']*/'minuuusemail@gmail.com', $AdminMessageSubject, $AdminMessageBody, $transport);
+		$emailService->sendEmail($user->email, $config['admin_email'], $UserMessageSubject, $UserMessageBody, $transport);
+		$emailService->sendEmail($config['admin_email'], $config['admin_email'], $AdminMessageSubject, $AdminMessageBody, $transport);
 
 		$this->getUserCourseTable()->buyCourse($user->id, $course->id, null, true);
 
