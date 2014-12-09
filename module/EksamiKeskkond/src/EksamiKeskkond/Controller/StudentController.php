@@ -365,6 +365,7 @@ class StudentController extends AbstractActionController {
 		$form->get('lesson_id')->setValue($lessonId);
 
 		$request = $this->getRequest();
+		$response = $this->getResponse();
 
 		if ($request->isPost()) {
 			$note = new Note();
@@ -372,19 +373,40 @@ class StudentController extends AbstractActionController {
 
 			if ($form->isValid()) {
 				$note->exchangeArray($form->getData());
-				$this->getNoteTable()->saveNote($note);
+				$noteId = $this->getNoteTable()->saveNote($note);
 
-				return $this->redirect()->toRoute('student/all-notes'); // hea oleks muuta
+				$html = '<div class="alert alert-warning" id="note'.$noteId.'">
+									<p>'. $note->content .'</p>
+									<a class="btn btn-default btn-xs edit-note" href="'.$this->url()->fromRoute('student/edit-note',  array('id' => $noteId )).'">
+										<span class="glyphicon glyphicon-pencil"></span>
+									</a>
+									<a class="btn btn-default btn-xs delete-note" href="'.$this->url()->fromRoute('student/delete-note',  array('id' => $noteId )).'">
+										<span class="glyphicon glyphicon-trash"></span>
+									</a>
+								</div>';
+
+				$response->setContent(\Zend\Json\Json::encode(array(
+					'response' => true,
+					'html' => $html,
+				)));
+				return $response;
 			}
 		}
-		return array(
-			'form' => $form,
-			'lessonId' => $lessonId,
-			'userId' => $user->id,
-		);
+		else{
+			$viewmodel = new ViewModel();
+			$viewmodel->setTerminal($request->isXmlHttpRequest());
+			$viewmodel->setVariables(array(
+				'form' => $form,
+				'lessonId' => $lessonId,
+				'userId' => $user->id,
+			));
+			return $viewmodel;
+		}
+
 	}
 	
 	public function editNoteAction() {
+		
 		$auth = new AuthenticationService();
 		$user = $auth->getIdentity();
 
@@ -392,32 +414,52 @@ class StudentController extends AbstractActionController {
 		$note = $this->getNoteTable()->getNote($id);
 
 		$request = $this->getRequest();
-
-		$form = new NoteForm();
-		$form->bind($note);
-		$form->get('user_id')->setValue($user->id);
-		$form->get('lesson_id')->setValue($note->lesson_id);
-		$form->get('submit')->setAttribute('value', 'Muuda');
+		$response = $this->getResponse();
 
 		if ($request->isPost()) {
+			$form = new NoteForm();
+			$form->bind($note);
+			$form->get('user_id')->setValue($user->id);
+			$form->get('lesson_id')->setValue($note->lesson_id);
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
 				$this->getNoteTable()->saveNote($note);
 
-				return $this->redirect()->toRoute('student/all-notes'); // hea oleks muuta
+				$response->setContent(\Zend\Json\Json::encode(array(
+						'response' => true,
+						'content' => $form->getData()->content,
+						'noteId' => $note->id,
+				)));
+				return $response;
 			}
 		}
-		return array(
-			'form' => $form,
-			'id' => $id,
-		);
+		else{
+			$form = new NoteForm();
+			$form->bind($note);
+			$form->get('user_id')->setValue($user->id);
+			$form->get('lesson_id')->setValue($note->lesson_id);
+			$form->get('submit')->setAttribute('value', 'Muuda');
+
+			$viewmodel = new ViewModel();
+			$viewmodel->setTerminal($request->isXmlHttpRequest());
+			$viewmodel->setVariables(array(
+				'form' => $form,
+				'id' => $id,
+			));
+			return $viewmodel;
+		}
+		die;
 	}
 	
 	public function deleteNoteAction() {
 		$this->getNoteTable()->deleteNote($this->params()->fromRoute('id'));
 
-		return $this->redirect()->toRoute('student/all-notes');
+		$response = $this->getResponse();
+		$response->setContent(\Zend\Json\Json::encode(array(
+				'response' => true,
+		)));
+		return $response;
 	}
 
 	public function allNotesAction() {

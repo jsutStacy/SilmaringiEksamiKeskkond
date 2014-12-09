@@ -304,7 +304,7 @@ $(document).ready(function() {
 				$("#mark-lesson-done-" + id).hide();
 				$("#mark-lesson-done-" + id).after("<p>Tund on märgitud tehtuks!</p>");
 
-				$("#lesson-" + id).addClass("done");
+				$("#lesson-" + id).append('<span class="glyphicon glyphicon-ok pull-right"></span>');
 			},
 			error: (function(e) {
 				alert(JSON.stringify(e));
@@ -312,6 +312,96 @@ $(document).ready(function() {
 		});
 	});
 });
+
+//Add note (display form)
+
+$(document).on('click', '.new-note', function(e) {
+	e.preventDefault();
+	var url = $(this).attr('href');
+	if($("#notes").length) {
+		if(!$("#notes").has("#addNoteForm").length) {
+			$("#notes").prepend($('<div>').load(url));
+		}
+	}
+	else{
+		alert(url);
+	}
+	
+	return false;
+});
+
+//(ajax call)
+$(document).on('click', 'a#submitAddNoteForm', function(e) {
+	e.preventDefault();
+	var formData = $('#addNoteForm').serialize();
+	var url = $(this).attr("href");
+
+	$.ajax({
+		type:"POST",
+		dataType: "json",
+		url:url,
+		data: formData,
+		success: function(data) {
+			$("#addNoteForm").remove();
+			$("#notes").prepend(data.html);
+		},
+		error: (function(e) {
+			alert("viga " + JSON.stringify(e));
+		})
+	});
+});
+
+//Edit note (display form)
+$(document).on('click', '.edit-note', function(e) {
+	e.preventDefault();
+	var noteContainer = $(this).parent();
+	if(!noteContainer.has("#editNote").length) {
+		noteContainer.prepend($('<div id="editNote" class="well">').load($(this).attr('href')));
+	}
+	return false;
+});
+
+//(ajax call)
+$(document).on('click', 'a#submitEditNoteForm', function(e) {
+	e.preventDefault();
+	var formData = $('#editNoteForm').serialize();
+	var url = $(this).attr("href");
+	$.ajax({
+		type:"POST",
+		dataType: "json",
+		url:url,
+		data: formData,
+		//beforeSend: alert(url),
+		success: function(data) {
+			$("#editNote").remove();
+			$("#note"+data.noteId+ " p").text(data.content);
+		},
+		error: (function(e) {
+			$("#editNote").html("error"+JSON.stringify(e));
+		})
+	});
+});
+
+
+//Delete note
+$(document).on('click', '.delete-note', function(e) {
+	e.preventDefault();
+
+	var url = $(this).attr("href");
+	var noteContainer = $(this).parent();
+	$.ajax({
+		type:"POST",
+		dataType: "json",
+		url:url,
+		success: function(data) {
+			noteContainer.remove();
+		},
+		error: (function(e) {
+			alert("viga " + JSON.stringify(e));
+		})
+	});
+});
+
 
 function displayUpload(name) {
 	$('#lesson-upload').children().hide();

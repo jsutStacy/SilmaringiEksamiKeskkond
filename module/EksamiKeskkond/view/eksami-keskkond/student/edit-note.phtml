@@ -1,10 +1,7 @@
 <?php
-	$this->headTitle('Muuda märkmeid - ');
-?>
-<?php
 	$form = $this->form;
-	$form->setAttribute('action', $this->url('student/edit-note', array('id' => $id)));
 	$form->prepare();
+	$form->setAttribute('id', 'editNoteForm');
 
 	echo $this->form()->openTag($form);
 	echo $this->formHidden($form->get('id'));
@@ -17,6 +14,6 @@
 </div>
 <br>
 <div class="input-group">
-	<?php echo $this->formSubmit($form->get('submit')); ?>
+	<a class="btn btn-default btn-sm" href="<?php echo $this->url('student/edit-note', array('id' => $id)) ?>" id="submitEditNoteForm">Muuda</a>
 </div>
 <?php echo $this->form()->closeTag(); ?>

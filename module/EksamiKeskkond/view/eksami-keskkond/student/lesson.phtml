@@ -44,31 +44,34 @@
 				<?php } ?>
 			<?php } else if ($lesson->type == 'video') { ?>
 				<?php foreach ($lessonFiles as $lessonFile) { ?>
-					<iframe width="100%" height="500px" src="<?php echo $this->escapeHtml(preg_replace('/watch\?v=/', 'embed/', $lessonFile->url)) ?>" frameborder="0" allowfullscreen></iframe>
+					<iframe class="embed-responsive-item" src="<?php echo $this->escapeHtml(preg_replace('/watch\?v=/', 'embed/', $lessonFile->url)) ?>" frameborder="0" allowfullscreen></iframe>
 				<?php } ?>
 			<?php } ?>
-			<?php if (empty($notes)) { ?>
-				<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('student/add-note', array('lesson_id' => $lesson->id)) ?>">
-					<span class="glyphicon glyphicon-plus"></span>Tee uusi märkmeid
-				</a>
-			<?php } else { ?>
-				<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('student/add-note', array('lesson_id' => $lesson->id)) ?>">
-					<span class="glyphicon glyphicon-plus"></span>Tee uusi märkmeid
-				</a>
-				<div class="clearfix"></div>
-				<b>Märkmed:</b>
-				<?php foreach ($notes as $note) { ?>
-					<div class="alert alert-warning">
-						<p><?php echo $this->escapeHtml($note->content) ?></p>
-						<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/edit-note', array('id' => $note->id)) ?>">
-							<span class="glyphicon glyphicon-pencil"></span>
-						</a>
-						<a class="btn btn-default btn-xs" href="<?php echo $this->url('student/delete-note', array('id' => $note->id)) ?>">
-							<span class="glyphicon glyphicon-trash"></span>
-						</a>
-					</div>
-				<?php } ?>
-			<?php } ?>
+
+			<a class="btn btn-primary btn-sm pull-right new-note" href="<?php echo $this->url('student/add-note', array('lesson_id' => $lesson->id)) ?>">
+				<span class="glyphicon glyphicon-plus"></span>Tee uusi märkmeid
+			</a>
+			<div class="clearfix"></div>
+			<b>Märkmed:</b>
+			<div class="panel panel-default">
+				<div class="panel-body" id="notes">
+					<?php if(!empty($notes)) { ?>
+						<?php foreach ($notes as $note) { ?>
+							<div class="alert alert-warning" id="note<?php echo  $note->id ?>">
+								<p><?php echo $this->escapeHtml($note->content) ?></p>
+								<a class="btn btn-default btn-xs edit-note" href="<?php echo $this->url('student/edit-note', array('id' => $note->id)) ?>">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+								<a class="btn btn-default btn-xs delete-note" href="<?php echo $this->url('student/delete-note', array('id' => $note->id)) ?>">
+									<span class="glyphicon glyphicon-trash"></span>
+								</a>
+							</div>
+						<?php }?>
+					<?php } else { ?>
+						<p class="well no-notes">Sellel tunnil märkmed puuduvad</p>
+					<?php } ?>
+				</div>
+			</div>
 
 	</div>
 </div>

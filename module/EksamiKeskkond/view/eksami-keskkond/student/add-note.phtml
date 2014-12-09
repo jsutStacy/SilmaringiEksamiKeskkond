@@ -1,9 +1,7 @@
 <?php
-	$this->headTitle('Tee uusi märkmeid - ');
-?>
-<?php
 	$form = $this->form;
-	$form->setAttribute('action', $this->url('student/add-note'));
+	$form->setAttribute('id', 'addNoteForm');
+	$form->setAttribute('class', 'well');
 	$form->prepare();
 
 	echo $this->form()->openTag($form);
@@ -16,6 +14,6 @@
 </div>
 <br>
 <div class="input-group">
-	<?php echo $this->formSubmit($form->get('submit')); ?>
+	<a class="btn btn-default btn-sm" href="<?php echo $this->url('student/add-note', array('lesson_id' => $lessonId)) ?>" id="submitAddNoteForm">Lisa</a>
 </div>
 <?php echo $this->form()->closeTag(); ?>
