@@ -736,6 +736,7 @@ class TeacherController extends AbstractActionController {
 			}
 		}
 		return array(
+			'receiver' => $user,
 			'user_id' => $userId,
 			'teacher_id' => $teacherId,
 			'form' => $form,

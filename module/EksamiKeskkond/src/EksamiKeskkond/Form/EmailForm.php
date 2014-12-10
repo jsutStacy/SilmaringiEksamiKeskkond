@@ -35,9 +35,6 @@ class EmailForm extends Form {
 				'type' => 'text',
 				'class' => 'form-control',
 			),
-			'options' => array(
-				'label' => 'Pealkiri',
-			),
 		));
 
 		$this->add(array(
@@ -45,9 +42,6 @@ class EmailForm extends Form {
 			'attributes' => array(
 				'type' => 'textarea',
 				'class' => 'form-control',
-			),
-			'options' => array(
-				'label' => 'Sisu',
 			),
 		));
 

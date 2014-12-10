@@ -9,7 +9,7 @@
 <div class="row">
 	<?php echo $this->sidebar ?>
 	<div class="col-md-8">
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h2 class="panel-title pull-left">Kirjeldus</h2>
 				<!-- <a class="btn btn-primary btn-sm pull-right" id="editDesctiption" href="<?php echo $this->url('teacher/edit-description', array('id' => $course->id)) ?>">
@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<br>
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h2 class="panel-title pull-left">Teemad</h2>
 				<a class="btn btn-primary btn-sm pull-right" id="addSubject" href="<?php echo $this->url('teacher/add-subject', array('id' => $courseData['course']->id)) ?>">
@@ -69,7 +69,6 @@
 										</a>
 									<?php } else { ?>
 										<a class="btn btn-default btn-xs pull-left" href="<?php echo $this->url('teacher/homework', array('id' => array_values($subsubject['homeworks'])[0]->id)) ?>">
-											<span class="glyphicon glyphicon-pencil"></span>
 											Kodutöö eelvaade
 										</a>
 									<?php } ?>
