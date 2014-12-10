@@ -124,6 +124,7 @@ class StudentController extends AbstractActionController {
 			'hasEnded' => $courseHasEnded,
 			'hasntStarted' => $courseHasntStarted,
 			'userId' => $user->id,
+			'activated' => $status,
 		));
 	}
 
@@ -159,7 +160,7 @@ class StudentController extends AbstractActionController {
 		foreach ($courses as $key => $course) {
 			$coursesData[$key]['course'] = $course;
 			$coursesData[$key]['hasBought'] = $this->getUserCourseTable()->checkIfUserHasBoughtCourse($user->id, $course->id);
-
+			$coursesData[$key]['activated'] = $this->getUserCourseTable()->checkIfUserHasAccessToCourse($user->id, $course->id);
 			if ($course->teacher_id) {
 				$coursesData[$key]['teacher'] = $teachers[$course->teacher_id];
 			}
@@ -183,9 +184,10 @@ class StudentController extends AbstractActionController {
 
 		$courseTeachers = array();
 
-		foreach ($studentCoursesIds as $courseId) {
+		foreach ($studentCoursesIds as $key => $courseId) {
 			$course = $this->getCourseTable()->getCourse($courseId);
-			$myCourses[] = $course;
+			$myCourses[$key]['course'] = $course;
+			$myCourses[$key]['activated'] = $this->getUserCourseTable()->checkIfUserHasAccessToCourse($user->id, $course->id);
 
 			if ($course->teacher_id) {
 				$teacher = $this->getUserTable()->getUser($course->teacher_id);
@@ -335,7 +337,7 @@ class StudentController extends AbstractActionController {
 
 		$this->getUserCourseTable()->buyCourse($user->id, $course->id, null, true);
 
-		return $this->redirect()->toRoute('student/all-courses');
+		return $this->redirect()->toRoute('student/my-courses');
 	}
 
 	private function to_banklink_ch ($v, $banklinkCharset) {

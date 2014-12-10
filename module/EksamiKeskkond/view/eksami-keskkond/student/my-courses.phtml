@@ -3,51 +3,61 @@
 ?>
 
 <div class="row">
-	<div class="col-md-5 pull-left">
-		<h2>Minu kursused</h2>
-	</div>
+	<h2 class="pull-left">Minu kursused</h2>
+	<div class="clearfix"></div>
+	<hr>
 </div>
 <div class="row">
-	<?php foreach ($myCourses as $course): ?>
-		<?php if ($course->published == true): ?>
-			<div class="col-md-4">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">
-							<a href="<?php echo $this->url('student/course', array('id' => $course->id)) ?>"><?php echo $this->escapeHtml($course->name) ?></a>
-						</h3>
-					</div>
-					<div class="panel-body">
-						<p class="well well-sm">
-							<?php echo $course->description ?>
-						</p>
-						<p>
-							<?php if ($courseTeachers[$course->teacher_id]) { ?>
-								<b>Õpetaja:</b> <?php echo $courseTeachers[$course->teacher_id]->firstname  . " " . $courseTeachers[$course->teacher_id]->lastname ?>
-							<?php } else { ?>
-								<span class="label label-danger">Õpetaja puudub</span>
-							<?php } ?>
-						</p>
-					</div>
-					<div class="panel-footer">
-						<small>
-							<?php
-								$startDate = date("d.m.Y", strtotime($course->start_date));
-								echo $startDate. " - ";
-								$endDate = date("d.m.Y", strtotime($course->end_date));
-								echo $endDate;
-
-								if ((time()-(60*60*24)) > strtotime($endDate)) {
-									echo '</br><span class="label label-danger">Kursus on läbi</span>';
-								}
-								else if ((time()-(60*60*24)) < strtotime($startDate)) {
-									echo '</br><span class="label label-warning">Kursus pole veel alanud</span>';
-								}
-							?>
-						</small>
+	<?php if (!empty($myCourses)) :?>
+		<?php foreach ($myCourses as $course): ?>
+			<?php if ($course['course']->published == true): ?>
+				<div class="col-md-4">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								<a href="<?php echo $this->url('student/course', array('id' => $course['course']->id)) ?>"><?php echo $this->escapeHtml($course['course']->name) ?></a>
+							</h3>
+						</div>
+						<div class="panel-body">
+							<p class="well well-sm">
+								<?php echo $course['course']->description ?>
+							</p>
+							<p>
+								<?php if ($courseTeachers[$course['course']->teacher_id]) { ?>
+									<b>Õpetaja:</b> <?php echo $courseTeachers[$course['course']->teacher_id]->firstname  . " " . $courseTeachers[$course['course']->teacher_id]->lastname ?>
+								<?php } else { ?>
+									<span class="label label-danger">Õpetaja puudub</span>
+								<?php } ?>
+							</p>
+							<p>
+								<?php if (!$course['activated']) { ?>
+									<span class="label label-warning">Kursus pole veel aktiveetud</span>
+								<?php } ?>
+							</p>
+						</div>
+						<div class="panel-footer">
+							<small>
+								<?php
+									$startDate = date("d.m.Y", strtotime($course['course']->start_date));
+									echo $startDate. " - ";
+									$endDate = date("d.m.Y", strtotime($course['course']->end_date));
+									echo $endDate;
+	
+									if ((time()-(60*60*24)) > strtotime($endDate)) {
+										echo '</br><span class="label label-danger">Kursus on läbi</span>';
+									}
+									else if ((time()-(60*60*24)) < strtotime($startDate)) {
+										echo '</br><span class="label label-warning">Kursus pole veel alanud</span>';
+									}
+								?>
+							</small>
+						</div>
 					</div>
 				</div>
-			</div>
-		<?php endif; ?>
-	<?php endforeach; ?>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	<?php else: ?>
+		<div class="alert alert-info" role="alert">Sul pole ostetud ühtegi kursust. Vali menüüst "Kõik kursused" ning soeta endale sealt õigused kursusele.</div>
+	<?php endif; ?>
+	
 </div>

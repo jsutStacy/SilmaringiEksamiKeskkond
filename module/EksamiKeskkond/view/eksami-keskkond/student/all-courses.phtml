@@ -3,15 +3,15 @@
 ?>
 
 <div class="row">
-	<div class="col-md-5 pull-left">
-		<h2>Kõik kursused</h2>
-	</div>
+	<h2 class="pull-left">Kõik kursused</h2>
+	<div class="clearfix"></div>
+	<hr>
 </div>
 <div class="row">
 	<?php foreach ($courses as $course) : ?>
 		<?php if ($course['course'] ->published == true): ?>
 			<div class="col-md-4">
-				<div class="panel panel-default">
+				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">
 							<a href="<?php echo $this->url('student/course', array('id' => $course['course']->id)) ?>"><?php echo $this->escapeHtml($course['course']->name) ?></a>
@@ -30,9 +30,14 @@
 						</p>
 						<p>
 							<?php if ($course['hasBought']) { ?>
-								</br><span class="label label-success">Kursus ostetud!</span>
+								<span class="label label-success">Kursus ostetud!</span>
 							<?php } else { ?>
 								<span class="label label-default"><?php echo $course['course']->price . " " . "€" ?></span>
+							<?php } ?>
+						</p>
+						<p>
+							<?php if ($course['hasBought'] && !$course['activated']) { ?>
+								<span class="label label-warning">Kursus pole veel aktiveetud</span>
 							<?php } ?>
 						</p>
 					</div>

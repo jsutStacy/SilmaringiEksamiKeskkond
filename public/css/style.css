@@ -115,7 +115,7 @@ img.page {
 	line-height: 2.5;
 	border-radius: 5px;
 	margin-bottom: 5px;
-	margin-top: 5px;
+	margin-top: 0px;
 }
 .course-sidebar .subject .subject-header a{
 	margin-left: 10px;
@@ -163,6 +163,35 @@ ul.list-group {
 	padding: 5px;
 }
 
-.panel-heading {
+/* primary panel style */
 
+.panel-primary {
+	border-color: #313a5e;
 }
+
+.panel-primary>.panel-heading {
+	background-color: #313a5e;
+	background-image: none;
+	color: #fff;
+	border-color: #313a5e;
+}
+
+.btn-primary {
+	background-image: none;
+	background-color:  #5c8cef;
+	border-color:  #5c8cef;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	font-weight: 700;
+}
+
+/* default panel style */
+
+.panel-default>.panel-heading {
+	background-image: none;
+}
+
+.well {
+	background-image: none;
+}
+

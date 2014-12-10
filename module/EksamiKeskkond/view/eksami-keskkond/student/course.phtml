@@ -39,6 +39,17 @@
 									<?php if ($lesson->published == true) { ?>
 										<li class="list-group-item lesson" id="lesson-<?php echo $lesson->id ?>">
 											<?php if (!$hasEnded && !$hasntStarted) { ?>
+												<?php if ($lesson->type == "text") { ?>
+													<span class="glyphicon glyphicon-align-justify"></span>
+												<?php } elseif ($lesson->type == "video") { ?>
+													<span class="glyphicon glyphicon-play-circle"></span>
+												<?php } elseif ($lesson->type == "audio") { ?>
+													<span class="glyphicon glyphicon-headphones"></span>
+												<?php } elseif ($lesson->type == "images") { ?>
+													<span class="glyphicon glyphicon-picture"></span>
+												<?php } elseif ($lesson->type == "presentation") { ?>
+													<span class="glyphicon glyphicon-book"></span>
+												<?php }?>
 												<a class="change-lesson" href="<?php echo $this->url('student/lesson', array('id' => $lesson->id)) ?>">
 													<?php echo $lesson->name; ?>
 												</a>
@@ -72,17 +83,28 @@
 		</div>
 	<?php } ?><!--  if has subjects -->
 <?php } ?><!-- if has bought -->
-<div class="col-md-8" id="lessonContent">
-	<p><?php echo $this->escapeHtml($course->description) ?></p>
-</div>
+	<div class="col-md-8" id="lessonContent">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h2 class="panel-title">Kursuse kirjeldus</h2>
+			</div>
+			<div class="panel-body">
+				<?php echo $this->escapeHtml($course->description) ?>
+			</div>
+		</div>
+	</div>
 </div>
 <?php if (!$hasBoughtCourse) { ?>
 	<a class="btn btn-primary btn-me" href="<?php echo $this->url('student/buy-course', array('id' => $course->id, 'bank' => 'test')) ?>">
-		<span class="glyphicon glyphicon-plus"></span>Osta kursus pangalingiga
+		Osta kursus pangalingiga
 	</a>
 	<a class="btn btn-primary btn-me" href="<?php echo $this->url('student/buy-course-with-bill', array('id' => $course->id)) ?>">
-		<span class="glyphicon glyphicon-plus"></span>Osta kursus arvega
+		Osta kursus arvega
 	</a>
+<?php } elseif (!$activated) { ?>
+	<div class="alert alert-info" role="alert">
+		Kursus ei ole veel Teie jaoks aktiveeritud administraatori poolt.
+	</div>
 <?php } ?>
 
 
