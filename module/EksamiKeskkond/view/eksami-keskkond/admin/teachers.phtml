@@ -2,30 +2,25 @@
 	$this->headTitle('Õpetajad');
 ?>
 
-<div class="row">
-	<div class="col-md-5 pull-left">
-		<h2>Õpetajad  (<?php echo count($teachers) ?>)</h2>
-		
-	</div>
-</div>
-<div class="row">
-	<table class="table table-striped">
-		<tr>
-			<td>Id</td>
-			<td>Eesnimi</td>
-			<td>Perekonnanimi</td>
-			<td></td>
-		</tr>
-		<?php foreach ($teachers as $teacher) : ?>
-		<tr>
-			<td><?php echo $this->escapeHtml($teacher->id) ?></td>
-			<td><?php echo $this->escapeHtml($teacher->firstname) ?></td>
-			<td><?php echo $this->escapeHtml($teacher->lastname) ?></td>
-			<td>
-				<a class="btn btn-primary btn-me pull-right" 
-					href="<?php echo $this->url('admin/send-email-to-user', array('user_id' => $teacher->id)) ?>">Saada kiri</a>
-			</td>
-		</tr>
-		<?php endforeach; ?>
-	</table>
-</div>
+<h2>Õpetajad  (<?php echo count($teachers) ?>)</h2>
+<hr>
+
+<table class="table table-striped">
+	<tr>
+		<td>Id</td>
+		<td>Eesnimi</td>
+		<td>Perekonnanimi</td>
+		<td></td>
+	</tr>
+	<?php foreach ($teachers as $teacher) : ?>
+	<tr>
+		<td><?php echo $this->escapeHtml($teacher->id) ?></td>
+		<td><?php echo $this->escapeHtml($teacher->firstname) ?></td>
+		<td><?php echo $this->escapeHtml($teacher->lastname) ?></td>
+		<td>
+			<a class="btn btn-primary btn-me pull-right" 
+				href="<?php echo $this->url('admin/send-email-to-user', array('user_id' => $teacher->id)) ?>">Saada kiri</a>
+		</td>
+	</tr>
+	<?php endforeach; ?>
+</table>

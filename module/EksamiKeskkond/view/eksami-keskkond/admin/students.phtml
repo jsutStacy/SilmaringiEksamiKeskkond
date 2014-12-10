@@ -1,13 +1,12 @@
 <?php
 	$this->headTitle('Õpilased - ');
 ?>
-<div class="row">
-	<div class="col-md-5 pull-left">
-		<h2>Õpilased</h2>
-	</div>
-</div>
+
+<h2>Õpilased</h2>
+<hr>
+
 <?php foreach ($coursesData as $course): ?>
-	<div class="panel panel-default">
+	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h2 class="panel-title pull-left"><?php echo $this->escapeHtml($course['course']->name)?></h2>
 			<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('admin/send-email-to-all-participants', array('course_id' => $course['course']->id)) ?>">Saada kõigile kiri</a>

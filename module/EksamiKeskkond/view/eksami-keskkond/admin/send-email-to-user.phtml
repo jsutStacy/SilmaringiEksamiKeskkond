@@ -1,7 +1,8 @@
 <?php
 	$this->headTitle('Saada e-mail - ');
 ?>
-<h1>Saada e-mail</h1>
+<h2>Saada e-mail</h2>
+<hr>
 <?php
 	$form = $this->form;
 	$form->setAttribute('action', $this->url('admin/send-email-to-user', array('user_id' => $this->user_id)));
@@ -10,13 +11,17 @@
 	echo $this->form()->openTag($form);
 	echo $this->formHidden($form->get('user_id'));
 ?>
-<div class="form-group">
+<div class="input-group">
+	<span class="input-group-addon">Pealkiri</span>
 	<?php echo $this->formRow($form->get('subject')); ?>
 </div>
-<div class="form-group">
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Sisu</span>
 	<?php echo $this->formRow($form->get('body')); ?>
 </div>
-<div class="form-group">
+<br>
+<div class="input-group">
 	<?php echo $this->formSubmit($form->get('submit')); ?>
 </div>
 

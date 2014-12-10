@@ -1,15 +1,12 @@
 <?php
 	$this->headTitle('Kursus - ');
 ?>
-<div class="row">
-	<div class="col-md-5 pull-left">
-		<h2><?php echo $this->escapeHtml($courseData['course']->name) ?></h2>
-	</div>
-</div>
+<h2><?php echo $this->escapeHtml($courseData['course']->name) ?></h2>
+<hr>
 <div class="row">
 	<?php echo $this->sidebar ?>
 	<div class="col-md-8">
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h2 class="panel-title pull-left">Kirjeldus</h2>
 				<div class="clearfix"></div>
@@ -21,7 +18,7 @@
 			</div>
 		</div>
 		<br>
-		<div class="panel panel-default">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h2 class="panel-title pull-left">Teemad</h2>
 				<div class="clearfix"></div>
@@ -34,7 +31,8 @@
 					<div class="panel-body">
 						<ul class="list-group subsubjects" id="subId<?php echo $subject['id'] ?>">
 							<?php foreach ($subject['subsubjects'] as $subsubject): ?>
-								<li class="list-group-item" id="subsubjectId<?php echo $subsubject['id'] ?>">
+								
+								<li class="list-group-item well" id="subsubjectId<?php echo $subsubject['id'] ?>">
 									<p class="subsubjectName pull-left">
 										<b><?php echo $this->escapeHtml($subsubject['name']) ?></b>
 									</p>

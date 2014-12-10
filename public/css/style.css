@@ -1,5 +1,5 @@
 body {
-	padding-top: 105px;
+	padding-top: 130px;
 	padding-bottom: 40px;
 }
 
@@ -7,6 +7,13 @@ body {
 	color: #0099FF;
 }
 
+.navbar-brand {
+	height: auto;
+}
+
+.push{
+	height: 60px;
+}
 .btn-success {
 	background-color: #0099FF;
 	border-color: #999;
@@ -71,37 +78,6 @@ ul.nav li a{
 #lesson-upload #url-field,
 #lesson-upload #file-field {
 	display: none;
-}
-
-/* SlideShow */
-
-img.page {
-	cursor: pointer;
-}
-
-#carousel-wrapper {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-
-	width: 100%;
-}
-
-#carousel img {
-	display: block;
-	float: left;
-}
-
-#pager img {
-	cursor: pointer;
-	background: #fff;
-	box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-	display: block;
-	width: 80px;
-	height: 80px;
-	padding: 10px;
-	margin: 10px;
-	float: left;
 }
 
 /* Course sidebar */
