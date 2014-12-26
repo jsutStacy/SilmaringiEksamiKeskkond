@@ -1,0 +1,28 @@
+<?php
+	$this->headTitle('Saada e-mail - ');
+?>
+<h2>Saada e-mail</h2>
+<hr>
+<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('admin/send-email-to-user', array('user_id' => $this->user_id)));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('user_id'));
+?>
+<div class="input-group">
+	<span class="input-group-addon">Pealkiri</span>
+	<?php echo $this->formRow($form->get('subject')); ?>
+</div>
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Sisu</span>
+	<?php echo $this->formRow($form->get('body')); ?>
+</div>
+<br>
+<div class="input-group">
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

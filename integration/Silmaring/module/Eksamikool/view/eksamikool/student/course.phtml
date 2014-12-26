@@ -1,0 +1,110 @@
+<?php
+	$this->headTitle('Kursus - ');
+	$course = $courseData['course'];
+?>
+<div class="row">
+	<h2 class="pull-left"><?php echo $this->escapeHtml($course->name) ?></h2>
+	<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('student/all-notes') ?>">Vaata kõiki märkmeid</a>
+	<div class="clearfix"></div>
+	<hr>
+</div>
+<div class="row">
+<?php if (!empty($courseData) && $hasBoughtCourse) { ?>
+	<?php if (!empty($courseData['subjects'])) { ?>
+		<div class="panel-group col-md-4 course-sidebar" id="accordion" role="tablist" aria-multiselectable="true">
+			<?php if ($hasEnded) { ?>
+				<span class="label label-danger">Kursus on läbi!</span>
+			<?php } ?>
+			<?php if ($hasntStarted) { ?>
+				<span class="label label-warning">Kursus pole veel alanud!</span>
+			<?php } ?>
+			<?php foreach ($courseData['subjects'] as $subject): ?>
+				<div class="subject">
+					<div role="tab" id="heading<?php echo $subject['id']; ?>">
+						<h2 class="subject-header">
+							<a data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $subject['id']; ?>" aria-controls="collapse<?php echo $subject['id']; ?>" aria-expanded="false">
+								<?php echo $this->escapeHtml($subject['name']) ?>
+							</a>
+						</h2>
+					</div>
+					<div id="collapse<?php echo $subject['id']; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<?php echo $subject['id']; ?>">
+						<ul class="list-group">
+							<?php foreach ($subject['subsubjects'] as $subsubject): ?>
+							<li class="list-group-item subsubject">
+								<h2 class="subsubject-header">
+									<?php echo $this->escapeHtml($subsubject['name']) ?>
+								</h2>
+								<ul class="list-group">
+								<?php foreach ($subsubject['lessons'] as $lesson): ?>
+									<?php if ($lesson->published == true) { ?>
+										<li class="list-group-item lesson" id="lesson-<?php echo $lesson->id ?>">
+											<?php if (!$hasEnded && !$hasntStarted) { ?>
+												<?php if ($lesson->type == "text") { ?>
+													<span class="glyphicon glyphicon-align-justify"></span>
+												<?php } elseif ($lesson->type == "video") { ?>
+													<span class="glyphicon glyphicon-play-circle"></span>
+												<?php } elseif ($lesson->type == "audio") { ?>
+													<span class="glyphicon glyphicon-headphones"></span>
+												<?php } elseif ($lesson->type == "images") { ?>
+													<span class="glyphicon glyphicon-picture"></span>
+												<?php } elseif ($lesson->type == "presentation") { ?>
+													<span class="glyphicon glyphicon-book"></span>
+												<?php }?>
+												<a class="change-lesson" href="<?php echo $this->url('student/lesson', array('id' => $lesson->id)) ?>">
+													<?php echo $lesson->name; ?>
+												</a>
+											<?php } else { ?>
+												<?php echo $lesson->name; ?>
+											<?php } ?>
+											<?php if ($lesson->done == true) { ?>
+												<span class="glyphicon glyphicon-ok pull-right"></span>
+											<?php } ?>
+										</li>
+									<?php } ?>
+								<?php endforeach; ?>
+								</ul>
+								<ul class="list-group">
+								<?php foreach ($subsubject['homeworks'] as $homework): ?>
+									<li class="list-group-item homework" id="homework-<?php echo $homework->id ?>">
+										<?php if (!$hasEnded && !$hasntStarted) { ?>
+											<a class="change-lesson" href="<?php echo $this->url('student/homework', array('id' => $homework->id)) ?>">Kodutöö</a>
+										<?php } else { ?>
+											Kodutöö
+										<?php } ?>
+									</li>
+								<?php endforeach; ?>
+								</ul>
+							</li>
+						<?php endforeach; ?>
+						</ul>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+	<?php } ?><!--  if has subjects -->
+<?php } ?><!-- if has bought -->
+	<div class="col-md-8" id="lessonContent">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h2 class="panel-title">Kursuse kirjeldus</h2>
+			</div>
+			<div class="panel-body">
+				<?php echo $this->escapeHtml($course->description) ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php if (!$hasBoughtCourse) { ?>
+	<a class="btn btn-primary btn-me" href="<?php echo $this->url('student/buy-course', array('id' => $course->id, 'bank' => 'test')) ?>">
+		Osta kursus pangalingiga
+	</a>
+	<a class="btn btn-primary btn-me" href="<?php echo $this->url('student/buy-course-with-bill', array('id' => $course->id)) ?>">
+		Osta kursus arvega
+	</a>
+<?php } elseif (!$activated) { ?>
+	<div class="alert alert-info" role="alert">
+		Kursus ei ole veel Teie jaoks aktiveeritud administraatori poolt.
+	</div>
+<?php } ?>
+
+

@@ -1,0 +1,37 @@
+<?php $this->headTitle($this->translate("Manage teachers")); ?>
+<header class="page-head clearfix">
+    <h1><?php echo $this->translate("Manage teachers"); ?></h1>
+</header>
+<?php if ($this->successMessages) : ?>
+    <?php foreach ($this->successMessages as $message) : ?>
+        <div class="alert alert-success">
+            <?php echo $message; ?>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+<form action="<?php echo $this->url('mySchools',array('action' => 'delete-teacher', 'id' => $this->school->getId())); ?>" method="post" id="list-form">
+    <a href="<?=$this->url('mySchools', array('action' => 'add-teacher', 'id' => $this->school->getId()));?>" class="btn btn-default pull-left"><?php echo $this->translate("Add teacher"); ?> +</a>
+    <button class="btn btn-danger pull-right" type="submit" onclick="if(confirm('<?php echo $this->translate('Are your sure?'); ?>'))return true; else return false;"><?php echo $this->translate("Delete"); ?></button>
+    <div class="clearfix"></div>
+    <br>
+<div class="table-responsive">
+    <table class="table ajax-teachers-dt">
+        <thead>
+        <tr>
+            <th><?php echo $this->translate('First name'); ?></th>
+            <th><?php echo $this->translate('Lastname'); ?></th>
+            <th><?php echo $this->translate('Classes'); ?></th>
+            <th><?php echo $this->translate('E-mail'); ?></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div id="datapaginaton"></div>
+</form>
+<script>
+    var dt_url = '<?php echo $this->url('mySchools',array('action' => 'manage-teachers-page', 'id' => $this->school->getId())); ?>?order=<?php echo $this->orderBy; ?>';
+</script>

@@ -1,0 +1,31 @@
+<?php
+	$this->headTitle('Lisa kodutöö - ');
+?>
+<h2>Lisa kodutöö</h2>
+<hr>
+<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('teacher/add-homework', array('subsubject_id' => $subsubjectId)));
+	$form->setAttribute('enctype', 'multipart/form-data');
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
+	echo $this->formHidden($form->get('user_id'));
+	echo $this->formHidden($form->get('subsubject_id'));
+
+?>
+<div class="input-group">
+	<span class="input-group-addon">Kirjeldus</span>
+	<?php echo $this->formRow($form->get('description')); ?>
+</div>
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Kodutöö fail</span>
+	<?php echo $this->formRow($form->get('fileupload')); ?>
+</div>
+<hr>
+<div class="input-group">
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+</div>
+<?php echo $this->form()->closeTag(); ?>

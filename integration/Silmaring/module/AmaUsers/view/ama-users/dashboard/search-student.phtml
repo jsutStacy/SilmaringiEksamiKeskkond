@@ -1,0 +1,52 @@
+<?=$this->headTitle($this->translate('Search'));?>
+<header class="page-head clearfix">
+    <h1><?=$this->translate('Search results');?>  (<?=$this->materialsCount;?>)</h1>
+</header>
+<div id="content">
+    <?php if($this->materialsCount==0 && $this->termLength>2) : ?>
+        <div class="alert alert-warning"><?=$this->translate('No results where found!');?></div>
+    <?php endif; ?>
+    <?php if($this->termLength<2) : ?>
+        <div class="alert alert-warning"><?=$this->translate('Search term must be atleast 2 characters long!');?></div>
+    <?php endif; ?>
+    <ul class="lesson_plan search">
+        <?php foreach($this->materials as $cid => $material) :?>
+            <li>
+                        <?php if(!$this->uploads()->has($material['filename']) && $material['file_type']!='video' && $material['file_type']!='test'  && $material['file_type']!='worksheet') continue; ?>
+                        <?php
+                        $target = 'target="_blank"';
+                        $onclick = '';
+                        if ( $material['file_type'] == 'image' || $material['file_type']=='file' ) {
+                            $url = $this->uploads()->get($material['filename']);
+                            $ext = $url->getExtension();
+                            if($material['file_type']=='image') {
+                                $url = $this->htImgUrl($material['filename'], 'images1024x768');
+                            }
+                            $onclick = "onclick=\"silmaring.addViewed('" . $this->url('materials', array('action' => 'view', 'id' => $material['id'], 'page' => $material['fileclass_id'])) . "');\"";
+                        }
+                        else if($material['file_type']=='video') {
+                            $url = $material['file_video'];
+                            $onclick = "onclick=\"silmaring.addViewed('" . $this->url('materials', array('action' => 'view', 'id' => $material['id'], 'page' => $material['fileclass_id'])) . "');\"";
+                        }
+                        else if($material['file_type']=='test') {
+                            $url = 'javascript:;';
+                            $target = '';
+                            $onclick = "onclick=\"silmaring.openInModal('".$this->url('solveTests', array('action' => 'index', 'id' => $material['id'], 'fid' => $material['fileclass_id']))."','modal-lg');\"";
+                            if($material['allreadyDoneTest']>0){
+                                $onclick = "onclick=\"silmaring.openInModal('".$this->url('solveTests', array('action' => 'solved', 'id' => $material['id'], 'fid' => $material['fileclass_id']))."','modal-lg');\"";
+                            }
+                        }
+                        else if($material['file_type']=='worksheet') {
+                            $url = 'javascript:;';
+                            $target = '';
+                            $onclick = "onclick=\"silmaring.openInModal('".$this->url('solveWorksheets', array('action' => 'index', 'id' => $material['id'], 'fid' => $material['fileclass_id']))."','modal-lg');\"";
+                            if($material['allreadyDoneWorksheet']>0){
+                                $onclick = "onclick=\"silmaring.openInModal('".$this->url('solveWorksheets', array('action' => 'solved', 'id' => $material['id'], 'fid' => $material['fileclass_id']))."','modal-lg');\"";
+                            }
+                        }
+                        ?>
+                        <a href="<?php echo $url; ?>"  <?=$target;?> <?=$onclick;?>><?php echo $material['name']; ?></a> <?php if($this->getIsNew($material['date_added'])) : ?><span class="new_item">(<?php echo $this->translate('NEW'); ?>)</span> <?php if($material['allreadyDoneTest']>0 || $material['allreadyDoneWorksheet']>0) : ?>(<?=$this->translate("Allready done")?>)<?php endif; ?><?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>

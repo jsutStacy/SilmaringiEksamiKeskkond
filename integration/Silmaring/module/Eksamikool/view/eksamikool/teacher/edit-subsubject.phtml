@@ -1,0 +1,18 @@
+<?php
+	$form = $this->form;
+	$form->setAttribute('id', 'editSubsubjectForm');
+	$form->prepare();
+	
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
+	echo $this->formHidden($form->get('subject_id'));
+?>
+
+<div class="form-group">
+	<?php echo $this->formRow($form->get('name')); ?>
+</div>
+<div class="form-group">
+	<a href="" id="submitEditSubsubjectForm">Muuda</a>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

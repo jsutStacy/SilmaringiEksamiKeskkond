@@ -1,0 +1,52 @@
+<?php
+	$this->headTitle('Lisa uus kursus - ');
+?>
+<h2>Lisa uus kursus</h2>
+<hr>
+<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('admin/add-course'));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
+?>
+<div class="input-group">
+	<span class="input-group-addon">Nimi</span>
+	<?php echo $this->formRow($form->get('name')); ?>
+</div>
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Kirjeldus</span>
+	<?php echo $this->formRow($form->get('description')); ?>
+</div>
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Hind</span>
+	<?php echo $this->formRow($form->get('price')); ?>
+</div>
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Õpetaja</span>
+	<?php echo $this->formRow($form->get('teacher_id')); ?>
+</div>
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Nähtavus</span>
+	<?php echo $this->formRow($form->get('published')); ?>
+</div>
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Alguskuupäev</span>
+	<?php echo $this->formRow($form->get('start_date')); ?>
+</div>
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Lõpukuupäev</span>
+	<?php echo $this->formRow($form->get('end_date')); ?>
+</div>
+<br>
+<div class="input-group">
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+</div>
+<?php echo $this->form()->closeTag(); ?>

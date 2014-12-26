@@ -1,0 +1,49 @@
+<?php
+//var_dump($this->worksheet);
+?>
+<script src="<?=$this->url('home')?>/js/Chart.js"></script>
+<ul class="stat_summary">
+    <li class="font_b"><?=$this->translate('Finished')?>: <strong class="col-gray"><?=$this->worksheet['finishedUsersCount']; ?></strong></li>
+    <li class="font_b"><?=$this->translate('Average result')?>: <strong><?=$this->worksheet['averagePoints']; ?></strong></li>
+    <li>(<?=$this->worksheet['percentOfMax']?>% <?=$this->translate("from maximum");?>)</li>
+    <li class="pull-right"><a href="javascript:;" onclick="silmaring.openInModal('<?=$this->url('manageWorksheets', array('action' => 'valuation', 'cid' => $this->lessonPlanId, 'id' => $this->fileClassId ));?>', 'modal-lg')" class="btn btn-primary  btn-lg" style="margin-top:-12px;"><?=$this->translate("Go to valuation");?></a></li>
+</ul>
+
+<?php $i=1; foreach($this->worksheet['questions'] as $question) : ?>
+<div class="answered_stat_block">
+    <h4><?=$i?>. <?=$question['q_question'];?> <span class="question_type"><?=($question['q_answerType']==2?$this->translate("Multiple choice question"):$this->translate("Text answer question"))?></span></h4>
+
+    <div class="answer_pie_center">
+        <canvas id="question_<?=$i?>" width="180" height="180"></canvas>
+    </div>
+
+    <div class="collapse-group">
+        <div class="clearfix">
+            <a href="javascript:;" onclick="silmaringTest.viewAnswers('<?=$this->url('manageWorksheets', array('action' => 'view-answers', 'cid' => $this->lessonPlanId, 'id' => $this->fileClassId));?>', <?=$question['q_id'];?>);" class="btn btn-default pull-right"><?=$this->translate("View answers");?></a>
+        </div>
+        <div class="collapse"  id="viewAnswers<?=$question['q_id']?>">
+            <div class="loading text-center" style="display:block;"><img src="<?php echo $this->url('home'); ?>images/ajax-loader.gif" alt="" /></div>
+        </div>
+    </div>
+</div>
+<script>
+$(function(){
+    var answerData<?=$i?> = [
+        {
+            value: <?=(int)$question['rightAnswersCount'];?>,
+            color:"#48874a",
+            highlight: "#5e9e60",
+            label: "<?=$this->translate("Right")?>"
+        },
+        {
+            value: <?=(int)$question['wrongAnswersCount'];?>,
+            color: "#d75553",
+            highlight: "#f47270",
+            label: "<?=$this->translate("Wrong")?>"
+        }
+    ];
+    var answer<?=$i?> = document.getElementById("question_<?=$i?>").getContext("2d");
+    window.answer_Data<?=$i?> = new Chart(answer<?=$i?>).Pie(answerData<?=$i?>, {animationEasing : "easeOutBounce"});
+});
+</script>
+<?php $i++; endforeach; ?>

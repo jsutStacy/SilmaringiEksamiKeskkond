@@ -1,0 +1,52 @@
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('solveTests', array('action' => 'ready', 'id' => $this->test['t_id'])));
+$form->setAttribute('role', 'form');
+$form->setAttribute('enctype', 'multipart/form-data');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+<div class="form-title row">
+    <div class="form-group">
+        <div class="col-sm-12">
+            <label><?=$this->translate("TEST:");?> <?=$this->test['t_name']?></label>
+            <div class="pull-right"><strong><?=$this->translate("SENT BY:");?></strong> <strong><?=$this->test['u_firstName'].' '. $this->test['u_lastname']?></strong> <?=$this->test['fc_dateAdded']->format('d.m.Y')?></div>
+        </div>
+    </div>
+</div>
+
+<?php $i = 1; foreach($this->questions as $question) : ?>
+    <div class="question_box">
+    <h4><?=$i?>. <?=$question['q_question']?> <small><strong class="col-red"><?=$question['q_points']?></strong> <?=($question['q_points']==1?$this->translate("point"):$this->translate('points'))?></small></h4>
+
+    <?php if($question['images']) : ?>
+    <div class="question_image form-group">
+        <?php foreach($question['images'] as $image) : ?>
+            <img src="<?=$this->htImgUrl($image['qi_filename'], 'images233x164'); ?>" alt="">
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+
+    <?php if($question['q_answerType']==1 || $question['q_answerType']==3) : ?>
+            <div class="form-group">
+                <textarea class="form-control"  name="user_question_element[<?=$question['q_id']?>][user_answer_element][answerText][]" rows="3" placeholder="<?=$this->translate("Answer here");?>"></textarea>
+            </div>
+    <?php elseif($question['q_answerType']==2) : ?>
+        <?php foreach($question['answers'] as $answer) : ?>
+            <?php if(empty($answer['a_option'])) continue; ?>
+            <div class="checkbox"><label><input type="checkbox" name="user_question_element[<?=$question['q_id']?>][user_answer_element][answer][]" value="<?=$answer['a_id']?>"> <?=$answer['a_option'];?></label></div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    </div>
+<?php $i++; endforeach; ?>
+
+<div class="loading text-center"><img src="<?php echo $this->url('home'); ?>images/ajax-loader.gif" alt="" /></div>
+<div class="alert flash-message margin-top-10">
+</div>
+<div class="pad-bot-15 clearfix">
+    <div class="col-md-12">
+        <a href="javascript:;" class="btn btn-primary btn-lg pull-right" onclick="if(confirm('<?=$this->translate('Before sending make sure you answered all questions!')?>'))silmaring.postAjaxForm('<?=$this->url('solveTests', array('action' => 'ready', 'id' => $this->test['fc_id']))?>','#solveForm', true); else return false;"><?=$this->translate('FINISH'); ?></a>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

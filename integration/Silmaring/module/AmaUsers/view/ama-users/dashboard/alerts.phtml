@@ -1,0 +1,14 @@
+<?php if($this->alertsCount>0) : ?>
+<div id="userpop_title" style="display: none">
+    <?php echo $this->translate('You have'); ?> <strong><?php echo $this->alertsCount; ?> <?php echo $this->translate('new alert(s)!'); ?></strong>
+</div>
+<div id="userpop_content" style="display: none">
+    <ul class="pop_list">
+        <?php foreach($this->alerts as $alert) : ?>
+            <li>
+                <?php echo $alert['a_message']; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>

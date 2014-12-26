@@ -1,0 +1,56 @@
+<?php
+	$this->headTitle('Kursus - ');
+	
+	$form = $this->form;	
+	$form->prepare();
+	echo $this->form()->openTag($form);
+	
+	echo $this->formHidden($form->get('VK_SERVICE'));
+	echo $this->formHidden($form->get('VK_VERSION'));
+	echo $this->formHidden($form->get('VK_SND_ID'));
+	echo $this->formHidden($form->get('VK_STAMP'));
+	echo $this->formHidden($form->get('VK_AMOUNT'));
+	echo $this->formHidden($form->get('VK_CURR'));
+	echo $this->formHidden($form->get('VK_ACC'));
+	echo $this->formHidden($form->get('VK_NAME'));
+	echo $this->formHidden($form->get('VK_REF'));
+	echo $this->formHidden($form->get('VK_LANG'));
+	echo $this->formHidden($form->get('VK_MSG'));
+	echo $this->formHidden($form->get('VK_RETURN'));
+	echo $this->formHidden($form->get('VK_CANCEL'));
+	echo $this->formHidden($form->get('VK_DATETIME'));
+	echo $this->formHidden($form->get('VK_ENCODING'));
+	echo $this->formHidden($form->get('VK_MAC'));
+	echo $this->formSubmit($form->get('submit'));
+	
+	echo $this->form()->closeTag();
+	
+	if ($this->response = "") {
+		echo "Üks hetk, suuname Sind edasi...";
+		
+		echo '<script type="text/javascript">';
+		echo 'document.bankLinkForm.submit();';
+		echo '</script>';
+	}
+?>
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<?php if ($response == "redirect"): ?>
+			<div class="alert alert-info" role="alert">Üks hetk, suuname Sind edasi...</div>
+			<script type="text/javascript">;
+				$(document).ready(function(){
+					$('#bankLinkSubmit').trigger("click");
+				});
+			</script>
+		<?php elseif ($response == "success"): ?>
+			<div class="alert alert-success" role="alert">
+				Ostsid endale edukalt ligipääsu kursusele: 
+				<a href="<?php echo $this->url('student/course', array('id' => $course->id)) ?>" class="btn btn-default"><?php echo $this->escapeHtml($course->name); ?></a>
+			</div>
+		<?php else: ?>
+			<div class="alert alert-danger" role="alert"><?php echo $response ?></div>
+		<?php endif; ?>
+	</div>
+</div>
+
+

@@ -1,0 +1,10 @@
+<ul>
+<?php foreach($this->categoryTree as $category) : ?>
+    <li id="c<?=$category['c_id']?>">
+        <div class="checkbox"><label><input type="checkbox"  name="categories[]" data-parent="<?=$category['p_id']?>"  onclick="silmaring.changeCategoryTreeState($(this))" value="<?=$category['c_id']?>" <?=(!$this->userCategories?'checked':(in_array($category['c_id'], $this->userCategories)?'checked':''))?>> <?=$category['c_name']?></label></div>
+        <?php if($category['subs']) : ?>
+            <?=$this->partial('ama-users/partial/category-tree-sub', array('categoryTree' => $category['subs'],'userCategories' => $this->userCategories))?>
+        <?php endif; ?>
+    </li>
+<?php endforeach; ?>
+</ul>

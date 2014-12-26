@@ -1,0 +1,52 @@
+<a href="<?php echo $this->url('register'); ?>" id="register" class="btn btn-primary" type="submit"><?php echo $this->translate('Sign up'); ?></a>
+<div id="vCenter">
+<div class="text-center">
+    <a href="<?php echo $this->url('home'); ?>" id="site-logo"><img src="<?php echo $this->url('home'); ?>images/logo.jpg"></a>
+</div>
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('home'));
+$form->setAttribute('class', 'form-signin');
+$form->setAttribute('role', 'form');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formElement($form->get('csrf'));
+?>
+<div class="alert alert-warning flash-message" <?php if($this->faceboookError || $this->googleError || $this->errorMessages) : ?>style="display:block;"<?php endif; ?>>
+    <?php if($this->faceboookError) : ?><?php echo $this->translate('There where errors with facebook login! Please try again.'); ?><?php endif; ?>
+    <?php if($this->googleError) : ?><?php echo $this->translate('There where errors with google login! Please try again.'); ?><?php endif; ?>
+    <?php if ($this->errorMessages) : ?>
+        <?php foreach ($this->errorMessages as $message) : ?>
+            <?php echo $message; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
+<div class="loading"><img src="<?php echo $this->url('home'); ?>images/ajax-loader.gif" alt="" /></div>
+<div class="form-group">
+    <?php echo $this->formElement($form->get('email')->setValue($this->username?$this->username:$this->email)); ?>
+</div>
+<div class="form-group">
+    <?php echo $this->formElement($form->get('password')->setValue($this->password));  ?>
+</div>
+
+<div class="form-group">
+    <label class="checkbox  col-md-offset-1">
+        <?php echo $this->formElement($form->get('rememberme')->setValue($this->email?1:0));  ?> <?php echo $this->translate($form->get('rememberme')->getLabel());  ?>
+    </label>
+</div>
+
+<div class="form-group text-center col-md-10 col-md-offset-1">
+    <?php echo $this->formButton($form->get('submit'), $this->translate('Sign in'));  ?>
+</div>
+<div class="form-group text-center col-md-10 col-md-offset-1">
+    <a href="<?php echo $this->facebookLoginUrl; ?>" class="btn btn-primary" id="facebookLogin"><?php echo $this->translate('Sign in with facebook'); ?></a>
+</div>
+<div class="form-group text-center col-md-10 col-md-offset-1">
+    <a href="<?php echo $this->googleLoginUrl; ?>" class="btn btn-primary" id="googleLogin"><?php echo $this->translate('Sign in with google'); ?></a>
+</div>
+<div class="text-center">
+    <a href="<?php echo $this->url("forgottenPassword"); ?>"><?php echo $this->translate("Forgot Password?"); ?></a>
+</div>
+<?php echo $this->form()->closeTag();?>
+</div>

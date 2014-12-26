@@ -1,0 +1,53 @@
+<?php if(!$this->loadMore) : ?><ul class="content_list"><?php endif; ?>
+    <?php foreach($materials as $material) : ?>
+        <?php if(!$this->uploads()->has($material['f_filename'])) continue; ?>
+        <?php
+        $url = $this->uploads()->get($material['f_filename']);
+        $ext = $url->getExtension();
+        $image = '<img src="' . $this->url('home'). '/images/file_icos/'.$ext.'.png"  alt="' . $material['f_name'] . '" title="' . $material['f_name'] .'">';
+        ?>
+        <li id="item<?php echo  $material['f_id']; ?>">
+            <div class="row">
+                <div class="col-md-1"><?php echo $image; ?></div>
+                <div class="col-md-11">
+                    <h2><a href="<?php echo $url; ?>"><?php echo $material['f_name']; ?></a></h2>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <table class="table_meta">
+                                <tr>
+                                    <th><?php echo $this->translate('ADDED'); ?>:</th>
+                                    <td><strong><?php echo $material['u_firstName'] ?> <?php echo $material['u_lastname'] ?></strong> <?php echo $material['f_date_added']->format('d.m.Y'); ?></td>
+                                </tr>
+                                <tr>
+                                    <th><?php echo $this->translate('USED BY'); ?>:</th>
+                                    <td><strong><?php echo $material['teacherCount']; ?> <?php echo $this->translate("teacher(s)"); ?></strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-4 text-center" id="addToLessonPlan<?php echo $material['f_id']; ?>">
+                            <span class="text-success" <?php if(!$material['isInLessonPlan']) : ?>style="display:none;"<?php endif; ?>><?php echo $this->translate("Used in lesson plan"); ?></span>
+                            <?php if(!$material['isInLessonPlan']) : ?>
+                                <a href="javascript:;" onclick="silmaring.addToLessonaPlan('<?php echo $this->url('lessonPlans', array('action' => 'add', 'id' => $this->categoryId, 'page' => $material['f_id'])); ?>','<?php echo  $material['f_id']; ?>');" class="btn btn-default"><?php echo $this->translate("Add to lesson plan"); ?></a>
+                                <div class="loading"><img src="<?php echo $this->url('home'); ?>images/ajax-loader.gif" alt="" /></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    <?php endforeach; ?>
+    <?php if($materials) : ?>
+        <li class="no-border"  id="modal-load-more">
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-lg" onclick="silmaring.loadMore('<?php echo $this->url('files', array('action' => 'select', 'cid' => $this->categoryId, 'id' => $this->page)); ?>')"><?php echo $this->translate("Load more"); ?></button>
+                <div class="loading"><img src="<?php echo $this->url('home'); ?>images/ajax-loader.gif" alt="" /></div>
+            </div>
+        </li>
+    <?php else : ?>
+        <li class="no-border"  id="modal-load-more">
+            <div class="alert alert-warning"><?php echo $this->translate("No more materials found!"); ?></div>
+        </li>
+    <?php endif; ?>
+
+    <?php if(!$this->loadMore) : ?></ul><?php endif; ?>
+

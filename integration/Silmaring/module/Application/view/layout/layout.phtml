@@ -1,0 +1,52 @@
+<?php echo $this->partial('layout/header'); ?>
+<div id="wrapper">
+    <header id="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <a id="sitelogo" href="<?php echo $this->url('home'); ?>"><img src="<?php echo $this->url('home'); ?>images/logo.jpg" alt="<?php echo $this->translate("Silmaring - teeme õppimise huvitavaks"); ?>"></a>
+                </div>
+                <div class="col-md-8 clearfix">
+                <?php if ($this->identity()) : ?>
+                   <?=$this->partial('partial/search-form', array('class' => 'navbar-right'));?>
+                <?php endif; ?>
+                    <div class="clear"></div>
+                        <?=$this->wpNavigation()?>
+                </div>
+            </div>
+        </div>
+    </header>
+
+<?php if ($this->identity()) : ?>
+    <?php echo $this->partial('partial/user-bar'); ?>
+<?php endif; ?>
+<section id="main" class="container"><!-- main -->
+    <div class="row">
+    <?php if ($this->identity()) : ?>
+    <div id="sidebar-container" class="col-md-3"><!-- sidebar -->
+        <?php echo $this->partial('partial/sidemenu'); ?>
+        <div class="side-search">
+            <h4><?=$this->translate("Otsi õppematerjali seast"); ?></h4>
+            <?=$this->partial('partial/search-form', array('class' => 'clearfix'));?>
+        </div>
+
+
+    </div><!-- /sidebar -->
+        <?php endif; ?>
+<div id="content-container" class="<?php if ($this->identity()) : ?>col-md-9<?php else : ?>col-md-12<?php endif; ?>"> <!-- content -->
+<?php echo $this->content; ?>
+</div> <!-- /content -->
+</section><!-- /main -->
+    <footer id="footer" class="bg-black"><!-- footer -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="pull-left"><li><strong>Silmaring MTÜ</strong></li></ul>
+                    <?=$this->wpNavigation(2)?>
+                    <a href="http://www.artmedia.ee/" title="Kodulehe valmistamine, kodulehe tegemine - Art media" target="_blank" id="ama" >AMA</a>
+                </div>
+            </div>
+        </div>
+    </footer><!-- /footer -->
+</div>
+<?php echo $this->partial('layout/footer'); ?>

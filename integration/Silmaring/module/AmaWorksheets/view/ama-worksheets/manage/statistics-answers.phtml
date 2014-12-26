@@ -1,0 +1,5 @@
+<ul class="list-group">
+ <?php foreach($this->answers as $answer) : ?>
+<li class="list-group-item <?=($answer['ua_isRight']==1?'list-group-item-success':'list-group-item-danger')?>"><strong><?=$answer['s_firstName'] .' ' . $answer['s_lastname']?></strong> <?=$this->translate('answered'); ?> <?=(!empty($answer['ua_answerText'])?$answer['ua_answerText']:$answer['a_option'])?></li>
+<?php endforeach; ?>
+</ul>

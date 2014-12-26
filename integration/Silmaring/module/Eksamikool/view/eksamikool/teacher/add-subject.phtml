@@ -1,0 +1,20 @@
+<?php
+	$form = $this->form;
+	$form->setAttribute('id', 'form');
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
+	echo $this->formHidden($form->get('course_id'));
+	
+?>
+<div class="input-group">
+	<span class="input-group-addon">Nimi</span>
+	<?php echo $this->formRow($form->get('name')); ?>
+</div>
+<br>
+<div class="input-group">
+	<a class="btn btn-default btn-sm" href="<?php echo $courseId ?>" id="submitSubjectForm">Lisa</a>
+	<a class="btn btn-default btn-sm" href="<?php echo $courseId ?>" id="cancelSubjectAdding">Katkesta</a>
+</div>
+<?php echo $this->form()->closeTag(); ?>

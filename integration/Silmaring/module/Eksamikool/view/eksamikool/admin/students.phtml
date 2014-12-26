@@ -1,0 +1,46 @@
+<?php
+	$this->headTitle('Õpilased - ');
+?>
+
+<h2>Õpilased</h2>
+<hr>
+
+<?php foreach ($coursesData as $course): ?>
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h2 class="panel-title pull-left"><?php echo $this->escapeHtml($course['course']->name)?></h2>
+			<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('admin/send-email-to-all-participants', array('course_id' => $course['course']->id)) ?>">Saada kõigile kiri</a>
+			<a class="btn btn-danger btn-sm pull-right" href="<?php echo $this->url('admin/empty-course', array('id' => $course['course']->id)) ?>">Kustuta kursuselt kõik õpilased</a>
+			<div class="clearfix"></div>
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped">
+				<?php foreach ($course['students'] as $student): ?>
+				<tr>
+					<td><?php echo $this->escapeHtml($student['student']->firstname) ?></td>
+					<td><?php echo $this->escapeHtml($student['student']->lastname) ?></td>
+					<td><?php if ($student['is_paid_by_bill'] == true) { ?> <p>Makstud arvega</p>
+						<?php } else { ?><p>Makstud pangalingiga</p>
+						<?php } ?>
+					</td>
+					<td>
+						<a class="btn btn-default btn-xs" href="<?php echo $this->url('admin/send-email-to-user', array('user_id' => $student['student']->id)) ?>">Saada kiri</a>
+						<br>
+						<?php if ($student['status'] == true) { ?>
+							<a class="btn btn-default btn-xs" href="<?php echo $this->url('admin/change-user-course-status',
+									array('user_id' => $student['student']->id, 'course_id' => $course['course']->id, 'status' => null)) ?>">
+								Eemalda ligipääs kursuselt
+							</a>
+						<?php } else { ?>
+							<a class="btn btn-default btn-xs" href="<?php echo $this->url('admin/change-user-course-status',
+									array('user_id' => $student['student']->id, 'course_id' => $course['course']->id, 'status' => true)) ?>">
+								Anna ligipääs kursusele
+							</a>
+						<?php } ?>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+	</div>
+<?php endforeach; ?>

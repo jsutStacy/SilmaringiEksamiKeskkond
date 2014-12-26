@@ -1,0 +1,101 @@
+<?php $this->headTitle($this->translate("Edit user")); ?>
+<header class="page-head clearfix">
+    <h1><?php echo $this->translate("Edit user"); ?></h1>
+</header>
+<div class="border-box pad-15">
+    <?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('users', array('action' => 'edit', 'id' => $this->user->getId())));
+    $form->setAttribute('role', 'form');
+    $form->setAttribute('enctype', 'multipart/form-data');
+    $form->prepare();
+
+    echo $this->form()->openTag($form);
+    ?>
+    <?php if ($this->successMessages) : ?>
+        <?php foreach ($this->successMessages as $message) : ?>
+            <div class="alert alert-success">
+                <?php echo $message; ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
+    <?php if ($this->messages) : ?>
+        <div class="alert alert-warning">
+            <?php echo $this->messages; ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($this->errorMessages) : ?>
+        <div class="alert alert-warning">
+            <?php foreach ($this->errorMessages as $message) : ?>
+                <?php echo $message; ?>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+    <div class="form-group">
+        <?php echo $this->formElement($form->get('role')->setValue($this->user->getSingleRole())); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formElement($form->get('firstName')->setValue($this->user->getFirstName())); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formElement($form->get('lastname')->setValue($this->user->getLastname())); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formElement($form->get('email')->setValue($this->user->getEmail())); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formElement($form->get('personalCode')->setValue($this->user->getPersonalCode())); ?>
+    </div>
+    <div class="form-group">
+        <div class="pull-left"><?php echo $form->get('state')->getLabel(); ?></div><?php echo $this->formElement($form->get('state')->setValue($this->user->getState())); ?>
+    </div>
+    <div class="clearfix"></div>
+    <div class="form-group">
+        <div class="pull-left">
+            <?php echo $this->formLabel($form->get('image')); ?>
+            <?php echo $this->formFile($form->get('image')); ?>
+        </div>
+        <div class="pull-right profile-image">
+            <?php if ( $user->getImage() ) : ?>
+                <img src="<?php echo $this->htImgUrl($user->getImage(), 'profile'); ?>" alt="image" /><br>
+                <a href="<?php echo $this->url('deleteProfileImage'); ?>"><?php echo $this->translate('Delete'); ?></a>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <br>
+    <div id="connected-schools">
+        <table class="table">
+            <thead>
+            <tr>
+                <th><?php echo $this->translate('School name'); ?></th>
+                <th> <a href="javascript:;" onclick="silmaring.openInModal('<?php echo $this->url('schools', array('action' => 'choose', 'id' => $this->user->getId())); ?>');"><?php echo $this->translate("Connect user with school"); ?></a></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($this->user->getSchools() as $school) : ?>
+                <tr>
+                    <td><?php echo $school->getSchool()->getName(); ?></td><td><a href="<?php echo $this->url('users', array('action' => 'remove-school', 'id' => $this->user->getId(),'rid' => $school->getSchool()->getId() )); ?>"><?php echo $this->translate('Remove'); ?></a></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <div class="form-group">
+        <i><?php echo $this->translate('Here u can change password.'); ?></i>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formElement($form->get('newPassword')); ?>
+    </div>
+    <div class="form-group">
+        <?php echo $this->formElement($form->get('newPasswordConfirm')); ?>
+    </div>
+    <div class="form-group text-right">
+        <?php echo $this->formButton($form->get('submit'), $this->translate('Update')); ?>
+    </div>
+    <div class="text-center">&nbsp;<br>&nbsp;</div>
+    <?php echo $this->form()->closeTag(); ?>
+</div>

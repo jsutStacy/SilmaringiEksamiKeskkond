@@ -1,0 +1,107 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<h2 class="panel-title"><?php echo $this->escapeHtml($lesson->name) ?></h2>
+		<?php if (empty($isLessonMarkedDone)) { ?>
+			<a class="mark-lesson-done" id="mark-lesson-done-<?php echo $lesson->id ?>"
+				href="<?php echo $this->url('student/mark-lesson-done', array('id' => $lesson->id)) ?>">Märgi tehtuks</a>
+		<?php } else { ?>
+			<p>Tund on märgitud tehtuks!</p>
+		<?php } ?>
+		<div class="clearfix"></div>
+	</div>
+	<div class="panel-body">
+		<p class="well"><?php echo $this->escapeHtml($lesson->content) ?></p>
+			<?php if ($lesson->type == 'images') { ?>
+			<?php 
+				$lessonFilesArray = array(); 
+				foreach ($lessonFiles as $lessonFile){
+					$lessonFilesArray[] = $lessonFile;
+				}
+			?>
+			<div id="carousel"  class="carousel slide" data-ride="carousel">
+				<!-- Indicators -->
+				<ol class="carousel-indicators">
+					<?php 
+						$i = 0;
+						foreach ($lessonFilesArray as $lessonFile) { 
+					?>
+						<li data-target="#carousel" data-slide-to="<?php echo $i; ?>" <?php echo $i == 0  ? 'class="active"' : '' ?>></li>
+					<?php $i++; } ?>
+				</ol>
+
+				<!-- Wrapper -->
+				<div class="carousel-inner" role="listbox">
+					<?php 
+						$i = 0;
+						foreach ($lessonFilesArray as $lessonFile) { 
+					?>
+						<div class="item <?php echo $i == 0  ? ' active' : '' ?>" data-toggle="modal" data-target=".image<?php echo $i ?>" role="button">
+							<img src="<?php echo $this->escapeHtml($lessonFile->url) ?>" alt="<?php echo $this->escapeHtml($lesson->name) ?>" />
+						</div>
+						<div class="modal fade image<?php echo $i ?>" tabindex="-1" role="dialog" aria-hidden="true">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content">
+									<img src="<?php echo $this->escapeHtml($lessonFile->url) ?>" alt="<?php echo $this->escapeHtml($lesson->name) ?>" />
+								</div>
+							</div>
+						</div>
+					<?php $i++; } ?>
+				</div>
+
+				<!-- Controls -->
+				<a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
+					<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="right carousel-control" href="#carousel" role="button" data-slide="next">
+					<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				</a>
+			</div> <!--  Carousel  -->
+			<?php } else if ($lesson->type == 'audio') { ?>
+				<?php foreach ($lessonFiles as $lessonFile) { ?>
+					<audio controls>
+						<source src="<?php echo $this->escapeHtml($lessonFile->url) ?>" type="audio/mpeg">
+					</audio>
+				<?php } ?>
+			<?php } else if ($lesson->type == 'presentation') { ?>
+				<?php foreach ($lessonFiles as $lessonFile) { ?>
+					<iframe class="col-lg-12 embed-responsive-item" frameborder="0" src="<?php echo $this->escapeHtml($lessonFile->url) ?>" width="100%" height="800px"></iframe>
+				<?php } ?>
+			<?php } else if ($lesson->type == 'video') { ?>
+				<?php foreach ($lessonFiles as $lessonFile) { ?>
+						<iframe class="col-lg-12 embed-responsive-item" height="400px" frameborder="0" src="<?php echo $this->escapeHtml(preg_replace('/watch\?v=/', 'embed/', $lessonFile->url)) ?>" allowfullscreen></iframe>
+				<?php } ?>
+			<?php } ?>
+
+			<div class="clearfix"></div>
+				<br>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title pull-left">Märkmed</h2>
+					<a class="btn btn-primary btn-sm pull-right new-note" href="<?php echo $this->url('student/add-note', array('lesson_id' => $lesson->id)) ?>">
+						<span class="glyphicon glyphicon-plus"></span>Tee uusi märkmeid
+					</a>
+					<div class="clearfix"></div>
+				</div>
+				<div class="panel-body" id="notes">
+					<?php if(!empty($notes)) { ?>
+						<?php foreach ($notes as $note) { ?>
+							<div class="alert alert-warning" id="note<?php echo  $note->id ?>">
+								<p><?php echo $this->escapeHtml($note->content) ?></p>
+								<a class="btn btn-default btn-xs edit-note" href="<?php echo $this->url('student/edit-note', array('id' => $note->id)) ?>">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+								<a class="btn btn-default btn-xs delete-note" href="<?php echo $this->url('student/delete-note', array('id' => $note->id)) ?>">
+									<span class="glyphicon glyphicon-trash"></span>
+								</a>
+							</div>
+						<?php }?>
+					<?php } else { ?>
+						<p class="well no-notes">Sellel tunnil märkmed puuduvad</p>
+					<?php } ?>
+				</div>
+			</div>
+
+	</div>
+</div>

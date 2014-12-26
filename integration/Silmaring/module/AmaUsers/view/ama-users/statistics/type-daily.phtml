@@ -1,0 +1,20 @@
+<span class="canvas_top_label"><?=$this->translate("Hours");?></span>
+<span class="canvas_bottom_right_label"><?=$this->translate("Days");?></span>
+<canvas id="<?=$this->type;?>" width="590" height="300"></canvas>
+<script>
+    <?php $hoursCount = count($this->hours); ?>
+    var <?=$this->type;?> = {
+        labels : [<?php for($i=1;$i<=$this->daysInMonth;$i++)  echo ($i!=1?",":"") . $i; ?>],
+        datasets : [
+            {
+                label: "<?=$this->translate('Statistics');?>",
+                fillColor : "rgba(163,195,209,0.6)",
+                strokeColor : "rgba(163,195,209,1)",
+                responsive: true,
+                data : [<?php for($i=1;$i<=$hoursCount;$i++)  echo ($i!=1?",":"") . $this->hours['hour' . $i]; ?>]
+            }
+        ]
+    }
+    var <?=$this->type;?>_a = document.getElementById('<?=$this->type;?>').getContext('2d');
+    new Chart(<?=$this->type;?>_a).Bar(<?=$this->type;?>);
+</script>

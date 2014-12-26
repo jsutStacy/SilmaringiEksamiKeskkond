@@ -1,0 +1,48 @@
+<br/>
+<h2><?=$this->translate("Average class usage time")?></h2>
+<br/>
+<div class="row">
+    <div class="canvas_wrap col-sm-9 daily_wrap">
+        <span class="canvas_top_label"><?=$this->translate("Hours");?></span>
+        <span class="canvas_bottom_right_label"><?=$this->translate("Days");?></span>
+        <canvas id="daily<?=$this->class_id?>" width="570" height="300"></canvas>
+        <script>
+            <?php $hoursCount = count($this->hours); ?>
+            var daily<?=$this->class_id?> = {
+                labels : [<?php for($i=1;$i<=$this->daysInMonth;$i++)  echo ($i!=1?",":"") . $i; ?>],
+                datasets : [
+                    {
+                        label: "<?=$this->translate('Statistics');?>",
+                        fillColor : "rgba(163,195,209,0.6)",
+                        strokeColor : "rgba(163,195,209,1)",
+                        responsive: true,
+                        data : [<?php for($i=1;$i<=$hoursCount;$i++)  echo ($i!=1?",":"") . $this->hours['hour' . $i]; ?>]
+                    }
+                ]
+            }
+            var daily<?=$this->class_id?>_a = document.getElementById('daily<?=$this->class_id?>').getContext('2d');
+            new Chart(daily<?=$this->class_id?>_a).Bar(daily<?=$this->class_id?>);
+        </script>
+    </div>
+    <div class="canvas_wrap col-sm-9 weekly_wrap" style="display:none">
+    </div>
+    <div class="canvas_wrap col-sm-9 monthly_wrap" style="display:none">
+    </div>
+    <div class="col-sm-3">
+        <div class="radio">
+            <label>
+                <input type="radio" name="type<?=$this->class_id?>" checked="checked" id="daily<?=$this->class_id?>" value="daily" onclick="silmaring.loadStatisticsView('<?=$this->url('statistics', array('action' => 'type'));?>','daily', <?=$this->class_id?>)"> <?=$this->translate("Day");?>
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="type<?=$this->class_id?>" id="weekly" value="weekly<?=$this->class_id?>" onclick="silmaring.loadStatisticsView('<?=$this->url('statistics', array('action' => 'type'));?>','weekly', <?=$this->class_id?>)"> <?=$this->translate("Week");?>
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="type<?=$this->class_id?>" id="monthly" value="monthly<?=$this->class_id?>" onclick="silmaring.loadStatisticsView('<?=$this->url('statistics', array('action' => 'type'));?>','monthly', <?=$this->class_id?>)"> <?=$this->translate("Month");?>
+            </label>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+<?php if(!isset($this->route)) $this->route = 'materials'; ?>
+<?php if($this->pageCount) : ?>
+    <ul class="pagination">
+        <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>><a href="<?php echo $this->url($this->route, array('action' => 'page', 'id' => '0','page' => $this->previous)); ?>">«</a></li>
+        <?php foreach ($this->pagesInRange as $page): ?>
+            <li <?php echo $page == $this->current ? 'class="active"' : ''; ?>><a href="<?php echo $this->url($this->route, array('action' => 'page', 'id' => '0','page' => $page)); ?>">
+                    <?php echo $page; ?>
+                </a></li>
+        <?php endforeach; ?>
+        <li <?php echo!isset($this->next) ? 'class="disabled"' : ''; ?>><a href="<?php echo $this->url($this->route, array('action' => 'page', 'id' => '0','page' => $this->next)); ?>">»</a></li>
+    </ul>
+<?php endif; ?>

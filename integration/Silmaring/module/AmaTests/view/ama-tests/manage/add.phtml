@@ -1,0 +1,61 @@
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('manageTests', array('action' => 'add')));
+$form->setAttribute('role', 'form');
+$form->setAttribute('enctype', 'multipart/form-data');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+
+<div class="form-title row">
+    <div class="form-group">
+        <div class="col-sm-12">
+            <?= $this->formElement($form->get('name')); ?>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group">
+        <div class="col-sm-12">
+            <?= $this->formElement($form->get('description')); ?>
+        </div>
+    </div>
+</div>
+<div id="visible-question-blocks"  class="margin-top-10">
+<?= $this->partial('ama-tests/partial/add-question', array('form' => $form)); ?>
+</div>
+<div class="loading text-center"><img src="<?php echo $this->url('home'); ?>images/ajax-loader.gif" alt="" /></div>
+<div class="alert flash-message margin-top-10">
+</div>
+<div class="row">
+    <div class="col-sm-offset-1 col-sm-11 clearfix">
+        <button type="button" onclick="silmaringTest.addQuestion()" class="btn btn-default pull-left"><i class="add_item_ico">+</i><?= $this->translate("Add new question"); ?></button>
+        <?php echo $this->formButton($form->get('submit')->setAttribute('onclick', 'silmaring.postAjaxForm("'.$this->url('manageTests', array('action' => 'add-ajax', 'id' => $this->category->getId())).'","#addForm", true)'), $this->translate('SAVE TEST')); ?>
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>
+<div class="hidden" id="clean-question-block">
+    <?= $this->partial('ama-tests/partial/add-question', array('form' => $form)); ?>
+</div>
+<?php
+$form2 = $this->imageThumbForm;
+$form2->setAttribute('action', $this->url('manageTests', array('action' => 'createImageThumb')));
+$form2->setAttribute('role', 'form');
+$form2->setAttribute('enctype', 'multipart/form-data');
+$form2->prepare();
+echo $this->form()->openTag($form2);
+echo $this->formElement($form2->get('image'));
+echo $this->form()->closeTag();
+?>
+
+<script>
+    $(function(){
+        $('#visible-question-blocks').sortable({
+            axis: 'y',
+            handle: ".move_item"
+        });
+    });
+</script>
+

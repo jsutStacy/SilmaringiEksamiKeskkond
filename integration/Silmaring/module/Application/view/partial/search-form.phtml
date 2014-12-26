@@ -1,0 +1,7 @@
+<form class="sitesearch form-inline <?=$this->class;?>" role="search" method="get" action="<?=$this->url("search");?>?>">
+    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+    <div class="form-group">
+        <input type="text" class="form-control" name="term" value="" placeholder="<?php echo $this->translate("Search from materials"); ?>">
+    </div>
+    <input type="reset" value="Reset" />
+</form>

@@ -1,0 +1,45 @@
+<?php $user = $this->identity();
+      if (!$user) $user = new \AmaUsers\Entity\User();
+?>
+<section id="user-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 clearfix">
+                <div class="logged_user pull-left">
+                    <div class="user_img pull-left">
+                        <a href="<?php echo $this->url("settings"); ?>">
+                            <?php if ( isset($user) && $user->getImage() ) : ?>
+                            <img src="<?php echo $this->htImgUrl($user->getImage(), 'profile'); ?>" alt="image" />
+                            <?php else : ?>
+                            <img src="<?php echo $this->url('home'); ?>images/no-image.png">
+                            <?php endif; ?>
+                        </a>
+                    </div>
+                    <div class="user_name pull-left"><a href="<?php echo $this->url("settings"); ?>"><?php echo $user->getFirstName() . ' ' . $user->getLastname(); ?></a></div>
+                </div>
+
+                <div id="notify_logout" class="pull-right normal">
+                    <a href="javascript:;" id="userpop" data-placement="bottom" onclick="silmaring.markAlertsAsRead('<?php echo $this->url('markAlertsRead'); ?>')"></a>
+                    <?php echo $this->partial('partial/header-alerts', array('data' => $this->getLastAlerts())); ?>
+                    <a href="<?php echo $this->url('logout'); ?>" class="logout_btn"><?php echo $this->translate("LEAVE"); ?></a>
+                </div>
+
+                <ul id="user-bar-tabs" class="nav nav-tabs pull-right" role="tablist">
+                    <?php if($user->hasRole('school') && isset($this->school)) :?>
+                    <li class="active"><a href="#school" role="tab" data-toggle="tab"><?php echo $this->school->getName(); ?></a></li>
+                    <?php else : ?>
+                       <?php if($user->hasRole('k_teacher') || $user->hasRole('school')) : ?>
+                            <?php echo $this->navigation()
+                                ->menu('tab_navigation')
+                                ->setMinDepth(0)
+                                ->setMaxDepth(0)
+                                ->setPartial('partial/tab-menu-li'); ?>
+                     <?php endif; ?>
+                    <?php endif; ?>
+
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>

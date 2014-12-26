@@ -1,0 +1,71 @@
+<form role="form" method="post" id="valuationForm" action="<?=$this->url('manageWorksheets',array('action' => 'save-valuation', 'cid' => $this->lessonPlanId, 'id' => $this->fileClassId));?>">
+    <div class="form-title row">
+        <div class="form-group">
+            <div class="col-sm-12">
+                <label class="pull-left"><?=$this->translate('WORKSHEET')?>: <?=$this->worksheet['t_name']?></label>
+                <a href="javascript:;" onclick="silmaring.openInModal('<?=$this->url('manageWorksheets', array('action' => 'statistics', 'cid' => $this->lessonPlanId, 'id' => $this->fileClassId ));?>', 'modal-lg')" class="btn btn-primary btn-lg pull-right"><?=$this->translate("Go to statistics");?></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grading-body">
+        <div class="grading-wrap clearfix">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th width="148"><?=$this->translate('Students')?></th>
+                        <?php $i=1; foreach($this->worksheet['questions'] as $question) :?>
+                        <th width="228"><?=$i?>. <?=$question['q_question'];?></th>
+                        <?php $i++; endforeach; ?>
+                        <th width="148"><?=$this->translate('SUMMARY')?></th>
+                    </tr>
+                    <?php foreach($this->worksheet['answers'] as $student =>  $answersArray) :?>
+                        <?php $answersPointsTotal = 0; ?>
+                                <tr>
+                                   <td><?=$student;?><input type="hidden" name="students[]" value="<?=$answersArray['student']?>" /></td>
+                                        <?php foreach($answersArray['answers'] as $answer) : ?>
+                                            <?php $answersPointsTotal += $answer['ua_points']; ?>
+                                            <td class="<?php if($answer['ua_isRight']) : ?>success<?php else : ?>danger<?php endif; ?>">
+                                                <p><?=(!empty($answer['ua_answerText'])?$answer['ua_answerText']:$answer['a_option'])?></p>
+                                                <div class="comment_with_btn clearfix" style="width: 238px;">
+                                                    <div class="input-group pull-left">
+                                                        <input name="gradeComments[<?=$answer['ua_id']?>]" type="text" placeholder="<?=$this->translate('Kommenteeri');?>" value="<?=$answer['ua_comment']?>">
+                                                    </div>
+                                                    <div class="btn-group pull-left dropup">
+                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span id="gradeText<?=$answer['ua_id']?>"><?php if(!empty($answer['ua_points'])) :?><?=$answer['ua_points']?><?php else : ?><?=$this->translate('Points');?><?php endif; ?></span> <span class="caret"></span></button>
+                                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                                            <?php for($i=1;$i<=$answer['points'];$i++) : ?>
+                                                            <li><a href="javascript:;" onclick="silmaringTest.changeGrade(<?=$i?>, <?=$answer['ua_id']?>);"><?=$i?></a></li>
+                                                            <?php endfor; ?>
+                                                        </ul>
+                                                        <input type="hidden" name="grades[<?=$answer['ua_id']?>]" id="grade<?=$answer['ua_id']?>" value="<?=$answer['ua_points']?>"/>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        <?php endforeach; ?>
+                                    <?php $percent = ceil(($answersPointsTotal/$this->worksheet['totalPoints'])*100); ?>
+                                    <td><strong><?=$answersPointsTotal;?><?=$this->translate('p')?> / <?=$percent?>%</strong></td>
+                                </tr>
+                    <?php endforeach; ?>
+                </table>
+            </div>
+        </div>
+        <a href="javascript:;" onclick="silmaring.postAjaxForm('<?=$this->url('manageWorksheets',array('action' => 'save-valuation', 'cid' => $this->lessonPlanId, 'id' => $this->fileClassId));?>', '#valuationForm', false)" class="btn btn-success"><?=$this->translate('Save');?></a>
+        <div class="clearfix"></div>
+        <div class="loading text-center"><img src="<?php echo $this->url('home'); ?>images/ajax-loader.gif" alt="" /></div>
+        <div class="alert flash-message margin-top-10">
+    </div>
+</form>
+
+<div class="row">
+    <div class="col-sm-offset-1 col-sm-11 clearfix">
+        <button type="button" class="btn btn-primary btn-lg pull-right" onclick="silmaring.postAjaxFormWithConfirm('<?=$this->url('manageWorksheets',array('action' => 'send-valuation', 'cid' => $this->lessonPlanId, 'id' => $this->fileClassId));?>', '#valuationForm', true, '<?=$this->translate("Are you sure you want to send results to students?");?>')">
+         <?php if($this->allreadySent) : ?>
+             <?=$this->translate('RESEND TO STUDENTS');?>
+         <?php endif; ?>
+         <?php if(!$this->allreadySent) : ?>
+            <?=$this->translate('SEND TO STUDENTS');?>
+         <?php endif; ?>
+        </button>
+    </div>
+</div>

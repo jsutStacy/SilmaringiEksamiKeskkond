@@ -1,0 +1,6 @@
+<h1><?php
+echo implode(', ', array_map(
+    function ($a) { return $this->translate($a->getLabel()); },
+    $this->pages));
+?>
+</h1>

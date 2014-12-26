@@ -1,0 +1,75 @@
+<?php
+	$this->headTitle('Muuda kursust - ');
+?>
+<h2>Haldad kursust <small><?php echo $this->escapeHtml($course->name) ?></small></h2>
+<hr>
+
+<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('admin/edit-course', array('id' => $this->id)));
+	$form->prepare();
+
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('id'));
+?>
+<div class="row">
+	<?php echo $this->sidebar ?>
+	<div class="col-md-8 pull-right">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h2 class="panel-title pull-left">Kursuse üldinfo</h2>
+				<a class="btn btn-primary btn-sm pull-right" href="<?php echo $this->url('admin/change-course-visibility', array('id' => $course->id)) ?>">
+					<?php if ($course->published == true) { ?>
+						Tee nähtamatuks
+					<?php } else { ?>
+						Tee nähtavaks
+					<?php }?>
+				</a>
+				<div class="clearfix"></div>
+			</div>
+			<div class="panel-body">
+				<div class="clearfix"></div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon">Nimi</span>
+					<?php echo $this->formRow($form->get('name')); ?>
+				</div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon">Kirjeldus</span>
+					<?php echo $this->formRow($form->get('description')); ?>
+				</div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon">Hind</span>
+					<?php echo $this->formRow($form->get('price')); ?>
+				</div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon">Õpetaja</span>
+					<?php echo $this->formRow($form->get('teacher_id')); ?>
+				</div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon">Nähtavus</span>
+					<?php echo $this->formRow($form->get('published')); ?>
+				</div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon">Algab</span>
+					<?php echo $this->formRow($form->get('start_date')); ?>
+				</div>
+				<br>
+				<div class="input-group">
+					<span class="input-group-addon">Kestab kuni</span>
+					<?php echo $this->formRow($form->get('end_date')); ?>
+				</div>
+				<br>
+				<div class="input-group">
+					<?php echo $this->formSubmit($form->get('submit')); ?>
+				</div>
+				<?php echo $this->form()->closeTag(); ?>
+			</div>
+		</div>
+	</div>
+</div>

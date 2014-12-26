@@ -1,0 +1,152 @@
+<?php $this->headTitle($this->category->getName()); ?>
+<header class="page-head clearfix">
+    <?php echo $this->navigation('tab_navigation')->breadcrumbs()->setMinDepth(0)->setPartial('ama-materials/partial/breadcrumb');?>
+    <?php if(!$this->isParentCategory) : ?>
+        <?php echo $this->partial('ama-materials/partial/add-material-dropdown'); ?>
+    <?php endif; ?>
+</header>
+<ul class="content_list">
+<?php foreach($materials as $material) :?>
+    <?php if(!$this->uploads()->has($material['f_filename']) && $material['f_type']!='video') continue; ?>
+    <?php
+        if ( $material['f_type'] == 'image' || $material['f_type']=='file' || $material['f_type']=='presentation' ) {
+            $url = $this->uploads()->get($material['f_filename']);
+            $ext = $url->getExtension();
+            if($material['f_type']=='image') {
+                $url = $this->htImgUrl($material['f_filename'], 'images1024x768');
+            }
+
+            $image = '<img src="' . $this->url('home'). '/images/file_icos/'.$ext.'.png"  alt="' . $material['f_name'] . '" title="' . $material['f_name'] .'">';
+            if($material['f_type']=='image') {
+                $image = '<img src="'. $this->htImgUrl($material['f_filename'], 'images') .'" alt="' . $material['f_name'] . '" title="' . $material['f_name'] .'">';
+            }
+        }
+    else if($material['f_type']=='video') {
+        $url = $material['f_video'];
+        $image = '<img src="'.$this->url('home'). '/images/file_icos/video.png" alt="' . $material['f_name'] . '" title="' . $material['f_name'] .'">';
+    }
+    ?>
+    <li id="item<?php echo $material['f_id']; ?>">
+        <div class="row">
+            <div class="col-md-1"><?php echo $image; ?></div>
+            <div class="col-md-11">
+                <!--<a href="#" class="move_item">Liiguta <i class="glyphicon glyphicon-fullscreen"></i></a>-->
+                <h2><a href="<?php echo $url; ?>" target="_blank"><?php echo $material['f_name']; ?></a></h2>
+                <div class="row">
+                    <div class="col-md-8">
+                        <table class="table_meta">
+                            <tr>
+                                <th><?php echo $this->translate('USED IN'); ?>:</th>
+                                <td>
+                                    <?php $categoryPath = $this->getCategoryPath($this->allCategories, $material['c_id']); $categoryPath = array_reverse($categoryPath); ?>
+                                    <?php $i = 1; foreach($categoryPath as $category) : ?>
+                                        <?php if($i!=1) : ?> / <?php endif; ?> <a href="<?php echo $this->url('materials', array('action' => 'category', 'id' => $category['c_id'])); ?>"><?php echo $category['c_name']; ?></a>
+                                        <?php $i++; endforeach; ?>
+                            </tr>
+                            <tr>
+                                <th><?php echo $this->translate('ADDED'); ?>:</th>
+                                <td><strong><?php echo $material['u_firstName'] ?> <?php echo $material['u_lastname'] ?></strong> <?php echo $material['f_date_added']->format('d.m.Y'); ?></td>
+                            </tr>
+                            <tr>
+                                <th><?php echo $this->translate('AUTHOR COMMENT'); ?>:</th>
+                                <td><a href="javascript:;" data-toggle="modal" data-target="#myModal2"><?php echo $this->translate('View comment'); ?></a></td>
+                            </tr>
+                        </table>
+
+                        <!-- KOMMENTAARI SISU -->
+                        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php echo $this->translate('Close'); ?></span></button>
+                                        <h4 class="modal-title" id="myModalLabel"><?php echo $material['u_firstName'] ?> <?php echo $material['u_lastname'] ?> <?php echo $this->translate('comment'); ?></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php echo $material['f_description']; ?>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->translate('Close'); ?></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item_comment_area collapse-group">
+                            <strong><?php echo $this->translate('MY COMMENT'); ?>: <a href="javascript:;" class="open_comment" onclick="silmaring.editComment('<?php echo $material['f_id']; ?>')"><i class="glyphicon glyphicon-pencil"></i></a></strong>
+                            <div style="display:none;" class="alert alert-success small item_comment_alert" id="item_comment_alert<?php echo $material['f_id']; ?>"><?php echo $this->translate("Comment successfully saved!"); ?></div>
+                            <div class="item_comment_content" id="item_comment_content<?php echo $material['f_id']; ?>"><?php echo $material['f_comment']; ?></div>
+                            <div class="item_comment collapse" id="item_comment<?php echo $material['f_id']; ?>">
+                                <form action="" method="post" id="postComment<?php echo $material['f_id']; ?>">
+                                    <textarea name="comment" placeholder="<?php echo $this->translate("Write comment here"); ?>"></textarea>
+                                    <button class="btn btn-default btn-sm" type="button" onclick="silmaring.postCommentAjaxForm('<?php echo $this->url('images', array('action'=>'post-comment', 'id' => $material['f_id'])); ?>','#postComment<?php echo $material['f_id']; ?>', <?php echo $material['f_id']; ?>)"><?php echo $this->translate("Save comment"); ?></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h5><?php echo $this->translate("SENT"); ?>:</h5>
+
+                        <table class="file_sent_table" width="100%">
+                            <tr>
+                                <th width="35%"><i class="teacher-table-icos class-ico"></i></th>
+                                <th><i class="teacher-table-icos cal-ico"></i></th>
+                                <th><i class="teacher-table-icos time-ico"></i></th>
+                                <th><i class="teacher-table-icos views-ico"></i></th>
+                            </tr>
+                            <?php  $sentClasses = $this->em->getRepository('AmaMaterials\Entity\File')->findFilesSentToClasses($this->user, $material['f_id']); ?>
+                            <?php foreach($sentClasses as $sentClass) : ?>
+                                <tr>
+                                <?php if($material['f_type']=='test') :?>
+                                    <td><a href="javascript:;" onclick="silmaring.openInModal('<?=$this->url('manageTests', array('action' => 'statistics', 'cid' => $material['f_id'], 'id' => $sentClass['fc_id']))?>', 'modal-lg')" class="text-success"><?php echo $sentClass['sc_className']; ?> (<?php echo $sentClass['s_shortName']; ?>)</a></td>
+                                <?php elseif($material['f_type']=='worksheet') : ?>
+                                    <td><a href="javascript:;" onclick="silmaring.openInModal('<?=$this->url('manageWorksheets', array('action' => 'statistics', 'cid' => $material['f_id'], 'id' => $sentClass['fc_id']))?>', 'modal-lg')" class="text-success"><?php echo $sentClass['sc_className']; ?> (<?php echo $sentClass['s_shortName']; ?>)</a></td>
+                                <?php else : ?>
+                                    <td><strong><?php echo $sentClass['sc_className']; ?> (<?php echo $sentClass['s_shortName']; ?>)</strong></td>
+                                    <?php endif; ?>
+                                    <td><?php echo $sentClass['fc_dateAdded']->format('d.m.Y'); ?></td>
+                                    <td><?php echo $sentClass['fc_dateAdded']->format('H.i'); ?></td>
+                                    <td class="viewed"><?php echo $sentClass['viewedCount'] ?>/<?php echo $sentClass['studentCount'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td class="viewed">&nbsp;</td>
+                            </tr>
+                        </table>
+
+                        <!-- Single button -->
+                        <div class="btn-group class-selection">
+                            <form action="" method="post"   id="dropdown<?php echo $material['f_id']; ?>">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><?php echo $this->translate("Send to class"); ?></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <?php foreach($this->usersClasses as $class) : ?>
+                                        <li>&nbsp;<input type="checkbox" name="classes[]" value="<?php echo $class['c_id']; ?>" id="classItem<?php echo $class['c_id'].$material['f_id']; ?>"> <label for="classItem<?php echo $class['c_id'].$material['f_id']; ?>"><?php echo $class['c_className']; ?> (<?php echo $class['s_shortName']; ?>)</label></li>
+                                    <?php endforeach; ?>
+                                    <li><a href="javascript:;" onclick="silmaring.checkAll('#dropdown<?php echo $material['f_id']; ?>');" class="select-all"><?php echo $this->translate("To all classes"); ?></a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="javascript:;" onclick="silmaring.postAjaxForm('<?php echo $this->url('images', array('action' => 'send', 'cid' => $material['f_id'], 'id' => $material['c_id'])); ?>','#dropdown<?php echo $material['f_id']; ?>', true)"><?php echo $this->translate("Send"); ?></a></li>
+                                </ul>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="javascript:;" onclick="if(confirm('<?php echo $this->translate('Are you sure you want to delete?'); ?>')) silmaring.doDelete('<?php echo $this->url('images', array('action'=>'delete', 'id' => $material['f_id'])); ?>', '<?php echo $material['f_id']; ?>'); else return false;" class="remove_item"><i class="glyphicon glyphicon-remove"></i></a>
+    </li>
+<?php endforeach; ?>
+</ul>
+
+<?php
+echo $this->paginationControl(
+    $this->paginator,
+    'sliding',
+    array('ama-materials/partial/category-paginator', 'AmaMaterials'),
+    array(
+        'category' => $this->category
+    )
+);
+?>
+<?php if(!$this->isParentCategory): ?> <?php echo $this->partial('ama-materials/partial/all-materials', array('materialsCount' => $this->materialsCount, 'category' => $this->category)); ?> <?php endif; ?>

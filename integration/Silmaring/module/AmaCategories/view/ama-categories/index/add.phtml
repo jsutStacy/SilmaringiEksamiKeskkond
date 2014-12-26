@@ -1,0 +1,37 @@
+
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('categories', array('action' => 'add-ajax', 'id' => $this->parent)));
+$form->setAttribute('role', 'form');
+$form->setAttribute('class', 'form-horizontal');
+$form->setAttribute('enctype', 'multipart/form-data');
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+<div class="alert flash-message">
+</div>
+<div class="form-group">
+    <?php echo $this->formLabel($form->get('name')); ?>
+    <div class="col-sm-6">
+        <?php echo $this->formElement($form->get('name')); ?>
+    </div>
+</div>
+<div class="form-group">
+    <?php echo $this->formLabel($form->get('order')); ?>
+    <div class="col-sm-2">
+        <?php echo $this->formElement($form->get('order')->setValue(0)); ?>
+    </div>
+</div>
+<div class="form-group">
+    <?php echo $this->formLabel($form->get('status')); ?>
+    <div class="col-sm-1 pull-left">
+        <?php echo $this->formElement($form->get('status')->setValue(1)); ?>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-3">
+        <?php echo $this->formButton($form->get('submit')->setAttribute('onclick', 'silmaring.postAjaxForm("'.$this->url('categories', array('action' => 'add-ajax', 'id' => $this->parent)).'","#addForm", true)'), $this->translate('Add')); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

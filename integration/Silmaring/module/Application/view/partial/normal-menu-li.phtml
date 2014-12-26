@@ -1,0 +1,7 @@
+<ul>
+    <?php foreach ($this->container as $key => $page): ?>
+        <li class="<?php if ( $page->isActive() ) : ?>active<?php endif; ?>"><a href="<?php echo $page->getHref(); ?>"><i class="menu-ico2 <?=($page->getClass()?$page->getClass():'folder-ico')?>"></i><strong><?php echo $this->translate($page->getLabel()); ?></strong></a>
+            <?php echo $this->partial('partial/admin-menu-li-sub', array('page' => $page)); ?>
+        </li>
+    <?php endforeach; ?>
+</ul>

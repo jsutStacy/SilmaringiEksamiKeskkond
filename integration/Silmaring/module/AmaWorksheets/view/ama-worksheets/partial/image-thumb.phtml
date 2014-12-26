@@ -1,0 +1,7 @@
+<div class="col-sm-4"><img alt="Image" src="<?=$this->htImgUrl($this->filename, 'images233x164'); ?>">
+ <?php if(!$this->disable) : ?><a href="javascript:;"
+onclick="<?php if($this->question) : ?>
+    silmaringTest.removeQuestionImage($(this),'<?=$this->url('manageWorksheets', array('action' => 'delete-question-image', 'cid' => $this->question->getId(), 'id' => $this->imageId));?>');
+<?php else : ?>
+    silmaringTest.removeQuestionImage($(this),'<?=$this->url('manageWorksheets', array('action' => 'delete-temp-question-image', 'cid' => $this->imageId)); ?>');<?php endif; ?>"
+class="rm-question-image">X</a><?php if(!$this->question) : ?><input type="hidden" name="question_element[<?=$this->questionNr;?>][images][]" value="<?=$this->imageId;?>" /><?php endif; ?><?php endif;?></div>

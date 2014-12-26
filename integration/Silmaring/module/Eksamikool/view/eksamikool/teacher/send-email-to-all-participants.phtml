@@ -1,0 +1,27 @@
+<?php
+	$this->headTitle('Saada e-mail kõigile ');
+?>
+<h2>Saada e-mail kõigile õpilastele</h2>
+<hr>
+<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('teacher/send-email-to-all-participants', array('course_id' => $this->course_id, 'teacher_id' => $this->teacher_id)));
+	$form->prepare();
+	echo $this->form()->openTag($form);
+	echo $this->formHidden($form->get('course_id'));
+?>
+<div class="input-group">
+	<span class="input-group-addon">Pealkiri</span>
+	<?php echo $this->formRow($form->get('subject')); ?>
+</div>
+<br>
+<div class="input-group">
+	<span class="input-group-addon">Sisu</span>
+	<?php echo $this->formRow($form->get('body')); ?>
+</div>
+<br>
+<div class="input-group">
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

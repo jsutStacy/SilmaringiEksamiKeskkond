@@ -1,0 +1,11 @@
+<?php if($this->data['alertsCount']>0) : ?>
+    <div id="userpop_content" style="display: none">
+        <ul class="pop_list">
+            <?php foreach($this->data['alerts'] as $alert) : ?>
+                <li>
+                    <?php echo $alert['a_message']; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>

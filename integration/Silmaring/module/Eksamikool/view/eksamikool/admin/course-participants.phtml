@@ -1,0 +1,65 @@
+<?php
+	$this->headTitle('Kursusel osalejad - ');
+?>
+<div class="row">
+	<div class="col-md-5 pull-left">
+		<h3>Kursusel osalejad (<?php echo count($participants) ?>)</h3>
+	</div>
+</div>
+<div class="row">
+	<?php echo $this->sidebar ?>
+	<div class="col-md-8 pull-right">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h2 class="panel-title pull-left">Osalejad</h2>
+				<div class="btn-group pull-right" role="group" aria-label="...">
+					<a class="btn btn-primary btn-sm" href="<?php echo $this->url('admin/empty-course', array('id' => $id)) ?>">Kustuta kursuselt kõik õpilased</a>
+					<a class="btn btn-primary btn-sm" href="<?php echo $this->url('admin/send-email-to-all-participants', array('course_id' => $id)) ?>">Saada kõigile e-mail</a>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<br>
+			<div class="panel-body">
+				<table class="table table-striped">
+					<tr>
+						<td>Id</td>
+						<td>Eesnimi</td>
+						<td>Perekonnanimi</td>
+						<td>Staatus</td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<?php foreach ($participants as $student): ?>
+					<tr>
+						<td><?php echo $this->escapeHtml($student['user']->id) ?></td>
+						<td><?php echo $this->escapeHtml($student['user']->firstname) ?></td>
+						<td><?php echo $this->escapeHtml($student['user']->lastname) ?></td>
+				
+						<?php if ($student['status'] == true) { ?>
+							<td>Kasutajal on ligipääs kursusele</td>
+							<td>
+								<a href="<?php echo $this->url('admin/change-user-course-status', array('user_id' => $student['user']->id, 'course_id' => $id, 'status' => null)) ?>">
+									Eemalda ligipääs kursuselt
+								</a>
+							</td>
+						<?php } else { ?>
+							<td>Kasutajal pole ligipääsu kursusele</td>
+							<td>
+								<a href="<?php echo $this->url('admin/change-user-course-status', array('user_id' => $student['user']->id, 'course_id' => $id, 'status' => true)) ?>">
+									Anna ligipääs kursusele
+								</a>
+							</td>
+						<?php } ?>
+						<td>
+							<div class="col-md-5 pull-right">
+								<a class="btn btn-primary btn-me pull-right" href="<?php echo $this->url('admin/send-email-to-user', array('user_id' => $student['user']->id)) ?>">Saada email</a>
+							</div>
+						</td>
+					</tr>
+					<?php endforeach; ?>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,42 @@
+<?php $this->headTitle($this->translate("Choose schools")); ?>
+<button class="btn btn-default pull-right" type="submit" onclick="if(confirm('<?php echo $this->translate('Are your sure?'); ?>')) silmaring.connectSchools('<?php echo $this->url('users', array('action' => 'add-schools', 'id' => $this->user)); ?>', '<?php echo $this->url('users', array('action' => 'remove-school', 'id' => $this->user)); ?>','<?php echo $this->translate("Remove"); ?>'); else return false;"><?php echo $this->translate("Add selected"); ?></button>
+    <div class="table-responsive">
+        <table class="table ajax-school-dt" id="choose-school">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th><?php echo $this->translate('School name'); ?></th>
+                <th><?php echo $this->translate('Status'); ?></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div id="datapaginaton"></div>
+<script>
+    $(function(){
+        $('.ajax-school-dt').dataTable({
+            "bFilter": true,
+            "bInfo": false,
+            "sPaginationType": "bootstrap",
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": '<?php echo $this->url('schools',array('action' => 'page', 'id' => $this->user)); ?>?order=<?php echo $this->orderBy; ?>',
+            "aLengthMenu": [15, 25, 40],
+            "iDisplayLength": 15,
+            "aaSorting": [
+                [ 0, "desc" ]
+            ],
+            "aoColumns": [
+                { "sWidth": "5%", 'sType' : 'numeric' },
+                { "sWidth": "65%", 'sType' : 'string'  },
+                { "sWidth": "15%", 'sType' : 'string'  },
+                { "sWidth": "5%" },
+                { "sWidth": "10%" }
+            ]
+        });
+    });
+</script>

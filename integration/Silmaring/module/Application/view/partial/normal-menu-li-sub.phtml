@@ -1,0 +1,9 @@
+<?php if ($page->hasPages() ) :?>
+    <ul>
+        <?php foreach ($page as $key => $sub_page): ?>
+            <li class="<?php if ( $sub_page->isActive() ) : ?>active<?php endif; ?>"><a href="<?php echo $sub_page->getHref(); ?>"><i class="menu-ico2 <?=($page->getClass()?$page->getClass():'folder-ico-small')?>"></i><?php echo $this->translate($sub_page->getLabel()); ?></a>
+                <?php echo $this->partial('partial/admin-menu-li-sub', array('page' => $sub_page)); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>

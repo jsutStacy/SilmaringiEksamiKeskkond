@@ -1,0 +1,4 @@
+<?php $action = $this->getParam()->fromRoute('action'); $id = $this->getParam()->fromRoute('id');  ?>
+<?php foreach ($this->container as $key => $page): ?>
+     <li class="<?php if ( $page->isActive() ) : ?>active<?php endif; ?>"><a href="<?=$this->url($page->getRoute(), array('action' => $action, 'id' => $id)); ?>"><?php echo $this->translate($page->getLabel()); ?></a></li>
+<?php endforeach; ?>
